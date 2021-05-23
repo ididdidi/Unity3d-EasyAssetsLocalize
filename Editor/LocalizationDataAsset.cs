@@ -1,35 +1,38 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public class LocalizationDataAsset
+namespace ru.mofrison.Unity3d
 {
-    [MenuItem("Assets/Create/Localization Data", false, 1)]
-    public static void CreateLocalizationDataAsset()
+    public class LocalizationDataAsset
     {
-        var selectionPath = AssetDatabase.GetAssetPath(Selection.activeObject);
-
-        if (string.IsNullOrEmpty(selectionPath))
+        [MenuItem("Assets/Create/Localization Data", false, 1)]
+        public static void CreateLocalizationDataAsset()
         {
-            selectionPath = Application.dataPath;
-        }
+            var selectionPath = AssetDatabase.GetAssetPath(Selection.activeObject);
 
-        var path = EditorUtility.SaveFilePanelInProject(
-                                         "Create Localization Data",
-                                         "NewLocalizationData",
-                                         "asset",
-                                         string.Empty,
-                                         selectionPath);
+            if (string.IsNullOrEmpty(selectionPath))
+            {
+                selectionPath = Application.dataPath;
+            }
 
-        if (path.Length > 0)
-        {
-            var asset = ScriptableObject.CreateInstance<LocalizationData>();
+            var path = EditorUtility.SaveFilePanelInProject(
+                                             "Create Localization Data",
+                                             "NewLocalizationData",
+                                             "asset",
+                                             string.Empty,
+                                             selectionPath);
 
-            AssetDatabase.CreateAsset(asset, path);
-            AssetDatabase.SaveAssets();
+            if (path.Length > 0)
+            {
+                var asset = ScriptableObject.CreateInstance<LocalizationData>();
 
-            EditorUtility.FocusProjectWindow();
+                AssetDatabase.CreateAsset(asset, path);
+                AssetDatabase.SaveAssets();
 
-            Selection.activeObject = asset;
+                EditorUtility.FocusProjectWindow();
+
+                Selection.activeObject = asset;
+            }
         }
     }
 }
