@@ -27,6 +27,8 @@ namespace ru.mofrison.Unity3d
 
 		private LocalizationData localization;
 		private ReorderableList tagsList;
+		float widthTag = 100f;
+		float widthPlus = 40f;
 
 		void OnEnable()
 		{
@@ -80,16 +82,24 @@ namespace ru.mofrison.Unity3d
 
 		private void DrawLanguageNames(Rect rect)
 		{
-			float dX = 40f;
-			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Tags");
-			dX = 100f;
+			float averageWidth = (rect.width - (widthTag + widthPlus + localization.LanguageNames.Count*20f + 16f)) / localization.LanguageNames.Count;
+			float widthLanguage = (averageWidth > 130f) ? averageWidth : 130f;
+			
+			GUIStyle boldStyle = new GUIStyle(GUI.skin.GetStyle("label"))
+			{
+				alignment = TextAnchor.LowerCenter,
+				fontStyle = FontStyle.Bold
+			};
+			float dX = rect.x;
+			GUI.Label(new Rect(new Vector2(rect.x, rect.y), new Vector2(widthTag + dX, rect.height)), "Tags", boldStyle);
+			dX += widthTag + 16f;
 
 			for (int i = 0; i < localization.Languages.Count; i++)
 			{
-				localization.Languages[i].Name = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Languages[i].Name, "TextField");
-				dX += 130f;
+				localization.Languages[i].Name = GUI.TextField(new Rect(new Vector2(dX, rect.y), new Vector2(widthLanguage, rect.height)), localization.Languages[i].Name, "TextField");
+				dX += widthLanguage;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
-				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
+				if (GUI.Button(new Rect(new Vector2(dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
 				{
 					localization.Languages.RemoveAt(i--);
 				}
@@ -97,7 +107,7 @@ namespace ru.mofrison.Unity3d
 			}
 
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
-			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
+			if (GUI.Button(new Rect(new Vector2(dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
 				localization.Languages.Add(new LanguageData("Language " + (localization.Languages.Count + 1)));
 			}
@@ -110,17 +120,20 @@ namespace ru.mofrison.Unity3d
 
 		private void DrawTag(Rect rect, int index, bool isActive, bool isFocused)
 		{
+			float averageWidth = (rect.width - (widthTag + widthPlus)) / localization.LanguageNames.Count;
+			float widthLanguage = (averageWidth > 150f) ? averageWidth : 150f;
+
 			var tag = (Tag)tagsList.list[index];
 			if (isActive)
 			{
-				tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y - 6), new Vector2(86, rect.height)), tag.Name, "PR TextField");
-				float dX = 86f;
+				tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y - 6), new Vector2(widthTag, rect.height)), tag.Name, "PR TextField");
+				float dX = rect.x + widthTag;
 
 				string temp;
 				foreach (var language in localization.Languages)
 				{
 					if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = ""; }
-					temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y - 6), new Vector2(150, rect.height)), temp, "PR TextField");
+					temp = GUI.TextField(new Rect(new Vector2(dX, rect.y - 6), new Vector2(widthLanguage, rect.height)), temp, "PR TextField");
 					if (!string.IsNullOrWhiteSpace(temp))
 					{
 						if (!tag.Localizations.ContainsKey(language.Name))
@@ -136,7 +149,7 @@ namespace ru.mofrison.Unity3d
 					{
 						tag.Localizations.Remove(language.Name);
 					}
-					dX += 150f;
+					dX += widthLanguage;
 
 					if (GUI.changed)
 					{
@@ -146,15 +159,15 @@ namespace ru.mofrison.Unity3d
 			}
 			else
 			{
-				GUI.Label(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name);
-				float dX = 86f;
+				GUI.Label(new Rect(new Vector2(rect.x, rect.y), new Vector2(widthTag, rect.height)), tag.Name);
+				float dX = rect.x + widthTag;
 				foreach (var language in localization.Languages)
 				{
 					if (tag.Localizations.ContainsKey(language.Name))
 					{
-						GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), tag.Localizations[language.Name]);
+						GUI.Label(new Rect(new Vector2(dX, rect.y), new Vector2(widthLanguage, rect.height)), tag.Localizations[language.Name]);
 					}
-					dX += 150f;
+					dX += widthLanguage;
 				}
 			}
 		}

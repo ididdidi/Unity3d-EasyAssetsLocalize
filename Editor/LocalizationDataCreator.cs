@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ru.mofrison.Unity3d
 {
-    public class LocalizationDataAsset
+    public class LocalizationDataCreator
     {
         [MenuItem("Assets/Create/Localization Data", false, 1)]
         public static void CreateLocalizationDataAsset()
