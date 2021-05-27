@@ -37,13 +37,14 @@ namespace ru.mofrison.Unity3d
             }
         }
 
-        void Start()
+        void Awake()
         {
             AddLocalization("Default", defaultLocalization);
         }
 
         public void AddLocalization(string localizationName, LocalizationData localizationData)
         {
+            if (!localizationData) { return; }
             var localization = new Dictionary<string, Dictionary<string, string>>();
 
             if (localizations.ContainsKey(localizationName))
