@@ -195,6 +195,7 @@ namespace ru.mofrison.Unity3d
 				}
 			}
 			reorderable.list.Remove(tag);
+			SetChanges();
 		}
 
 		private void SetChanges()
