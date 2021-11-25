@@ -69,7 +69,7 @@ namespace ru.mofrison.Unity3d
             if (localization.Count > 0)
             {
                 localizations.Add(localizationName, localization);
-                UptateLocalizations();
+                UpdateLocalizations();
             }
             else
             {
@@ -80,13 +80,13 @@ namespace ru.mofrison.Unity3d
         public void RemoveLocalization(string localizationName)
         {
             if (localizations.ContainsKey(localizationName)) { localizations.Remove(localizationName); }
-            UptateLocalizations();
+            UpdateLocalizations();
         }
 
         public void SetLanguage(string language)
         {
             if (Languages.Contains(language)) { Language = language; }
-            UptateLocalizations();
+            UpdateLocalizations();
         }
 
         public string GetLocalization(string tag)
@@ -102,7 +102,7 @@ namespace ru.mofrison.Unity3d
             return null;
         }
 
-        public void UptateLocalizations()
+        public void UpdateLocalizations()
         {
             var textViews = FindObjectsOfType<Text>();
             foreach (var textView in textViews)
@@ -142,7 +142,7 @@ namespace ru.mofrison.Unity3d
                 index = Languages.Count + newIndex;
             }
             Language = Languages[index];
-            UptateLocalizations();
+            UpdateLocalizations();
         }
 
         public void AddChangeLanguageCallback(ChangeLanguage callback)
