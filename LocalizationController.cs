@@ -52,17 +52,17 @@ namespace ru.mofrison.Unity3d
                 throw new Exception(string.Format("Localization with the name: {0}, has already been added.", localizationName));
             }
 
-            foreach (var language in localizationData.Languages)
+            for (int i=0; i < localizationData.Languages.Count; i++)
             {
                 Dictionary<string, string> words;
-                if (!localization.TryGetValue(language.Name, out words))
+                if (!localization.TryGetValue(localizationData.Languages[i].Name, out words))
                 {
                     words = new Dictionary<string, string>();
-                    localization.Add(language.Name, words);
+                    localization.Add(localizationData.Languages[i].Name, words);
                 }
-                foreach (var word in language.Resources)
+                for (int j=0; j < localizationData.Languages[i].Resources.Count; j++)
                 {
-                    words.Add(word.Tag, word.StringData);
+                    words.Add(localizationData.Languages[i].Resources[j].Tag, localizationData.Languages[i].Resources[j].StringData);
                 }
             }
 
@@ -105,10 +105,10 @@ namespace ru.mofrison.Unity3d
         public void UpdateLocalizations()
         {
             var textViews = FindObjectsOfType<Text>();
-            foreach (var textView in textViews)
+            for (int i=0; i < textViews.Length; i++)
             {
-                var localisation = GetLocalization(textView.name);
-                if (!string.IsNullOrWhiteSpace(localisation)) { textView.text = localisation; }
+                var localisation = GetLocalization(textViews[i].name);
+                if (!string.IsNullOrWhiteSpace(localisation)) { textViews[i].text = localisation; }
             }
 
             changeLanguage?.Invoke();

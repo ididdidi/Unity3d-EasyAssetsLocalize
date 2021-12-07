@@ -12,9 +12,9 @@ namespace ru.mofrison.Unity3d
             get
             {
                 List<string> languageNames = new List<string>();
-                foreach (var language in Languages)
+                for (int i=0; i < Languages.Count; i++)
                 {
-                    languageNames.Add(language.Name);
+                    languageNames.Add(Languages[i].Name);
                 }
                 return languageNames;
             }
@@ -23,13 +23,13 @@ namespace ru.mofrison.Unity3d
         public Dictionary<string, string> GetLanguageData(string languageName)
         {
             var dictionary = new Dictionary<string, string>();
-            foreach (var language in Languages)
+            for (int i=0; i < Languages.Count; i++)
             {
-                if (language.Name.Equals(languageName))
+                if (Languages[i].Name.Equals(languageName))
                 {
-                    foreach (var word in language.Resources)
+                    for (int j=0; j < Languages[i].Resources.Count; j++)
                     {
-                        dictionary.Add(word.Tag, word.StringData);
+                        dictionary.Add(Languages[i].Resources[j].Tag, Languages[i].Resources[j].StringData);
                     }
                     return dictionary;
                 }

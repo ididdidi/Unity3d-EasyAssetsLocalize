@@ -59,11 +59,11 @@ namespace ru.mofrison.Unity3d
 				foreach (var local in language.Resources)
 				{
 					bool tagExists = false;
-					foreach (var tag in tags)
+					for (int i=0; i < tags.Count; i++)
 					{
-						if (tag.Name.Equals(local.Tag))
+						if (tags[i].Name.Equals(local.Tag))
 						{
-							tag.Localizations.Add(language.Name, local.StringData);
+							tags[i].Localizations.Add(language.Name, local.StringData);
 							tagExists = true;
 							break;
 						}
@@ -203,11 +203,12 @@ namespace ru.mofrison.Unity3d
 			foreach (var language in localization.Languages)
 			{
 				language.Resources.Clear();
-				foreach (var tag in (List<Tag>)tagsList.list)
+				var tags = (List<Tag>)tagsList.list;
+				for (int i=0; i < tags.Count; i++)
 				{
-					if (tag.Localizations.ContainsKey(language.Name))
+					if (tags[i].Localizations.ContainsKey(language.Name))
 					{
-						language.Resources.Add(new LocalizationResource(tag.Name, tag.Localizations[language.Name]));
+						language.Resources.Add(new LocalizationResource(tags[i].Name, tags[i].Localizations[language.Name]));
 					}
 				}
 			}
@@ -219,11 +220,12 @@ namespace ru.mofrison.Unity3d
 		{
 			foreach (var language in localization.Languages)
 			{
-				foreach (var tag in (List<Tag>)tagsList.list)
+				var tags = (List<Tag>)tagsList.list;
+				for (int i = 0; i < tags.Count; i++)
 				{
-					if (!tag.Localizations.ContainsKey(language.Name))
+					if (!tags[i].Localizations.ContainsKey(language.Name))
 					{
-						Debug.LogWarning(string.Format("The {0} doesn't have a value for the {1}.", language.Name, tag.Name));
+						Debug.LogWarning(string.Format("The {0} doesn't have a value for the {1}.", language.Name, tags[i].Name));
 					}
 				}
 			}
