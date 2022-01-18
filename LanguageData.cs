@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ru.mofrison.Unity3d
+namespace ru.mofrison.Unity3D.Localization
 {
     [System.Serializable]
     public class LanguageData

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ru.mofrison.Unity3d
+namespace ru.mofrison.Unity3D.Localization
 {
     public class LocalizationController : MonoBehaviour
     {

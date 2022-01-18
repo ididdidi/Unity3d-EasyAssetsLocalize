@@ -3,11 +3,11 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace ru.mofrison.Unity3d
+namespace ru.mofrison.Unity3D.Localization
 {
 
 	[CustomEditor(typeof(LocalizationData))]
-	public class LocalizationDataEditor : Editor
+	public class LocalizationDataEditor : UnityEditor.Editor
 	{
 		[System.Serializable]
 		private class Tag
