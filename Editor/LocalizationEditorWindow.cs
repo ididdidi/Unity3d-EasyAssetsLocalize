@@ -2,55 +2,44 @@
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-
-[CustomEditor(typeof(LocalizationData))]
-public class LocalizationDataEditor : Editor
+public class LocalizationEditorWindow : EditorWindow
 {
-	[System.Serializable]
-	private class Tag
-	{
-		private string name;
-		private Dictionary<string, string> localizations;
+    [System.Serializable]
+    private class Tag
+    {
+        private string name;
+        private Dictionary<string, string> localizations;
 
-		public string Name { get => name; set => name = value; }
-		public Dictionary<string, string> Localizations { get => localizations; }
+        public string Name { get => name; set => name = value; }
+        public Dictionary<string, string> Localizations { get => localizations; }
 
-		public Tag(string name) {
-			this.name = name;
-			localizations = new Dictionary<string, string>();
-		}
-	}
+        public Tag(string name)
+        {
+            this.name = name;
+            localizations = new Dictionary<string, string>();
+        }
+    }
 
-	private LocalizationData localization;
-	private ReorderableList tagsList;
+	public LocalizationData localization;
+    private ReorderableList tagsList;
 
-	void OnEnable()
-	{
-		localization = this.target as LocalizationData;
+    void CreateList()
+    {
+        tagsList = new ReorderableList(ExtractionData(), typeof(Tag), true, true, true, true);
 
-		tagsList = new ReorderableList(ExtractionData(), typeof(Tag), true, true, true, true);
+        tagsList.drawHeaderCallback = DrawLanguageNames;
 
-		tagsList.drawHeaderCallback = DrawLanguageNames;
+        tagsList.drawElementCallback = DrawTag;
 
-		tagsList.drawElementCallback = DrawTag;
+        tagsList.onAddCallback = AddNewTag;
 
-		tagsList.onAddCallback = AddNewTag;
+        tagsList.onRemoveCallback = RemoveTag;
+    }
 
-		tagsList.onRemoveCallback = RemoveTag;
-	}
-
-	public override void OnInspectorGUI()
-	{
-		//	serializedObject.Update();
-		//	tagsList.DoLayoutList();
-
-		DrawDefaultInspector();
-
-		if (GUILayout.Button("Редактор"))
-		{
-			LocalizationEditorWindow window = (LocalizationEditorWindow)EditorWindow.GetWindow(typeof(LocalizationEditorWindow));
-			window.localization = this.target as LocalizationData;
-		}
+    void OnGUI()
+    {
+		if(tagsList == null) { CreateList(); }
+		tagsList.DoLayoutList();
 	}
 
 	private List<Tag> ExtractionData()
@@ -165,8 +154,8 @@ public class LocalizationDataEditor : Editor
 
 	private void AddNewTag(ReorderableList allList)
 	{
-			allList.list.Add(new Tag("Tag " + (allList.list.Count + 1)));
-			allList.index = allList.list.Count - 1;
+		allList.list.Add(new Tag("Tag " + (allList.list.Count + 1)));
+		allList.index = allList.list.Count - 1;
 	}
 
 	private void RemoveTag(ReorderableList reorderable)
@@ -202,7 +191,7 @@ public class LocalizationDataEditor : Editor
 			}
 		}
 		EditorUtility.SetDirty(localization);
-		serializedObject.ApplyModifiedProperties();
+		//serializedObject.ApplyModifiedProperties();
 	}
 
 	private void OnDisable()
