@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ru.mofrison.Unity3D.Localization
+namespace Localization
 {
     public class LocalizationDataCreator
     {

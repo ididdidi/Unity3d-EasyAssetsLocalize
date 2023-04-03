@@ -106,14 +106,14 @@ public class LocalizationEditorWindow : EditorWindow
 		var tag = (Tag)tagsList.list[index];
 		if (isActive)
 		{
-			tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y - 6), new Vector2(86, rect.height)), tag.Name, "PR TextField");
+			tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name, "PR TextField");
 			float dX = 86f;
 
 			string temp;
 			foreach (var language in localization.Languages)
 			{
 				if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = ""; }
-				temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y - 6), new Vector2(150, rect.height)), temp, "PR TextField");
+				temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), temp, "PR TextField");
 				if (!string.IsNullOrWhiteSpace(temp))
 				{
 					if (!tag.Localizations.ContainsKey(language.Name))
@@ -191,7 +191,6 @@ public class LocalizationEditorWindow : EditorWindow
 			}
 		}
 		EditorUtility.SetDirty(localization);
-		//serializedObject.ApplyModifiedProperties();
 	}
 
 	private void OnDisable()
