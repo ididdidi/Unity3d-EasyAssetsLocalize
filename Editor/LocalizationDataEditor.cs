@@ -1,18 +1,21 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(LocalizationData))]
-public class LocalizationDataEditor : Editor
+namespace Localization
 {
-	public override void OnInspectorGUI()
+	[CustomEditor(typeof(LocalizationData))]
+	public class LocalizationDataEditor : Editor
 	{
-		DrawDefaultInspector();
-
-		if (GUILayout.Button("Edit localization"))
+		public override void OnInspectorGUI()
 		{
-			LocalizationEditorWindow window = (LocalizationEditorWindow)EditorWindow.GetWindow(typeof(LocalizationEditorWindow));
-			window.localization = this.target as LocalizationData;
-			window.minSize = new Vector2(640,240);
+			DrawDefaultInspector();
+
+			if (GUILayout.Button("Edit localization"))
+			{
+				LocalizationEditorWindow window = (LocalizationEditorWindow)EditorWindow.GetWindow(typeof(LocalizationEditorWindow));
+				window.localization = this.target as LocalizationData;
+				window.minSize = new Vector2(640, 240);
+			}
 		}
 	}
 }
