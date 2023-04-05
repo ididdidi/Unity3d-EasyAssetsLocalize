@@ -6,16 +6,16 @@ namespace Localization
     public class LocalizationResource
     {
         [SerializeField] private string tag;
-        [SerializeField] private string stringData;
+        [SerializeField] private Data data;
 
         public string Tag { get => tag; }
 
-        public string StringData { get => stringData; }
+        public Data Data { get => data; }
 
-        public LocalizationResource(string tag, string value)
+        public LocalizationResource(string tag, Data data)
         {
             this.tag = tag;
-            stringData = value;
+            this.data = data;
         }
     }
 }

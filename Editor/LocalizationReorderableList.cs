@@ -11,15 +11,15 @@ namespace Localization
 		private class Entity
 		{
 			private string name;
-			private Dictionary<string, string> localizations;
+			private Dictionary<string, Data> localizations;
 
 			public string Name { get => name; set => name = value; }
-			public Dictionary<string, string> Localizations { get => localizations; }
+			public Dictionary<string, Data> Localizations { get => localizations; }
 
 			public Entity(string name)
 			{
 				this.name = name;
-				localizations = new Dictionary<string, string>();
+				localizations = new Dictionary<string, Data>();
 			}
 		}
 
@@ -28,6 +28,9 @@ namespace Localization
 		public LocalizationReorderableList(LocalizationData localizationData) : base(LocalizationDataAdapter(localizationData), typeof(Entity), true, true, true, true)
 		{
 			localization = localizationData;
+
+			elementHeight = 18;
+
 			drawHeaderCallback = DrawLanguageNames;
 
 			drawElementCallback = DrawTag;
@@ -49,7 +52,7 @@ namespace Localization
 					{
 						if (tag.Name.Equals(local.Tag))
 						{
-							tag.Localizations.Add(language.Name, local.StringData);
+							tag.Localizations.Add(language.Name, local.Data);
 							tagExists = true;
 							break;
 						}
@@ -58,7 +61,7 @@ namespace Localization
 					if (!tagExists)
 					{
 						var newTag = new Entity(local.Tag);
-						newTag.Localizations.Add(language.Name, local.StringData);
+						newTag.Localizations.Add(language.Name, local.Data);
 						tags.Add(newTag);
 					}
 				}
@@ -99,17 +102,24 @@ namespace Localization
 		private void DrawTag(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			var tag = (Entity)list[index];
-			if (isActive)
+			if (true)
 			{
 				tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name, "PR TextField");
 				float dX = 86f;
 
-				string temp;
+				Data temp;
 				foreach (var language in localization.Languages)
 				{
-					if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = ""; }
-					temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), temp, "PR TextField");
-					if (!string.IsNullOrWhiteSpace(temp))
+					if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = new Data(new Texture2D(2,2)); }
+					if (temp.DataObject is string)
+					{
+						temp.DataObject = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)temp.DataObject, "PR TextField");
+					}
+					else
+					{
+						temp.DataObject = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)temp.DataObject, temp.DataObject.GetType(), false);
+					}
+				//	if (temp != default)
 					{
 						if (!tag.Localizations.ContainsKey(language.Name))
 						{
@@ -120,10 +130,10 @@ namespace Localization
 							tag.Localizations[language.Name] = temp;
 						}
 					}
-					else if (tag.Localizations.ContainsKey(language.Name))
-					{
-						tag.Localizations.Remove(language.Name);
-					}
+				//	else if (tag.Localizations.ContainsKey(language.Name))
+				//	{
+				//		tag.Localizations.Remove(language.Name);
+				//	}
 					dX += 150f;
 
 					if (GUI.changed)
@@ -140,7 +150,7 @@ namespace Localization
 				{
 					if (tag.Localizations.ContainsKey(language.Name))
 					{
-						GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), tag.Localizations[language.Name]);
+					//GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), tag.Localizations[language.Name]);
 					}
 					dX += 150f;
 				}
