@@ -6,7 +6,7 @@ namespace Localization
     [System.Serializable]
     public class Data
     {
-        private enum Type { String, Texture, Audio, Video }
+        public enum Type { String, Texture, Audio, Video }
         [SerializeField] private Type type;
         [SerializeField] private string stringData;
         [SerializeField] private Texture2D texture;
@@ -18,9 +18,27 @@ namespace Localization
             set => SetDataObject(value); 
         }
 
-        public Data(object dataObject)
+        public System.Type DataType
         {
+            get => GetDataType();
+        }
+
+        public Data(Type type, object dataObject = null)
+        {
+            this.type = type;
             SetDataObject(dataObject);
+        }
+
+        private System.Type GetDataType()
+        {
+            switch (type)
+            {
+                case Type.String: return typeof(string);
+                case Type.Texture: return typeof(Texture2D);
+                case Type.Audio: return typeof(AudioClip);
+                case Type.Video: return typeof(VideoClip);
+                default: throw new System.NotImplementedException($"GetDataObject for: {type}");
+            }
         }
 
         private object GetDataObject()
@@ -29,21 +47,21 @@ namespace Localization
             {
                 case Type.String: return stringData;
                 case Type.Texture: return texture;
-                default: return null;
+                case Type.Audio: return audio;
+                case Type.Video: return video;
+                default: throw new System.NotImplementedException($"GetDataObject for: {type}");
             }
         }
 
         private void SetDataObject(object dataObject)
         {
-            if (dataObject is string)
+            switch (type)
             {
-                type = Type.String;
-                stringData = (string)dataObject;
-            }
-            else if (dataObject is Texture2D)
-            {
-                type = Type.Texture;
-                texture = (Texture2D)dataObject;
+                case Type.String: stringData = (string)dataObject; break;
+                case Type.Texture: texture = (Texture2D)dataObject; break;
+                case Type.Audio: audio = (AudioClip)dataObject; break;
+                case Type.Video: video = (VideoClip)dataObject; break;
+                default: throw new System.NotImplementedException($"GetDataObject for: {type}");
             }
         }
     }

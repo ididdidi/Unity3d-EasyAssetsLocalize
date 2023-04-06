@@ -102,65 +102,49 @@ namespace Localization
 		private void DrawTag(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			var tag = (Entity)list[index];
-			if (true)
+			tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name, "PR TextField");
+			float dX = 86f;
+
+			Data temp;
+			foreach (var language in localization.Languages)
 			{
-				tag.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name, "PR TextField");
-				float dX = 86f;
-
-				Data temp;
-				foreach (var language in localization.Languages)
+				if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = new Data(Data.Type.Audio); }
+				if (temp.DataObject is string)
 				{
-					if (!tag.Localizations.TryGetValue(language.Name, out temp)) { temp = new Data(new Texture2D(2,2)); }
-					if (temp.DataObject is string)
-					{
-						temp.DataObject = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)temp.DataObject, "PR TextField");
-					}
-					else
-					{
-						temp.DataObject = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)temp.DataObject, temp.DataObject.GetType(), false);
-					}
-				//	if (temp != default)
-					{
-						if (!tag.Localizations.ContainsKey(language.Name))
-						{
-							tag.Localizations.Add(language.Name, temp);
-						}
-						else
-						{
-							tag.Localizations[language.Name] = temp;
-						}
-					}
-				//	else if (tag.Localizations.ContainsKey(language.Name))
-				//	{
-				//		tag.Localizations.Remove(language.Name);
-				//	}
-					dX += 150f;
-
-					if (GUI.changed)
-					{
-						SetChanges();
-					}
+					temp.DataObject = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)temp.DataObject, "PR TextField");
 				}
-			}
-			else
-			{
-				GUI.Label(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), tag.Name);
-				float dX = 86f;
-				foreach (var language in localization.Languages)
+				else
 				{
-					if (tag.Localizations.ContainsKey(language.Name))
-					{
-					//GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), tag.Localizations[language.Name]);
-					}
-					dX += 150f;
+					temp.DataObject = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)temp.DataObject, temp.DataType, false);
+				}
+
+				if (!tag.Localizations.ContainsKey(language.Name))
+				{
+					tag.Localizations.Add(language.Name, temp);
+				}
+				else
+				{
+					tag.Localizations[language.Name] = temp;
+				}
+				dX += 150f;
+
+				if (GUI.changed)
+				{
+					SetChanges();
 				}
 			}
 		}
 
 		private void AddNewTag(ReorderableList allList)
 		{
-			allList.list.Add(new Entity("Tag " + (allList.list.Count + 1)));
+			var entity = new Entity("Tag " + (allList.list.Count + 1));
+			foreach (var language in localization.Languages)
+			{
+				entity.Localizations.Add(language.Name, new Data(Data.Type.Audio));
+			}
+			allList.list.Add(entity);
 			allList.index = allList.list.Count - 1;
+			SetChanges();
 		}
 
 		private void RemoveTag(ReorderableList reorderable)
@@ -191,6 +175,7 @@ namespace Localization
 				{
 					if (tag.Localizations.ContainsKey(language.Name))
 					{
+						//Debug.Log($"{tag.Name} - {tag.Localizations[language.Name]}");
 						language.Resources.Add(new LocalizationResource(tag.Name, tag.Localizations[language.Name]));
 					}
 				}
