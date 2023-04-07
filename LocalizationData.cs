@@ -20,16 +20,16 @@ namespace Localization
             }
         }
 
-        public Dictionary<string, Data> GetLanguageData(string languageName)
+        public Dictionary<string, Resource> GetLanguageData(string languageName)
         {
-            var dictionary = new Dictionary<string, Data>();
+            var dictionary = new Dictionary<string, Resource>();
             foreach (var language in Languages)
             {
                 if (language.Name.Equals(languageName))
                 {
                     foreach (var resource in language.Resources)
                     {
-                        dictionary.Add(resource.Tag, resource.Data);
+                        dictionary.Add(resource.Tag, resource);
                     }
                     return dictionary;
                 }

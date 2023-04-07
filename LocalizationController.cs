@@ -7,7 +7,7 @@ namespace Localization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationData defaultLocalization;
-        private Dictionary<string, Dictionary<string, Dictionary<string, Data>>> localizations = new Dictionary<string, Dictionary<string, Dictionary<string, Data>>>();
+        private Dictionary<string, Dictionary<string, Dictionary<string, Resource>>> localizations = new Dictionary<string, Dictionary<string, Dictionary<string, Resource>>>();
 
         public string Language
         {
@@ -41,7 +41,7 @@ namespace Localization
 
         public void AddLocalization(string localizationName, LocalizationData localizationData)
         {
-            var localization = new Dictionary<string, Dictionary<string, Data>>();
+            var localization = new Dictionary<string, Dictionary<string, Resource>>();
 
             if (localizations.ContainsKey(localizationName))
             {
@@ -50,15 +50,15 @@ namespace Localization
 
             foreach (var language in localizationData.Languages)
             {
-                Dictionary<string, Data> resources;
+                Dictionary<string, Resource> resources;
                 if (!localization.TryGetValue(language.Name, out resources))
                 {
-                    resources = new Dictionary<string, Data>();
+                    resources = new Dictionary<string, Resource>();
                     localization.Add(language.Name, resources);
                 }
                 foreach (var resource in language.Resources)
                 {
-                    resources.Add(resource.Tag, resource.Data);
+                    resources.Add(resource.Tag, resource);
                 }
             }
 
@@ -85,7 +85,7 @@ namespace Localization
             UptateLocalizations();
         }
 
-        public Data GetLocalization(string tag)
+        public Resource GetLocalization(string tag)
         {
             var languagePacks = GetLanguagePacks();
             for (int i = languagePacks.Count - 1; i >= 0; i--)
@@ -108,9 +108,9 @@ namespace Localization
             }
         }
 
-        private List<Dictionary<string, Data>> GetLanguagePacks()
+        private List<Dictionary<string, Resource>> GetLanguagePacks()
         {
-            var languagePacks = new List<Dictionary<string, Data>>();
+            var languagePacks = new List<Dictionary<string, Resource>>();
             foreach (var localization in localizations)
             {
                 if (localization.Value.ContainsKey(Language))

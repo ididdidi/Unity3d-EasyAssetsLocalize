@@ -4,8 +4,9 @@ using UnityEngine.Video;
 namespace Localization
 {
     [System.Serializable]
-    public class Data
+    public class Resource
     {
+        [SerializeField] private string tag;
         public enum Type { String, Texture, Audio, Video }
         [SerializeField] private Type type;
         [SerializeField] private string stringData;
@@ -13,23 +14,32 @@ namespace Localization
         [SerializeField] private AudioClip audio;
         [SerializeField] private VideoClip video;
 
-        public object DataObject { 
-            get => GetDataObject(); 
-            set => SetDataObject(value); 
+        public string Tag { get => tag; }
+        public object Data
+        {
+            get => GetDataObject();
+            set => SetDataObject(value);
         }
 
-        public System.Type DataType
+        public System.Type ObjectType
         {
-            get => GetDataType();
+            get => GetSystemType();
         }
 
-        public Data(Type type, object dataObject = null)
+        public Resource(string tag, object dataObject)
         {
-            this.type = type;
+            this.tag = tag;
+            this.type = GetDataType(dataObject.GetType());
             SetDataObject(dataObject);
         }
 
-        private System.Type GetDataType()
+        public Resource(string tag, System.Type type)
+        {
+            this.tag = tag;
+            this.type = GetDataType(type);
+        }
+
+        private System.Type GetSystemType()
         {
             switch (type)
             {
@@ -39,6 +49,15 @@ namespace Localization
                 case Type.Video: return typeof(VideoClip);
                 default: throw new System.NotImplementedException($"GetDataObject for: {type}");
             }
+        }
+
+        private Type GetDataType(System.Type type)
+        {
+            if (type.IsAssignableFrom(typeof(string))) { return Type.String; }
+            else if (type.IsAssignableFrom(typeof(Texture2D))) { return Type.Texture; }
+            else if (type.IsAssignableFrom(typeof(AudioClip))) { return Type.Audio; }
+            else if (type.IsAssignableFrom(typeof(VideoClip))) { return Type.Video; }
+            else { throw new System.NotImplementedException($"GetDataObject for: {type}"); }
         }
 
         private object GetDataObject()
@@ -57,7 +76,7 @@ namespace Localization
         {
             switch (type)
             {
-                case Type.String: stringData = (string)dataObject; break;
+                case Type.String: stringData = (dataObject != null) ? (string)dataObject : ""; break;
                 case Type.Texture: texture = (Texture2D)dataObject; break;
                 case Type.Audio: audio = (AudioClip)dataObject; break;
                 case Type.Video: video = (VideoClip)dataObject; break;

@@ -7,16 +7,16 @@ namespace Localization
     public class LanguageData
     {
         [SerializeField] private string name;
-        [SerializeField] private List<LocalizationResource> resources;
+        [SerializeField] private List<Resource> resources;
 
         public string Name { get => name; set => name = value; }
 
-        public List<LocalizationResource> Resources { get => resources; }
+        public List<Resource> Resources { get => resources; }
 
         public LanguageData(string name)
         {
             this.name = name;
-            resources = new List<LocalizationResource>();
+            resources = new List<Resource>();
         }
     }
 }
