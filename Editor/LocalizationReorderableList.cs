@@ -38,6 +38,8 @@ namespace Localization
 			onAddCallback = AddNewTag;
 
 			onRemoveCallback = RemoveTag;
+
+			onReorderCallback = (list) => { SetChanges(); };
 		}
 
 		private static List<Entity> LocalizationDataAdapter(LocalizationData localization)
@@ -136,15 +138,15 @@ namespace Localization
 			}
 		}
 
-		private void AddNewTag(ReorderableList allList)
+		private void AddNewTag(ReorderableList reorderable)
 		{
-			var entity = new Entity("Tag " + (allList.list.Count + 1));
+			var entity = new Entity("Tag " + (reorderable.list.Count + 1));
 			foreach (var language in localization.Languages)
 			{
 				entity.Localizations.Add(language.Name, "");
 			}
-			allList.list.Add(entity);
-			allList.index = allList.list.Count - 1;
+			reorderable.list.Add(entity);
+			reorderable.index = reorderable.list.Count - 1;
 			SetChanges();
 		}
 
