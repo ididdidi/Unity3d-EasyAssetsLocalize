@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Localization
 {
-	[CustomEditor(typeof(LocalizationData))]
+	[CustomEditor(typeof(LocalizationStorage))]
 	public class LocalizationDataEditor : Editor
 	{
 		public override void OnInspectorGUI()
@@ -13,7 +13,7 @@ namespace Localization
 			if (GUILayout.Button("Edit localization"))
 			{
 				LocalizationEditorWindow window = (LocalizationEditorWindow)EditorWindow.GetWindow(typeof(LocalizationEditorWindow));
-				window.localization = this.target as LocalizationData;
+				window.localization = this.target as LocalizationStorage;
 				window.serializedObject = this.serializedObject;
 				window.minSize = new Vector2(640, 240);
 			}

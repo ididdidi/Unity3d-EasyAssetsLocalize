@@ -23,9 +23,9 @@ namespace Localization
 			}
 		}
 
-		public LocalizationData localization;
+		public LocalizationStorage localization;
 
-		public LocalizationReorderableList(LocalizationData localizationData) : base(LocalizationDataAdapter(localizationData), typeof(Entity), true, true, true, true)
+		public LocalizationReorderableList(LocalizationStorage localizationData) : base(LocalizationDataAdapter(localizationData), typeof(Entity), true, true, true, true)
 		{
 			localization = localizationData;
 
@@ -42,19 +42,19 @@ namespace Localization
 			onReorderCallback = (list) => { SetChanges(); };
 		}
 
-		private static List<Entity> LocalizationDataAdapter(LocalizationData localization)
+		private static List<Entity> LocalizationDataAdapter(LocalizationStorage localization)
 		{
 			var entities = new List<Entity>();
 			foreach (var language in localization.Languages)
 			{
-				foreach (var local in language.Resources)
+				foreach (var local in localization.GetLocalizationResources(language))
 				{
 					bool entityExists = false;
 					foreach (var entity in entities)
 					{
-						if (entity.Name.Equals(local.Tag))
+						if (entity.Name.Equals(local.Key))
 						{
-							entity.Localizations.Add(language.Name, local.Data);
+							entity.Localizations.Add(language, local.Value.Data);
 							entityExists = true;
 							break;
 						}
@@ -62,8 +62,8 @@ namespace Localization
 
 					if (!entityExists)
 					{
-						var newTag = new Entity(local.Tag);
-						newTag.Localizations.Add(language.Name, local.Data);
+						var newTag = new Entity(local.Key);
+						newTag.Localizations.Add(language, local.Value.Data);
 						entities.Add(newTag);
 					}
 				}
@@ -79,7 +79,7 @@ namespace Localization
 
 			for (int i = 0; i < localization.Languages.Count; i++)
 			{
-				localization.Languages[i].Name = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Languages[i].Name, "TextField");
+				localization.Languages[i] = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Languages[i], "TextField");
 				dX += 130f;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
 				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
@@ -92,7 +92,7 @@ namespace Localization
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
-				localization.Languages.Add(new LanguageData("Language " + (localization.Languages.Count + 1)));
+				localization.localizations.Add(new Localization("Language " + (localization.Languages.Count + 1)));
 			}
 
 			if (GUI.changed)
@@ -110,8 +110,8 @@ namespace Localization
 			object temp = null;
 			foreach (var language in localization.Languages)
 			{
-				if (entity.Localizations.ContainsKey(language.Name)) { temp = entity.Localizations[language.Name]; }
-				
+				if (entity.Localizations.ContainsKey(language)) { temp = entity.Localizations[language]; }
+
 				if (temp.GetType().IsAssignableFrom(typeof(string)))
 				{
 					temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)temp, "PR TextField");
@@ -121,13 +121,13 @@ namespace Localization
 					temp = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)temp, temp.GetType(), false);
 				}
 
-				if (!entity.Localizations.ContainsKey(language.Name))
+				if (!entity.Localizations.ContainsKey(language))
 				{
-					entity.Localizations.Add(language.Name, temp);
+					entity.Localizations.Add(language, temp);
 				}
 				else
 				{
-					entity.Localizations[language.Name] = temp;
+					entity.Localizations[language] = temp;
 				}
 				dX += 150f;
 
@@ -143,7 +143,7 @@ namespace Localization
 			var entity = new Entity("Tag " + (reorderable.list.Count + 1));
 			foreach (var language in localization.Languages)
 			{
-				entity.Localizations.Add(language.Name, "");
+				entity.Localizations.Add(language, "");
 			}
 			reorderable.list.Add(entity);
 			reorderable.index = reorderable.list.Count - 1;
@@ -153,7 +153,7 @@ namespace Localization
 		private void RemoveTag(ReorderableList reorderable)
 		{
 			var entity = (Entity)reorderable.list[reorderable.index];
-			foreach (var lang in localization.Languages)
+			foreach (var lang in localization.localizations)
 			{
 				if (lang.Resources != null)
 				{
@@ -171,14 +171,14 @@ namespace Localization
 
 		private void SetChanges()
 		{
-			foreach (var language in localization.Languages)
+			foreach (var language in localization.localizations)
 			{
 				language.Resources.Clear();
 				foreach (var entity in (List<Entity>)list)
 				{
-					if (entity.Localizations.ContainsKey(language.Name))
+					if (entity.Localizations.ContainsKey(language.Language))
 					{
-						language.Resources.Add(new Resource(entity.Name, entity.Localizations[language.Name]));
+						language.Resources.Add(new Resource(entity.Name, entity.Localizations[language.Language]));
 					}
 				}
 			}

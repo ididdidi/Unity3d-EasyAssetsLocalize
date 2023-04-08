@@ -4,18 +4,18 @@ using UnityEngine;
 namespace Localization
 {
     [System.Serializable]
-    public class LanguageData
+    public class Localization
     {
-        [SerializeField] private string name;
+        [SerializeField] private string language;
         [SerializeField] private List<Resource> resources;
 
-        public string Name { get => name; set => name = value; }
+        public string Language { get => language; set => language = value; }
 
         public List<Resource> Resources { get => resources; }
 
-        public LanguageData(string name)
+        public Localization(string language)
         {
-            this.name = name;
+            this.language = language;
             resources = new List<Resource>();
         }
     }

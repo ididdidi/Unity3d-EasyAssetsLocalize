@@ -5,7 +5,7 @@ namespace Localization
 {
 	public class LocalizationEditorWindow : EditorWindow
 	{
-		public LocalizationData localization;
+		public LocalizationStorage localization;
 		public SerializedObject serializedObject;
 		private LocalizationReorderableList localizationsList;
 

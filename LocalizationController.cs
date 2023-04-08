@@ -6,8 +6,8 @@ namespace Localization
 {
     public class LocalizationController : MonoBehaviour
     {
-        [SerializeField] private LocalizationData defaultLocalization;
-        private Dictionary<string, Dictionary<string, Dictionary<string, Resource>>> localizations = new Dictionary<string, Dictionary<string, Dictionary<string, Resource>>>();
+        [SerializeField] private LocalizationStorage localizationStorage;
+        private Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
         public string Language
         {
@@ -15,133 +15,73 @@ namespace Localization
             set => PlayerPrefs.SetString("Language", value);
         }
 
-        public List<string> Languages
-        {
-            get
-            {
-                var languages = new List<string>();
-                foreach (var local in localizations)
-                {
-                    foreach (var language in local.Value.Keys)
-                    {
-                        if (!languages.Contains(language))
-                        {
-                            languages.Add(language);
-                        }
-                    }
-                }
-                return languages;
-            }
-        }
+        public List<string> Languages { get; private set; }
 
         void Start()
         {
-            AddLocalization("Default", defaultLocalization);
+            LoadLocalization(localizationStorage);
         }
 
-        public void AddLocalization(string localizationName, LocalizationData localizationData)
+        public void LoadLocalization(LocalizationStorage localization)
         {
-            var localization = new Dictionary<string, Dictionary<string, Resource>>();
-
-            if (localizations.ContainsKey(localizationName))
-            {
-                throw new Exception(string.Format("Localization with the name: {0}, has already been added.", localizationName));
-            }
-
-            foreach (var language in localizationData.Languages)
-            {
-                Dictionary<string, Resource> resources;
-                if (!localization.TryGetValue(language.Name, out resources))
-                {
-                    resources = new Dictionary<string, Resource>();
-                    localization.Add(language.Name, resources);
-                }
-                foreach (var resource in language.Resources)
-                {
-                    resources.Add(resource.Tag, resource);
-                }
-            }
-
-            if (localization.Count > 0)
-            {
-                localizations.Add(localizationName, localization);
-                UptateLocalizations();
-            }
-            else
-            {
-                Debug.LogWarning(string.Format("{0} is empty.", localizationName));
-            }
-        }
-
-        public void RemoveLocalization(string localizationName)
-        {
-            localizations.Remove(localizationName);
-            UptateLocalizations();
+            Languages = localization.Languages;
+            SetLanguage(Language);
         }
 
         public void SetLanguage(string language)
         {
-            if (Languages.Contains(language)) { Language = language; }
-            UptateLocalizations();
-        }
-
-        public Resource GetLocalization(string tag)
-        {
-            var languagePacks = GetLanguagePacks();
-            for (int i = languagePacks.Count - 1; i >= 0; i--)
+            if (Languages.Contains(language))
             {
-                if (languagePacks[i].ContainsKey(tag))
+                dictionary.Clear();
+                foreach (var resource in localizationStorage.GetLocalizationResources(Language))
                 {
-                    return languagePacks[i][tag];
+                    dictionary.Add(resource.Key, resource.Value);
                 }
             }
-            return default;
+            else
+            {
+                throw new System.ArgumentException($"{Language} not found in the {Languages}");
+            }
+            UptateLocalization();
         }
 
-        public void UptateLocalizations()
+        public void UptateLocalization()
         {
             var textViews = FindObjectsOfType<Text>();
             foreach (var textView in textViews)
             {
-                var localisation = GetLocalization(textView.name);
-                //if (!string.IsNullOrWhiteSpace(localisation)) { textView.text = localisation; }
+                var localisation = dictionary[textView.name] as string;
+                if (!string.IsNullOrWhiteSpace(localisation)) { textView.text = localisation; }
             }
         }
 
-        private List<Dictionary<string, Resource>> GetLanguagePacks()
+        public void SetNextLanguage()
         {
-            var languagePacks = new List<Dictionary<string, Resource>>();
-            foreach (var localization in localizations)
-            {
-                if (localization.Value.ContainsKey(Language))
-                {
-                    languagePacks.Add(localization.Value[Language]);
-                }
-                else
-                {
-                    Debug.LogWarning(string.Format("{0} not found in the {1}", Language, localization.Key));
-                }
-            }
-            return languagePacks;
+            ChangeLocalzation(Direction.Next);
         }
 
-        public void ChangeLocalzation(int offset)
+        public void SetPrevLanguage()
         {
-            if (offset == 0) return;
+            ChangeLocalzation(Direction.Back);
+        }
+
+        private enum Direction { Next = 1, Back =-1 }
+
+        private void ChangeLocalzation(Direction direction)
+        {
+            if (Languages.Count < 2) { return; }
             int index = Languages.IndexOf(Language);
-            int newIndex = (index + offset) % (Languages.Count);
-            if (newIndex >= 0) { index = newIndex; }
+            if (index > -1)
+            {
+                int newIndex = (index + (int)direction) % Languages.Count;
+                if (newIndex >= 0) { index = newIndex; }
+                else { index = Languages.Count + newIndex; }
+                SetLanguage(Languages[index]);
+            }
             else
             {
-                index = Languages.Count + newIndex;
+                throw new System.ArgumentException($"{Language} not found in the {Languages}");
             }
-            Language = Languages[index];
-            UptateLocalizations();
-        }
-
-        public class Exception : System.Exception
-        {
-            public Exception(string message) : base(message) { }
         }
     }
 }

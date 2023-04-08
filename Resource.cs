@@ -7,7 +7,7 @@ namespace Localization
     public class Resource
     {
         [SerializeField] private string tag;
-        public enum Type { String, Texture, Audio, Video }
+        private enum Type { String, Texture, Audio, Video }
         [SerializeField] private Type type;
         [SerializeField] private string stringData;
         [SerializeField] private Texture2D texture;

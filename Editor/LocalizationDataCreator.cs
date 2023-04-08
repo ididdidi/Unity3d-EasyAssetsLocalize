@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Localization
 {
-    public class LocalizationDataCreator
+    public class LocalizationStorageCreator
     {
-        [MenuItem("Assets/Create/Localization Data", false, 1)]
+        [MenuItem("Assets/Create/Localization", false, 1)]
         public static void CreateLocalizationDataAsset()
         {
             var selectionPath = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -16,7 +16,7 @@ namespace Localization
             }
 
             var path = EditorUtility.SaveFilePanelInProject(
-                                             "Create Localization Data",
+                                             "Create Localization storage",
                                              "NewLocalizationData",
                                              "asset",
                                              string.Empty,
@@ -24,7 +24,7 @@ namespace Localization
 
             if (path.Length > 0)
             {
-                var asset = ScriptableObject.CreateInstance<LocalizationData>();
+                var asset = ScriptableObject.CreateInstance<LocalizationStorage>();
 
                 AssetDatabase.CreateAsset(asset, path);
                 AssetDatabase.SaveAssets();
