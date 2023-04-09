@@ -47,14 +47,14 @@ namespace Localization
 			var entities = new List<Entity>();
 			foreach (var language in localization.Languages)
 			{
-				foreach (var local in localization.GetLocalizationResources(language))
+				foreach (var local in localization.GetLocalization(language).Dictionary)
 				{
 					bool entityExists = false;
 					foreach (var entity in entities)
 					{
 						if (entity.Name.Equals(local.Key))
 						{
-							entity.Localizations.Add(language, local.Value.Data);
+							entity.Localizations.Add(language, local.Value);
 							entityExists = true;
 							break;
 						}
@@ -63,7 +63,7 @@ namespace Localization
 					if (!entityExists)
 					{
 						var newTag = new Entity(local.Key);
-						newTag.Localizations.Add(language, local.Value.Data);
+						newTag.Localizations.Add(language, local.Value);
 						entities.Add(newTag);
 					}
 				}
@@ -79,12 +79,13 @@ namespace Localization
 
 			for (int i = 0; i < localization.Languages.Count; i++)
 			{
-				localization.Languages[i] = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Languages[i], "TextField");
+				var language = localization.Languages[i];
+				localization.GetLocalization(language).Language = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), language, "TextField");
 				dX += 130f;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
 				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
 				{
-					localization.Languages.RemoveAt(i--);
+					localization.RemoveLocalization(localization.Languages[i]);
 				}
 				dX += 20f;
 			}
@@ -92,7 +93,7 @@ namespace Localization
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
-				localization.localizations.Add(new Localization("Language " + (localization.Languages.Count + 1)));
+				localization.AddLocalization("Language " + (localization.Languages.Count + 1));
 			}
 
 			if (GUI.changed)
@@ -153,36 +154,28 @@ namespace Localization
 		private void RemoveTag(ReorderableList reorderable)
 		{
 			var entity = (Entity)reorderable.list[reorderable.index];
-			foreach (var lang in localization.localizations)
+			for(int i=0; i < localization.Languages.Count; i++)
 			{
-				if (lang.Resources != null)
-				{
-					for (int i = 0; i < lang.Resources.Count; i++)
-					{
-						if (lang.Resources[i].Tag.Equals(entity.Name))
-						{
-							lang.Resources.RemoveAt(i--);
-						}
-					}
-				}
+				localization.GetLocalization(localization.Languages[i]).Remove(entity.Name);
 			}
 			reorderable.list.Remove(entity);
 		}
 
 		private void SetChanges()
 		{
-			foreach (var language in localization.localizations)
+			for (int i = 0; i < localization.Languages.Count; i++)
 			{
-				language.Resources.Clear();
+				string language = localization.Languages[i];
 				foreach (var entity in (List<Entity>)list)
 				{
-					if (entity.Localizations.ContainsKey(language.Language))
+					if (entity.Localizations.ContainsKey(language))
 					{
-						language.Resources.Add(new Resource(entity.Name, entity.Localizations[language.Language]));
+						localization.GetLocalization(language).SetValue(entity.Name, entity.Localizations[language]);
 					}
 				}
 			}
 			EditorUtility.SetDirty(localization);
+			//list = LocalizationDataAdapter(localization);
 		}
 	}
 }

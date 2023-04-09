@@ -32,11 +32,7 @@ namespace Localization
         {
             if (Languages.Contains(language))
             {
-                dictionary.Clear();
-                foreach (var resource in localizationStorage.GetLocalizationResources(Language))
-                {
-                    dictionary.Add(resource.Key, resource.Value);
-                }
+                dictionary = localizationStorage.GetLocalization(Language).Dictionary;
             }
             else
             {
