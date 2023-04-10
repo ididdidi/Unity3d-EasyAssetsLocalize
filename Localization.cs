@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Localization
+namespace ResourceLocalization
 {
     [System.Serializable]
-    public class Localization
+    public partial class Localization
     {
         [SerializeField] private string language;
-        [SerializeField] private List<Resource> resources;
+        [SerializeField] private List<SerializedResources> resources;
 
         public string Language { get => language; set => language = value; }
 
         public Localization(string language)
         {
             this.language = language;
-            resources = new List<Resource>();
+            resources = new List<SerializedResources>();
         }
                
         public Dictionary<string, object> Dictionary
@@ -36,7 +36,7 @@ namespace Localization
             {
                 if (resources[i].Tag.Equals(tag)) { resources[i].Data = value; return; }
             }
-            resources.Add(new Resource(tag, value));
+            resources.Add(new SerializedResources(tag, value));
         }
 
         public object GetValue(string tag)

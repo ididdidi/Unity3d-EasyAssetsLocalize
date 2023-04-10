@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Localization
+namespace ResourceLocalization
 {
     public class LocalizationStorageCreator
     {

@@ -3,72 +3,93 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Localization
+namespace ResourceLocalization
 {
 	public class LocalizationReorderableList : ReorderableList
 	{
-		[System.Serializable]
-		private class Entity
+		private class Element
 		{
-			private string name;
-			private Dictionary<string, object> localizations;
+			public string Tag { get; set; }
+			public Dictionary<string, object> Localizations { get; }
 
-			public string Name { get => name; set => name = value; }
-			public Dictionary<string, object> Localizations { get => localizations; }
-
-			public Entity(string name)
+			public Element(string name)
 			{
-				this.name = name;
-				localizations = new Dictionary<string, object>();
+				Tag = name;
+				Localizations = new Dictionary<string, object>();
+			}
+
+			public void DrawOnGUI(Rect rect)
+			{
+				this.Tag = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), this.Tag, "PR TextField");
+				float dX = 86f;
+
+				string[] languages = new string[Localizations.Count]; 
+				Localizations.Keys.CopyTo(languages,0);
+
+				foreach (var language in languages)
+				{
+					var value = Localizations[language];
+					if (value.GetType().IsAssignableFrom(typeof(string)))
+					{
+						value = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)value, "PR TextField");
+					}
+					else
+					{
+						value = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)value, value.GetType(), false);
+					}
+					dX += 150f;
+					Localizations[language] = value;
+				}
 			}
 		}
 
-		public LocalizationStorage localization;
+		private LocalizationStorage LocalizationStorage { get; }
 
-		public LocalizationReorderableList(LocalizationStorage localizationData) : base(LocalizationDataAdapter(localizationData), typeof(Entity), true, true, true, true)
+		public LocalizationReorderableList(LocalizationStorage localizationStorage) : base(LocalizationDataAdapter(localizationStorage), typeof(Element), true, true, true, true)
 		{
-			localization = localizationData;
+			this.LocalizationStorage = localizationStorage;
 
 			elementHeight = 18;
 
 			drawHeaderCallback = DrawLanguageNames;
 
-			drawElementCallback = DrawTag;
+			drawElementCallback = DrawElement;
 
 			onAddCallback = AddNewTag;
 
 			onRemoveCallback = RemoveTag;
 
-			onReorderCallback = (list) => { SetChanges(); };
+			//onReorderCallback = (list) => { SetChanges(); };
+
 		}
 
-		private static List<Entity> LocalizationDataAdapter(LocalizationStorage localization)
+		private static List<Element> LocalizationDataAdapter(LocalizationStorage localizationStorage)
 		{
-			var entities = new List<Entity>();
-			foreach (var language in localization.Languages)
+			var resources = new List<Element>();
+			foreach (var localization in localizationStorage.Localizations)
 			{
-				foreach (var local in localization.GetLocalization(language).Dictionary)
+				foreach (var local in localization.Dictionary)
 				{
-					bool entityExists = false;
-					foreach (var entity in entities)
+					bool resourceExists = false;
+					foreach (var resource in resources)
 					{
-						if (entity.Name.Equals(local.Key))
+						if (resource.Tag.Equals(local.Key))
 						{
-							entity.Localizations.Add(language, local.Value);
-							entityExists = true;
+							resource.Localizations.Add(localization.Language, local.Value);
+							resourceExists = true;
 							break;
 						}
 					}
 
-					if (!entityExists)
+					if (!resourceExists)
 					{
-						var newTag = new Entity(local.Key);
-						newTag.Localizations.Add(language, local.Value);
-						entities.Add(newTag);
+						var newTag = new Element(local.Key);
+						newTag.Localizations.Add(localization.Language, local.Value);
+						resources.Add(newTag);
 					}
 				}
 			}
-			return entities;
+			return resources;
 		}
 
 		private void DrawLanguageNames(Rect rect)
@@ -77,15 +98,15 @@ namespace Localization
 			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Tags");
 			dX = 100f;
 
-			for (int i = 0; i < localization.Languages.Count; i++)
+			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				var language = localization.Languages[i];
-				localization.GetLocalization(language).Language = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), language, "TextField");
+				localization.Language = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Language, "TextField");
 				dX += 130f;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
 				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
 				{
-					localization.RemoveLocalization(localization.Languages[i]);
+					LocalizationStorage.RemoveLocalization(localization.Language);
+					return;
 				}
 				dX += 20f;
 			}
@@ -93,89 +114,50 @@ namespace Localization
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
-				localization.AddLocalization("Language " + (localization.Languages.Count + 1));
+				LocalizationStorage.AddLocalization("Language " + (LocalizationStorage.Languages.Count + 1));
 			}
 
 			if (GUI.changed)
 			{
-				list = LocalizationDataAdapter(localization);
+				list = LocalizationDataAdapter(LocalizationStorage);
 			}
 		}
 
-		private void DrawTag(Rect rect, int index, bool isActive, bool isFocused)
+		private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
 		{
-			var entity = (Entity)list[index];
-			entity.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), entity.Name, "PR TextField");
-			float dX = 86f;
-
-			object temp = null;
-			foreach (var language in localization.Languages)
-			{
-				if (entity.Localizations.ContainsKey(language)) { temp = entity.Localizations[language]; }
-
-				if (temp.GetType().IsAssignableFrom(typeof(string)))
-				{
-					temp = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)temp, "PR TextField");
-				}
-				else
-				{
-					temp = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)temp, temp.GetType(), false);
-				}
-
-				if (!entity.Localizations.ContainsKey(language))
-				{
-					entity.Localizations.Add(language, temp);
-				}
-				else
-				{
-					entity.Localizations[language] = temp;
-				}
-				dX += 150f;
-
-				if (GUI.changed)
-				{
-					SetChanges();
-				}
-			}
+			((Element)list[index]).DrawOnGUI(rect);
+			if (GUI.changed) { SetChanges(); }
 		}
 
 		private void AddNewTag(ReorderableList reorderable)
 		{
-			var entity = new Entity("Tag " + (reorderable.list.Count + 1));
-			foreach (var language in localization.Languages)
+			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				entity.Localizations.Add(language, "");
+				localization.SetValue("Tag " + (reorderable.list.Count + 1), "");
 			}
-			reorderable.list.Add(entity);
-			reorderable.index = reorderable.list.Count - 1;
-			SetChanges();
+
+			list = LocalizationDataAdapter(LocalizationStorage);
 		}
 
 		private void RemoveTag(ReorderableList reorderable)
 		{
-			var entity = (Entity)reorderable.list[reorderable.index];
-			for(int i=0; i < localization.Languages.Count; i++)
+			var resource = (Element)reorderable.list[reorderable.index];
+			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				localization.GetLocalization(localization.Languages[i]).Remove(entity.Name);
+				localization.Remove(resource.Tag);
 			}
-			reorderable.list.Remove(entity);
+			list = LocalizationDataAdapter(LocalizationStorage);
 		}
 
 		private void SetChanges()
 		{
-			for (int i = 0; i < localization.Languages.Count; i++)
+			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				string language = localization.Languages[i];
-				foreach (var entity in (List<Entity>)list)
+				foreach (var resource in (List<Element>)list)
 				{
-					if (entity.Localizations.ContainsKey(language))
-					{
-						localization.GetLocalization(language).SetValue(entity.Name, entity.Localizations[language]);
-					}
+					localization.SetValue(resource.Tag, resource.Localizations[localization.Language]);
 				}
 			}
-			EditorUtility.SetDirty(localization);
-			//list = LocalizationDataAdapter(localization);
 		}
 	}
 }

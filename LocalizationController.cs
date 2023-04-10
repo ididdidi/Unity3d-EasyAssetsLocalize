@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Localization
+namespace ResourceLocalization
 {
     public class LocalizationController : MonoBehaviour
     {

@@ -1,22 +1,22 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Localization
+namespace ResourceLocalization
 {
 	public class LocalizationEditorWindow : EditorWindow
 	{
-		public LocalizationStorage localization;
-		public SerializedObject serializedObject;
+		public LocalizationStorage localizationStorage;
+		//public SerializedObject serializedObject;
 		private LocalizationReorderableList localizationsList;
 
 		void OnGUI()
 		{
-			if (localizationsList == null && localization) { localizationsList = new LocalizationReorderableList(localization); }
+			if (localizationsList == null && localizationStorage) { localizationsList = new LocalizationReorderableList(localizationStorage); }
 			localizationsList?.DoLayoutList();
 
 			if (GUI.changed)
 			{
-				EditorUtility.SetDirty(localization);
+				EditorUtility.SetDirty(localizationStorage);
 			}
 		}
 	}

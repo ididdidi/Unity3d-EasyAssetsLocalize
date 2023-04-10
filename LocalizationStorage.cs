@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Localization
+namespace ResourceLocalization
 {
     public class LocalizationStorage : ScriptableObject
     {
@@ -19,7 +19,9 @@ namespace Localization
                 return languages;
             }
         }
-        
+
+        public IEnumerable<Localization> Localizations { get => localizations; }
+
         public Localization GetLocalization(string language)
         {
             for (int i = localizations.Count - 1; i > -1; i--)
@@ -51,7 +53,7 @@ namespace Localization
                     localization.SetValue(dictionary.Key, dictionary.Value);
                 }
             }
-            localizations.Add(new Localization(language));
+            localizations.Add(localization);
         }
 
         public void RemoveLocalization(string language)
