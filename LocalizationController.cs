@@ -15,29 +15,34 @@ namespace ResourceLocalization
             set => PlayerPrefs.SetString("Language", value);
         }
 
-        public List<string> Languages { get; private set; }
+        public List<string> Languages
+        {
+            get
+            {
+                List<string> languages = new List<string>();
+                foreach (var localization in localizationStorage?.Localizations)
+                {
+                    languages.Add(localization.Language);
+                }
+                return languages;
+            }
+        }
 
         void Start()
         {
             LoadLocalization(localizationStorage);
         }
 
-        public void LoadLocalization(LocalizationStorage localization)
+        public void LoadLocalization(LocalizationStorage localizationStorage)
         {
-            Languages = localization.Languages;
+            this.localizationStorage = localizationStorage;
             SetLanguage(Language);
         }
 
         public void SetLanguage(string language)
         {
-            if (Languages.Contains(language))
-            {
-                dictionary = localizationStorage.GetLocalization(Language).Dictionary;
-            }
-            else
-            {
-                throw new System.ArgumentException($"{Language} not found in the {Languages}");
-            }
+            Language = language;
+            dictionary = localizationStorage.GetLocalization(language).Dictionary;
             UptateLocalization();
         }
 

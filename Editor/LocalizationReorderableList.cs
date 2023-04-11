@@ -97,6 +97,7 @@ namespace ResourceLocalization
 			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Tags");
 			dX = 100f;
 
+			var count = 0;
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
 				localization.Language = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Language, "TextField");
@@ -105,20 +106,21 @@ namespace ResourceLocalization
 				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
 				{
 					LocalizationStorage.RemoveLocalization(localization.Language);
-					return;
+					break;
 				}
 				dX += 20f;
+				count++;
 			}
 
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
-				LocalizationStorage.AddLocalization("Language " + (LocalizationStorage.Languages.Count + 1));
+				LocalizationStorage.AddLocalization("Language " + (count + 1));
 			}
 
 			if (GUI.changed)
 			{
-				list = ExtractElements(LocalizationStorage);
+				this.list = ExtractElements(LocalizationStorage);
 			}
 		}
 

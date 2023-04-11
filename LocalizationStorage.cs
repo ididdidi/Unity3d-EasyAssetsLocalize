@@ -7,19 +7,6 @@ namespace ResourceLocalization
     {
         [SerializeField] private List<Localization> localizations = new List<Localization>();
 
-        public List<string> Languages
-        {
-            get
-            {
-                List<string> languages = new List<string>();
-                foreach (var localization in localizations)
-                {
-                    languages.Add(localization.Language);
-                }
-                return languages;
-            }
-        }
-
         public IEnumerable<Localization> Localizations { get => localizations; }
 
         public Localization GetLocalization(string language)
@@ -36,19 +23,18 @@ namespace ResourceLocalization
 
         public void AddLocalization(string language)
         {
-            var count = localizations.Count;
-            for (int i = 0; i < count; i++)
+            foreach(var local in Localizations)
             {
-                if (localizations[i].Language.Equals(language))
+                if (local.Language.Equals(language))
                 {
                     throw new System.ArgumentException($"{GetType()}: There is already a localizations with {language}");
                 }
             }
             
             var localization = new Localization(language);
-            if(count > 0)
+            if(localizations.Count > 0)
             {
-                foreach (var dictionary in localizations[count-1].Dictionary)
+                foreach (var dictionary in localizations[localizations.Count - 1].Dictionary)
                 {
                     localization.SetValue(dictionary.Key, dictionary.Value);
                 }

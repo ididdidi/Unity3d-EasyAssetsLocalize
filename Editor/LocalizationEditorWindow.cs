@@ -6,7 +6,6 @@ namespace ResourceLocalization
 	public class LocalizationEditorWindow : EditorWindow
 	{
 		public LocalizationStorage localizationStorage;
-		//public SerializedObject serializedObject;
 		private LocalizationReorderableList localizationsList;
 
 		void OnGUI()
