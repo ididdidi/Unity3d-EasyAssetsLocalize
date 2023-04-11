@@ -45,7 +45,7 @@ namespace ResourceLocalization
 
 		private LocalizationStorage LocalizationStorage { get; }
 
-		public LocalizationReorderableList(LocalizationStorage localizationStorage) : base(LocalizationDataAdapter(localizationStorage), typeof(Element), true, true, true, true)
+		public LocalizationReorderableList(LocalizationStorage localizationStorage) : base(ExtractElements(localizationStorage), typeof(Element), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -55,15 +55,14 @@ namespace ResourceLocalization
 
 			drawElementCallback = DrawElement;
 
-			onAddCallback = AddNewTag;
+			onAddCallback = AddNewElement;
 
-			onRemoveCallback = RemoveTag;
+			onRemoveCallback = RemoveElement;
 
-			//onReorderCallback = (list) => { SetChanges(); };
-
+			onReorderCallbackWithDetails = ReorderList;
 		}
 
-		private static List<Element> LocalizationDataAdapter(LocalizationStorage localizationStorage)
+		private static List<Element> ExtractElements(LocalizationStorage localizationStorage)
 		{
 			var resources = new List<Element>();
 			foreach (var localization in localizationStorage.Localizations)
@@ -119,45 +118,55 @@ namespace ResourceLocalization
 
 			if (GUI.changed)
 			{
-				list = LocalizationDataAdapter(LocalizationStorage);
+				list = ExtractElements(LocalizationStorage);
 			}
 		}
 
 		private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			((Element)list[index]).DrawOnGUI(rect);
-			if (GUI.changed) { SetChanges(); }
+			if (GUI.changed)
+			{
+				foreach (var localization in LocalizationStorage.Localizations)
+				{
+					foreach (var resource in (List<Element>)list)
+					{
+						localization.SetValue(resource.Tag, resource.Localizations[localization.Language]);
+					}
+				}
+			}
 		}
 
-		private void AddNewTag(ReorderableList reorderable)
+		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
+		{
+			foreach(var localization in LocalizationStorage.Localizations)
+			{
+				var tag = localization.GetTag(oldIndex);
+				var value = localization.GetValue(oldIndex);
+				localization.RemoveAt(oldIndex);
+				localization.Insert(newIndex, tag, value);
+			}
+			this.list = ExtractElements(LocalizationStorage);
+		}
+
+		private void AddNewElement(ReorderableList reorderable)
 		{
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
 				localization.SetValue("Tag " + (reorderable.list.Count + 1), "");
 			}
 
-			list = LocalizationDataAdapter(LocalizationStorage);
+			list = ExtractElements(LocalizationStorage);
 		}
 
-		private void RemoveTag(ReorderableList reorderable)
+		private void RemoveElement(ReorderableList reorderable)
 		{
 			var resource = (Element)reorderable.list[reorderable.index];
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
 				localization.Remove(resource.Tag);
 			}
-			list = LocalizationDataAdapter(LocalizationStorage);
-		}
-
-		private void SetChanges()
-		{
-			foreach (var localization in LocalizationStorage.Localizations)
-			{
-				foreach (var resource in (List<Element>)list)
-				{
-					localization.SetValue(resource.Tag, resource.Localizations[localization.Language]);
-				}
-			}
+			list = ExtractElements(LocalizationStorage);
 		}
 	}
 }
