@@ -14,7 +14,6 @@ namespace ResourceLocalization
 			{
 				LocalizationEditorWindow window = (LocalizationEditorWindow)EditorWindow.GetWindow(typeof(LocalizationEditorWindow));
 				window.localizationStorage = this.target as LocalizationStorage;
-				//window.serializedObject = this.serializedObject;
 				window.minSize = new Vector2(640, 240);
 			}
 		}
