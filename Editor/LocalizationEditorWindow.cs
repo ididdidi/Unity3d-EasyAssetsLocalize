@@ -6,11 +6,11 @@ namespace ResourceLocalization
 	public class LocalizationEditorWindow : EditorWindow
 	{
 		public LocalizationStorage localizationStorage;
-		private LocalizationReorderableList localizationsList;
+		private ReorderableLocalizationList localizationsList;
 
 		void OnGUI()
 		{
-			if (localizationsList == null && localizationStorage) { localizationsList = new LocalizationReorderableList(localizationStorage); }
+			if (localizationsList == null && localizationStorage) { localizationsList = new ReorderableLocalizationList(localizationStorage); }
 			localizationsList?.DoLayoutList();
 
 			if (GUI.changed)

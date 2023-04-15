@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ResourceLocalization
 {
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
+        [SerializeField] private Object[] receivers;
         private Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
         public string Language
@@ -28,6 +28,8 @@ namespace ResourceLocalization
             }
         }
 
+        public LocalizationReceiver[] Receivers => receivers as LocalizationReceiver[];
+
         void Start()
         {
             LoadLocalization(localizationStorage);
@@ -43,16 +45,10 @@ namespace ResourceLocalization
         {
             Language = language;
             dictionary = localizationStorage.GetLocalization(language).Dictionary;
-            UptateLocalization();
-        }
-
-        public void UptateLocalization()
-        {
-            var textViews = FindObjectsOfType<Text>();
-            foreach (var textView in textViews)
+            
+            foreach (LocalizationReceiver receiver in receivers)
             {
-                var localisation = dictionary[textView.name] as string;
-                if (!string.IsNullOrWhiteSpace(localisation)) { textView.text = localisation; }
+                receiver.SetLocalization(dictionary[receiver.Name]);
             }
         }
 

@@ -49,7 +49,7 @@ namespace ResourceLocalization
                 if (localizations[i].Language.Equals(language))
                 {
                     localizations.RemoveAt(i);
-                    return; // In this implementation, tags should not be repeated, if this is allowed, then to remove all values ​​with a given tag, just comment out this return
+                    return; // In this implementation, names should not be repeated, if this is allowed, then to remove all values ​​with a given name, just comment out this return
                 }
             }
         }

@@ -24,42 +24,42 @@ namespace ResourceLocalization
                 var dictionary = new Dictionary<string, object>();
                 for (int i = 0; i < resources.Count; i++)
                 {
-                    dictionary.Add(resources[i].Tag, resources[i].Data);
+                    dictionary.Add(resources[i].Name, resources[i].Data);
                 }
                 return dictionary;
             }
         }
 
-        public bool Conteins(string tag)
+        public bool Conteins(string name)
         {
             for (int i = 0; i < resources.Count; i++)
             {
-                if (resources[i].Tag.Equals(tag)) { return true; }
+                if (resources[i].Name.Equals(name)) { return true; }
             }
             return false;
         }
 
-        public void SetValue(string tag, object value)
+        public void SetValue(string name, object value)
         {
             for (int i = 0; i < resources.Count; i++)
             {
-                if (resources[i].Tag.Equals(tag)) { resources[i].Data = value; return; }
+                if (resources[i].Name.Equals(name)) { resources[i].Data = value; return; }
             }
-            resources.Add(new SerializedResources(tag, value));
+            resources.Add(new SerializedResources(name, value));
         }
 
-        public object GetValue(string tag)
+        public object GetValue(string name)
         {
             for (int i = 0; i < resources.Count; i++)
             {
-                if (resources[i].Tag.Equals(tag)) { return resources[i].Data; }
+                if (resources[i].Name.Equals(name)) { return resources[i].Data; }
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {tag}");
+            throw new System.ArgumentException($"{GetType()}: No resources found for {name}");
         }
 
-        public string GetTag(int index)
+        public string GetName(int index)
         {
-            if (index > -1 && index < resources.Count) { return resources[index].Tag; }
+            if (index > -1 && index < resources.Count) { return resources[index].Name; }
             throw new System.ArgumentException($"{GetType()}: No resources found by {index}");
         }
 
@@ -71,23 +71,23 @@ namespace ResourceLocalization
 
         public void RemoveAt(int index) => resources.RemoveAt(index);
         
-        public void Remove(string tag)
+        public void Remove(string name)
         {
             for (int i = resources.Count-1; i > -1; i--)
             {
-                if (resources[i].Tag.Equals(tag)) { 
+                if (resources[i].Name.Equals(name)) { 
                     resources.RemoveAt(i);
-                    return; // In this implementation, tags should not be repeated, if this is allowed, then to remove all values ​​with a given tag, just comment out this return
+                    return; // In this implementation, names should not be repeated, if this is allowed, then to remove all values ​​with a given name, just comment out this return
                 }
             }
         }
 
-        public void Insert(int index, string tag, object value)
+        public void Insert(int index, string name, object value)
         {
             if (index < 0 || index >= resources.Count) { throw new System.ArgumentException($"{GetType()}: The index must have a value between 0 and {resources.Count}"); }
-            if (Conteins(tag)) { throw new System.ArgumentException($"{GetType()}: An item with {tag} has already been added."); }
+            if (Conteins(name)) { throw new System.ArgumentException($"{GetType()}: An item with {name} has already been added."); }
 
-            resources.Insert(index, new SerializedResources(tag, value));
+            resources.Insert(index, new SerializedResources(name, value));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ResourceLocalization
         [System.Serializable]
         private class SerializedResources
         {
-            [SerializeField] private string tag;
+            [SerializeField] private string name;
             private enum Type { String, Texture, Audio, Video }
             [SerializeField] private Type type;
             [SerializeField] private string stringData;
@@ -16,7 +16,7 @@ namespace ResourceLocalization
             [SerializeField] private AudioClip audio;
             [SerializeField] private VideoClip video;
 
-            public string Tag { get => tag; }
+            public string Name { get => name; }
             public object Data
             {
                 get => GetDataObject();
@@ -28,16 +28,16 @@ namespace ResourceLocalization
                 get => GetSystemType();
             }
 
-            public SerializedResources(string tag, object dataObject)
+            public SerializedResources(string name, object dataObject)
             {
-                this.tag = tag;
+                this.name = name;
                 this.type = GetDataType(dataObject.GetType());
                 SetDataObject(dataObject);
             }
 
-            public SerializedResources(string tag, System.Type type)
+            public SerializedResources(string name, System.Type type)
             {
-                this.tag = tag;
+                this.name = name;
                 this.type = GetDataType(type);
             }
 

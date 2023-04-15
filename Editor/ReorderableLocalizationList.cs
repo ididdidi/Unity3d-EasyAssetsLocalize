@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-	public class LocalizationReorderableList : ReorderableList
+	public class ReorderableLocalizationList : ReorderableList
 	{
 		private class Element
 		{
-			public string Tag { get; set; }
+			public string Name { get; set; }
 			public Dictionary<string, object> Localizations { get; }
 
 			public Element(string name)
 			{
-				Tag = name;
+				Name = name;
 				Localizations = new Dictionary<string, object>();
 			}
 
 			public void DrawOnGUI(Rect rect)
 			{
-				this.Tag = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), this.Tag, "PR TextField");
+				this.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), this.Name, "PR TextField");
 				float dX = 86f;
 
 				string[] languages = new string[Localizations.Count]; 
@@ -45,7 +45,7 @@ namespace ResourceLocalization
 
 		private LocalizationStorage LocalizationStorage { get; }
 
-		public LocalizationReorderableList(LocalizationStorage localizationStorage) : base(ExtractElements(localizationStorage), typeof(Element), true, true, true, true)
+		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(ExtractElements(localizationStorage), typeof(Element), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -72,7 +72,7 @@ namespace ResourceLocalization
 					bool resourceExists = false;
 					foreach (var resource in resources)
 					{
-						if (resource.Tag.Equals(local.Key))
+						if (resource.Name.Equals(local.Key))
 						{
 							resource.Localizations.Add(localization.Language, local.Value);
 							resourceExists = true;
@@ -82,9 +82,9 @@ namespace ResourceLocalization
 
 					if (!resourceExists)
 					{
-						var newTag = new Element(local.Key);
-						newTag.Localizations.Add(localization.Language, local.Value);
-						resources.Add(newTag);
+						var element = new Element(local.Key);
+						element.Localizations.Add(localization.Language, local.Value);
+						resources.Add(element);
 					}
 				}
 			}
@@ -94,7 +94,7 @@ namespace ResourceLocalization
 		private void DrawLanguageNames(Rect rect)
 		{
 			float dX = 40f;
-			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Tags");
+			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Resources");
 			dX = 100f;
 
 			var count = 0;
@@ -133,7 +133,7 @@ namespace ResourceLocalization
 				{
 					foreach (var resource in (List<Element>)list)
 					{
-						localization.SetValue(resource.Tag, resource.Localizations[localization.Language]);
+						localization.SetValue(resource.Name, resource.Localizations[localization.Language]);
 					}
 				}
 			}
@@ -143,7 +143,7 @@ namespace ResourceLocalization
 		{
 			foreach(var localization in LocalizationStorage.Localizations)
 			{
-				var tag = localization.GetTag(oldIndex);
+				var tag = localization.GetName(oldIndex);
 				var value = localization.GetValue(oldIndex);
 				localization.RemoveAt(oldIndex);
 				localization.Insert(newIndex, tag, value);
@@ -155,7 +155,7 @@ namespace ResourceLocalization
 		{
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				localization.SetValue("Tag " + (reorderable.list.Count + 1), "");
+				localization.SetValue("Name " + (reorderable.list.Count + 1), "");
 			}
 
 			list = ExtractElements(LocalizationStorage);
@@ -166,7 +166,7 @@ namespace ResourceLocalization
 			var resource = (Element)reorderable.list[reorderable.index];
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				localization.Remove(resource.Tag);
+				localization.Remove(resource.Name);
 			}
 			list = ExtractElements(LocalizationStorage);
 		}
