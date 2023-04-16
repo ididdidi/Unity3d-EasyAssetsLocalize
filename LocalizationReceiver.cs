@@ -17,7 +17,10 @@ namespace ResourceLocalization
         [SerializeField] private Object receiver;
 
         public string ID { get => id; }
-        public IReceiver Object => receiver as IReceiver;
+        public IReceiver Object { 
+            get => (IReceiver)receiver; 
+            set => receiver = (Object)value;
+        }
 
     }
 }
