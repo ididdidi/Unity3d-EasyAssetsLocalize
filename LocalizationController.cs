@@ -7,7 +7,7 @@ namespace ResourceLocalization
     {
         [SerializeField] private LocalizationStorage localizationStorage;
         [SerializeField] private List<LocalizationReceiver> receivers;
-        private Dictionary<string, object> dictionary = new Dictionary<string, object>();
+        private Dictionary<string, Resource> dictionary = new Dictionary<string, Resource>();
 
         public string Language
         {
@@ -49,7 +49,7 @@ namespace ResourceLocalization
             
             foreach (LocalizationReceiver receiver in receivers)
             {
-                receiver.Object.SetData(dictionary[receiver.ID]);
+                receiver.Object.Data = dictionary[receiver.ID];
             }
         }
 

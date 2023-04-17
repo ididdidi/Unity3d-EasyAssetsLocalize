@@ -24,10 +24,17 @@ namespace ResourceLocalization
             resiver.Object = GetReceiver(objectFieldRect, resiver.Object);
             if (GUI.changed && resiver.Object != null)
             {
-                foreach (var localization in Localizations)
-                {
-                    localization.SetValue(resiver.ID, "Test");
-                }
+             //   foreach (var localization in Localizations)
+             //   {
+             //       if (!localization.Conteins(resiver.ID))
+             //       {
+             //           localization.Add(resiver.ID, resiver.Object.ResourceType);
+             //       }
+             //       else if (!localization.GetDataType(resiver.ID).Equals(resiver.Object.ResourceType))
+             //       {
+             //           localization.SetValue(resiver.ID, resiver.Object.Data);
+             //       }
+             //   }
             }
         }
 

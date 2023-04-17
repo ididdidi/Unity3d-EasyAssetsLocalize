@@ -10,7 +10,7 @@ namespace ResourceLocalization
             string Name { get; }
             System.Type ResourceType { get; }
 
-            void SetData(object data);
+            object Data { get; set; }
         }
 
         [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");

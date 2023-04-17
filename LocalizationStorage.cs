@@ -36,7 +36,7 @@ namespace ResourceLocalization
             {
                 foreach (var dictionary in localizations[localizations.Count - 1].Dictionary)
                 {
-                    localization.SetValue(dictionary.Key, dictionary.Value);
+                    localization.SetValue(dictionary.Value.Clone());
                 }
             }
             localizations.Add(localization);

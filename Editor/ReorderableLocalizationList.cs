@@ -10,12 +10,14 @@ namespace ResourceLocalization
 		private class Element
 		{
 			public string Name { get; set; }
-			public Dictionary<string, object> Localizations { get; }
+			public System.Type Type { get; }
+			public Dictionary<string, Resource> Localizations { get; }
 
-			public Element(string name)
+			public Element(string name, System.Type type)
 			{
 				Name = name;
-				Localizations = new Dictionary<string, object>();
+				Type = type;
+				Localizations = new Dictionary<string, Resource>();
 			}
 
 			public void DrawOnGUI(Rect rect)
@@ -28,17 +30,17 @@ namespace ResourceLocalization
 
 				foreach (var language in languages)
 				{
-					var value = Localizations[language];
-					if (value.GetType().IsAssignableFrom(typeof(string)))
+					var resource = Localizations[language];
+					if (typeof(string).IsAssignableFrom(resource.Type))
 					{
-						value = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)value, "PR TextField");
+						resource.Data = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)resource.Data, "PR TextField");
 					}
 					else
 					{
-						value = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)value, value.GetType(), false);
+						resource.Data = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)resource.Data, resource.Type, false);
 					}
 					dX += 150f;
-					Localizations[language] = value;
+					Localizations[language] = resource;
 				}
 			}
 		}
@@ -82,7 +84,7 @@ namespace ResourceLocalization
 
 					if (!resourceExists)
 					{
-						var element = new Element(local.Key);
+						var element = new Element(local.Key, localization.GetDataType(local.Key));
 						element.Localizations.Add(localization.Language, local.Value);
 						resources.Add(element);
 					}
@@ -133,7 +135,7 @@ namespace ResourceLocalization
 				{
 					foreach (var resource in (List<Element>)list)
 					{
-						localization.SetValue(resource.Name, resource.Localizations[localization.Language]);
+						localization.SetValue(resource.Localizations[localization.Language]);
 					}
 				}
 			}
@@ -143,19 +145,19 @@ namespace ResourceLocalization
 		{
 			foreach(var localization in LocalizationStorage.Localizations)
 			{
-				var tag = localization.GetName(oldIndex);
-				var value = localization.GetValue(oldIndex);
+				var resource = localization.GetResource(oldIndex);
 				localization.RemoveAt(oldIndex);
-				localization.Insert(newIndex, tag, value);
+				localization.Insert(newIndex, resource);
 			}
 			this.list = ExtractElements(LocalizationStorage);
 		}
 
 		private void AddNewElement(ReorderableList reorderable)
 		{
+			var resource = new ImageResource("Name " + (reorderable.list.Count + 1), Resources.Load<Texture2D>("avatar"));
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
-				localization.SetValue("Name " + (reorderable.list.Count + 1), "");
+				localization.SetValue(resource.Clone());
 			}
 
 			list = ExtractElements(LocalizationStorage);
