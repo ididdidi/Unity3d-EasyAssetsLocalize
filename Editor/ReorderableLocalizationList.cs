@@ -7,13 +7,13 @@ namespace ResourceLocalization
 {
 	public class ReorderableLocalizationList : ReorderableList
 	{
-		private class Element
+		private class LocalizedResources
 		{
 			public string Name { get; set; }
 			public System.Type Type { get; }
 			public Dictionary<string, Resource> Localizations { get; }
 
-			public Element(string name, System.Type type)
+			public LocalizedResources(string name, System.Type type)
 			{
 				Name = name;
 				Type = type;
@@ -47,7 +47,7 @@ namespace ResourceLocalization
 
 		private LocalizationStorage LocalizationStorage { get; }
 
-		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(ExtractElements(localizationStorage), typeof(Element), true, true, true, true)
+		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(ExtractResourcess(localizationStorage), typeof(LocalizedResources), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -55,18 +55,18 @@ namespace ResourceLocalization
 
 			drawHeaderCallback = DrawLanguageNames;
 
-			drawElementCallback = DrawElement;
+			drawElementCallback = DrawResources;
 
-			onAddCallback = AddNewElement;
+			onAddCallback = AddNewResources;
 
-			onRemoveCallback = RemoveElement;
+			onRemoveCallback = RemoveResources;
 
 			onReorderCallbackWithDetails = ReorderList;
 		}
 
-		private static List<Element> ExtractElements(LocalizationStorage localizationStorage)
+		private static List<LocalizedResources> ExtractResourcess(LocalizationStorage localizationStorage)
 		{
-			var resources = new List<Element>();
+			var resources = new List<LocalizedResources>();
 			foreach (var localization in localizationStorage.Localizations)
 			{
 				foreach (var local in localization.Dictionary)
@@ -84,9 +84,9 @@ namespace ResourceLocalization
 
 					if (!resourceExists)
 					{
-						var element = new Element(local.Key, localization.GetDataType(local.Key));
-						element.Localizations.Add(localization.Language, local.Value);
-						resources.Add(element);
+						var newResource = new LocalizedResources(local.Key, local.Value.Type);
+						newResource.Localizations.Add(localization.Language, local.Value);
+						resources.Add(newResource);
 					}
 				}
 			}
@@ -122,18 +122,18 @@ namespace ResourceLocalization
 
 			if (GUI.changed)
 			{
-				this.list = ExtractElements(LocalizationStorage);
+				this.list = ExtractResourcess(LocalizationStorage);
 			}
 		}
 
-		private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
 		{
-			((Element)list[index]).DrawOnGUI(rect);
+			((LocalizedResources)list[index]).DrawOnGUI(rect);
 			if (GUI.changed)
 			{
 				foreach (var localization in LocalizationStorage.Localizations)
 				{
-					foreach (var resource in (List<Element>)list)
+					foreach (var resource in (List<LocalizedResources>)list)
 					{
 						localization.SetValue(resource.Localizations[localization.Language]);
 					}
@@ -149,28 +149,28 @@ namespace ResourceLocalization
 				localization.RemoveAt(oldIndex);
 				localization.Insert(newIndex, resource);
 			}
-			this.list = ExtractElements(LocalizationStorage);
+			this.list = ExtractResourcess(LocalizationStorage);
 		}
 
-		private void AddNewElement(ReorderableList reorderable)
+		private void AddNewResources(ReorderableList reorderable)
 		{
-			var resource = new ImageResource("Name " + (reorderable.list.Count + 1), Resources.Load<Texture2D>("avatar"));
+			var resource = new ImageResource("Name " + (reorderable.list.Count + 1), UnityEngine.Resources.Load<Texture2D>("avatar"));
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
 				localization.SetValue(resource.Clone());
 			}
 
-			list = ExtractElements(LocalizationStorage);
+			list = ExtractResourcess(LocalizationStorage);
 		}
 
-		private void RemoveElement(ReorderableList reorderable)
+		private void RemoveResources(ReorderableList reorderable)
 		{
-			var resource = (Element)reorderable.list[reorderable.index];
+			var resource = (LocalizedResources)reorderable.list[reorderable.index];
 			foreach (var localization in LocalizationStorage.Localizations)
 			{
 				localization.Remove(resource.Name);
 			}
-			list = ExtractElements(LocalizationStorage);
+			list = ExtractResourcess(LocalizationStorage);
 		}
 	}
 }
