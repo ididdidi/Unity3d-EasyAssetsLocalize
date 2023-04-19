@@ -19,13 +19,14 @@ namespace ResourceLocalization
         {
             get
             {
-                List<string> languages = new List<string>();
-                foreach (var localization in localizationStorage?.Localizations)
+                var languages = new List<string>(localizationStorage.Languages.Length);
+                for(int i=0; i < languages.Count; i++)
                 {
-                    languages.Add(localization.Language);
+                    languages[i] = localizationStorage.Languages[i].Name;
                 }
                 return languages;
-            }
+            } 
+            
         }
 
         public List<LocalizationReceiver> Receivers { get => receivers; }
@@ -45,7 +46,7 @@ namespace ResourceLocalization
         public void SetLanguage(string language)
         {
             Language = language;
-            dictionary = localizationStorage.GetLocalization(language).Dictionary;
+         //   dictionary = localizationStorage.GetLocalization(language).Dictionary;
             
             foreach (LocalizationReceiver receiver in receivers)
             {

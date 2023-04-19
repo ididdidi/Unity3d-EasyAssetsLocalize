@@ -8,8 +8,8 @@ namespace ResourceLocalization
 {
     public class ReorderableReceiverList : ReorderableList
     {
-        private IEnumerable<Localization> Localizations { get; }
-        public ReorderableReceiverList(List<LocalizationReceiver> receivers, IEnumerable<Localization> localizations) : base(receivers, typeof(LocalizationReceiver))
+        private IEnumerable<Language> Localizations { get; }
+        public ReorderableReceiverList(List<LocalizationReceiver> receivers, IEnumerable<Language> localizations) : base(receivers, typeof(LocalizationReceiver))
         {
             Localizations = localizations;
             onAddCallback = AddRecever;

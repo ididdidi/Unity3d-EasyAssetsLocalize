@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -7,47 +6,9 @@ namespace ResourceLocalization
 {
 	public class ReorderableLocalizationList : ReorderableList
 	{
-		private class LocalizedResources
-		{
-			public string Name { get; set; }
-			public System.Type Type { get; }
-			public Dictionary<string, Resource> Localizations { get; }
+		private ILocalizationRepository LocalizationStorage { get; }
 
-			public LocalizedResources(string name, System.Type type)
-			{
-				Name = name;
-				Type = type;
-				Localizations = new Dictionary<string, Resource>();
-			}
-
-			public void DrawOnGUI(Rect rect)
-			{
-				this.Name = GUI.TextField(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), this.Name, "PR TextField");
-				float dX = 86f;
-
-				string[] languages = new string[Localizations.Count]; 
-				Localizations.Keys.CopyTo(languages,0);
-
-				foreach (var language in languages)
-				{
-					var resource = Localizations[language];
-					if (typeof(string).IsAssignableFrom(resource.Type))
-					{
-						resource.Data = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)resource.Data, "PR TextField");
-					}
-					else
-					{
-						resource.Data = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)resource.Data, resource.Type, false);
-					}
-					dX += 150f;
-					Localizations[language] = resource;
-				}
-			}
-		}
-
-		private LocalizationStorage LocalizationStorage { get; }
-
-		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(ExtractResourcess(localizationStorage), typeof(LocalizedResources), true, true, true, true)
+		public ReorderableLocalizationList(ILocalizationRepository localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -58,56 +19,27 @@ namespace ResourceLocalization
 			drawElementCallback = DrawResources;
 
 			onAddCallback = AddNewResources;
-
+		
 			onRemoveCallback = RemoveResources;
-
+		
 			onReorderCallbackWithDetails = ReorderList;
-		}
-
-		private static List<LocalizedResources> ExtractResourcess(LocalizationStorage localizationStorage)
-		{
-			var resources = new List<LocalizedResources>();
-			foreach (var localization in localizationStorage.Localizations)
-			{
-				foreach (var local in localization.Dictionary)
-				{
-					bool resourceExists = false;
-					foreach (var resource in resources)
-					{
-						if (resource.Name.Equals(local.Key))
-						{
-							resource.Localizations.Add(localization.Language, local.Value);
-							resourceExists = true;
-							break;
-						}
-					}
-
-					if (!resourceExists)
-					{
-						var newResource = new LocalizedResources(local.Key, local.Value.Type);
-						newResource.Localizations.Add(localization.Language, local.Value);
-						resources.Add(newResource);
-					}
-				}
-			}
-			return resources;
 		}
 
 		private void DrawLanguageNames(Rect rect)
 		{
-			float dX = 40f;
+			float dX = 16f;
 			GUI.Label(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(rect.width, rect.height)), "Resources");
 			dX = 100f;
 
 			var count = 0;
-			foreach (var localization in LocalizationStorage.Localizations)
+			foreach (var language in LocalizationStorage.Languages)
 			{
-				localization.Language = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), localization.Language, "TextField");
+				language.Name = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(130, rect.height)), language.Name, "TextField");
 				dX += 130f;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
 				if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), iconButton, "SearchCancelButton"))
 				{
-					LocalizationStorage.RemoveLocalization(localization.Language);
+					LocalizationStorage.RemoveLanguage(language.Name);
 					break;
 				}
 				dX += 20f;
@@ -117,60 +49,52 @@ namespace ResourceLocalization
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(18, rect.height)), icon, "RL FooterButton"))
 			{
-				LocalizationStorage.AddLocalization("Language " + (count + 1));
+				LocalizationStorage.AddLanguage("Language " + (count + 1));
 			}
 
 			if (GUI.changed)
 			{
-				this.list = ExtractResourcess(LocalizationStorage);
+				this.list = LocalizationStorage.Localizations;
 			}
 		}
 
 		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
 		{
-			((LocalizedResources)list[index]).DrawOnGUI(rect);
-			if (GUI.changed)
+			var localsation = list[index] as Localization;
+			GUI.Label(new Rect(new Vector2(rect.x, rect.y), new Vector2(86, rect.height)), localsation.Tag.Name);
+			float dX = 86f;
+
+			for (int i = 0; i < localsation.Resources.Count; i++)
 			{
-				foreach (var localization in LocalizationStorage.Localizations)
+				if (typeof(string).IsAssignableFrom(localsation.Resources[i].Type))
 				{
-					foreach (var resource in (List<LocalizedResources>)list)
-					{
-						localization.SetValue(resource.Localizations[localization.Language]);
-					}
+					localsation.Resources[i].Data = GUI.TextField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (string)localsation.Resources[i].Data, "PR TextField");
 				}
+				else
+				{
+					localsation.Resources[i].Data = EditorGUI.ObjectField(new Rect(new Vector2(rect.x + dX, rect.y), new Vector2(150, rect.height)), (Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
+				}
+				dX += 150f;
 			}
 		}
 
 		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
 		{
-			foreach(var localization in LocalizationStorage.Localizations)
-			{
-				var resource = localization.GetResource(oldIndex);
-				localization.RemoveAt(oldIndex);
-				localization.Insert(newIndex, resource);
-			}
-			this.list = ExtractResourcess(LocalizationStorage);
+			var localization = list.list[index] as Localization;
+			LocalizationStorage.RemoveResource(oldIndex);
+			LocalizationStorage.InsertResource(newIndex, localization);
 		}
-
+	
 		private void AddNewResources(ReorderableList reorderable)
 		{
-			var resource = new ImageResource("Name " + (reorderable.list.Count + 1), UnityEngine.Resources.Load<Texture2D>("avatar"));
-			foreach (var localization in LocalizationStorage.Localizations)
-			{
-				localization.SetValue(resource.Clone());
-			}
-
-			list = ExtractResourcess(LocalizationStorage);
+			LocalizationStorage.AddResource("Avayar", new ImageResource(Resources.Load<Texture2D>("avatar")));
+			list = LocalizationStorage.Localizations;
 		}
-
+	
 		private void RemoveResources(ReorderableList reorderable)
 		{
-			var resource = (LocalizedResources)reorderable.list[reorderable.index];
-			foreach (var localization in LocalizationStorage.Localizations)
-			{
-				localization.Remove(resource.Name);
-			}
-			list = ExtractResourcess(LocalizationStorage);
+			LocalizationStorage.RemoveResource(reorderable.index);
+			list = LocalizationStorage.Localizations;
 		}
 	}
 }

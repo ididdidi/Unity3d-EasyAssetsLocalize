@@ -1,57 +1,106 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ResourceLocalization
 {
-    public class LocalizationStorage : ScriptableObject
+    public class LocalizationStorage : ScriptableObject, ILocalizationRepository
     {
-        [SerializeField] private List<Localization> localizations = new List<Localization>();
+        [SerializeField] private List<Tag> tags = new List<Tag>();
+        [SerializeField] private List<Language> languages = new List<Language>();
 
-        public IEnumerable<Localization> Localizations { get => localizations; }
+        public Language[] Languages => languages.ToArray();
 
-        public Localization GetLocalization(string language)
+        public Localization[] Localizations
         {
-            for (int i = localizations.Count - 1; i > -1; i--)
+            get
             {
-                if (localizations[i].Language.Equals(language))
+                var localizations = new Localization[tags.Count];
+                for(int i=0; i < tags.Count; i++)
                 {
-                    return localizations[i];
+                    var resources = new Resource[languages.Count];
+                    for(int j=0; j < languages.Count; j++)
+                    {
+                        resources[j] = languages[j].Resources[i];
+                    }
+                    localizations[i] = new Localization(tags[i], resources);
                 }
+                return localizations;
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {language}");
         }
 
-        public void AddLocalization(string language)
+        public void AddLanguage(string name)
         {
-            foreach(var local in Localizations)
+            foreach (var language in languages)
             {
-                if (local.Language.Equals(language))
+                if (language.Name.Equals(name))
                 {
                     throw new System.ArgumentException($"{GetType()}: There is already a localizations with {language}");
                 }
             }
-            
-            var localization = new Localization(language);
-            if(localizations.Count > 0)
+
+            var resources = new Resource[(languages.Count > 0) ? languages[0].Resources.Count : 0];
+            for (int i = 0; i < resources.Length; i++)
             {
-                foreach (var dictionary in localizations[localizations.Count - 1].Dictionary)
-                {
-                    localization.SetValue(dictionary.Value.Clone());
-                }
+                resources[i] = languages[0].Resources[i].Clone();
             }
-            localizations.Add(localization);
+            languages.Add(new Language(name, resources));
         }
 
-        public void RemoveLocalization(string language)
+        public void RemoveLanguage(string name)
         {
-            for (int i = localizations.Count - 1; i > -1; i--)
+            for (int i = languages.Count - 1; i > -1; i--)
             {
-                if (localizations[i].Language.Equals(language))
+                if (languages[i].Name.Equals(name))
                 {
-                    localizations.RemoveAt(i);
+                    languages.RemoveAt(i);
                     return; // In this implementation, names should not be repeated, if this is allowed, then to remove all values ​​with a given name, just comment out this return
                 }
             }
+        }
+
+        public void AddResource(string name, Resource resource)
+        {
+            tags.Add(new Tag(name, name));
+            for(int i=0; i < languages.Count; i++)
+            {
+                languages[i].Resources.Add(resource);
+            }
+        }
+
+        public void InsertResource(int index, Localization localization)
+        {
+            tags.Insert(index, localization.Tag);
+            for (int i = 0; i < languages.Count; i++)
+            {
+                languages[i].Resources.Insert(index, localization.Resources[i]);
+            }
+        }
+
+        public void RemoveResource(int index)
+        {
+            tags.RemoveAt(index);
+            for (int i = 0; i < languages.Count; i++)
+            {
+                languages[i].Resources.RemoveAt(index);
+            }
+        }
+
+        public Dictionary<Tag, Resource> GetLocalization(string language)
+        {
+            for (int i = 0; i < languages.Count; i++)
+            {
+                if (languages[i].Name.Equals(language))
+                {
+                    var dictionary = new Dictionary<Tag, Resource>();
+                    for (int j = 0; j < tags.Count; j++)
+                    {
+                        dictionary.Add(tags[j], languages[i].Resources[j]);
+                    }
+                    return dictionary;
+                }
+            }
+            throw new System.ArgumentException($"{GetType()}: No resources found for {language}");
         }
     }
 }

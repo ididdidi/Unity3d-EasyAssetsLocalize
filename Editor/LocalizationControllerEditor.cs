@@ -11,7 +11,7 @@ namespace ResourceLocalization
         private void OnEnable()
         {
             controller = target as LocalizationController;
-            receiverList = new ReorderableReceiverList(controller.Receivers, controller.LocalizationStorage.Localizations);
+            receiverList = new ReorderableReceiverList(controller.Receivers, controller.LocalizationStorage.Languages);
         }
 
         public override void OnInspectorGUI()
