@@ -5,15 +5,14 @@ namespace ResourceLocalization
     [System.Serializable]
     public class Tag
     {
-        [SerializeField] private string id;
+        [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");
         [SerializeField] private string name;
 
         public string ID { get => id; }
         public string Name { get => name; set => name = value; }
 
-        public Tag(string id, string name)
+        public Tag(string name)
         {
-            this.id = id;
             this.name = name;
         }
 

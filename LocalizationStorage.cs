@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace ResourceLocalization
@@ -59,9 +58,19 @@ namespace ResourceLocalization
             }
         }
 
-        public void AddResource(string name, Resource resource)
+        public bool Conteins(Tag tag)
         {
-            tags.Add(new Tag(name, name));
+            return tags.Contains(tag);
+        }
+
+        public void AddResource(Tag tag, Resource resource)
+        {
+            if(tags.Contains(tag))
+            {
+                throw new System.ArgumentException($"{tag.Name}-{tag.ID}: has already been added");
+            }
+
+            tags.Add(tag);
             for(int i=0; i < languages.Count; i++)
             {
                 languages[i].Resources.Add(resource);
@@ -85,6 +94,8 @@ namespace ResourceLocalization
                 languages[i].Resources.RemoveAt(index);
             }
         }
+
+        public void RemoveResource(Tag tag) => RemoveResource(tags.IndexOf(tag));
 
         public Dictionary<Tag, Resource> GetLocalization(string language)
         {

@@ -7,11 +7,11 @@ namespace ResourceLocalization
     {
         [SerializeField] private LocalizationStorage localizationStorage;
         [SerializeField] private List<LocalizationReceiver> receivers;
-        private Dictionary<string, Resource> dictionary = new Dictionary<string, Resource>();
+        private Dictionary<Tag, Resource> dictionary;
 
         public string Language
         {
-            get => (PlayerPrefs.HasKey("Language")) ? PlayerPrefs.GetString("Language") : Application.systemLanguage.ToString();
+            get => PlayerPrefs.HasKey("Language") ? PlayerPrefs.GetString("Language") : Application.systemLanguage.ToString();
             set => PlayerPrefs.SetString("Language", value);
         }
 
@@ -46,11 +46,11 @@ namespace ResourceLocalization
         public void SetLanguage(string language)
         {
             Language = language;
-         //   dictionary = localizationStorage.GetLocalization(language).Dictionary;
+            dictionary = localizationStorage.GetLocalization(language);
             
             foreach (LocalizationReceiver receiver in receivers)
             {
-                receiver.Object.Data = dictionary[receiver.ID];
+                receiver.Resource = dictionary[receiver.LocalizationTag];
             }
         }
 

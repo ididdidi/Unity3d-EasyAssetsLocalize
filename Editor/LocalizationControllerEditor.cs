@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEngine;
 
 namespace ResourceLocalization
 {
@@ -11,7 +10,7 @@ namespace ResourceLocalization
         private void OnEnable()
         {
             controller = target as LocalizationController;
-            receiverList = new ReorderableReceiverList(controller.Receivers, controller.LocalizationStorage.Languages);
+            receiverList = new ReorderableReceiverList(controller.Receivers, controller.LocalizationStorage);
         }
 
         public override void OnInspectorGUI()

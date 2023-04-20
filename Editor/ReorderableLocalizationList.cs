@@ -87,7 +87,7 @@ namespace ResourceLocalization
 	
 		private void AddNewResources(ReorderableList reorderable)
 		{
-			LocalizationStorage.AddResource("Avayar", new ImageResource(Resources.Load<Texture2D>("avatar")));
+			//LocalizationStorage.AddResource("Avayar", new ImageResource(Resources.Load<Texture2D>("avatar")));
 			list = LocalizationStorage.Localizations;
 		}
 	
