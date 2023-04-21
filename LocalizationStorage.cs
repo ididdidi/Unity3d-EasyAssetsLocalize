@@ -65,14 +65,11 @@ namespace ResourceLocalization
 
         public void AddResource(Tag tag, Resource resource)
         {
-            if(tags.Contains(tag))
-            {
-                throw new System.ArgumentException($"{tag.Name}-{tag.ID}: has already been added");
-            }
+            if(tags.Contains(tag)) { throw new System.ArgumentException($"{tag.Name}-{tag.ID}: has already been added"); }
 
             tags.Add(tag);
-            for(int i=0; i < languages.Count; i++)
-            {
+
+            for(int i=0; i < languages.Count; i++) {
                 languages[i].Resources.Add(resource);
             }
         }
