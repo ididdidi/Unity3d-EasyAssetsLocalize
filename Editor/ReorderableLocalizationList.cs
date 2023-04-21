@@ -8,7 +8,7 @@ namespace ResourceLocalization
 	{
 		private ILocalizationRepository LocalizationStorage { get; }
 
-		public ReorderableLocalizationList(ILocalizationRepository localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, true, true)
+		public ReorderableLocalizationList(ILocalizationRepository localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -17,12 +17,14 @@ namespace ResourceLocalization
 			drawHeaderCallback = DrawLanguageNames;
 
 			drawElementCallback = DrawResources;
-
-			onAddCallback = AddNewResources;
-		
-			onRemoveCallback = RemoveResources;
 		
 			onReorderCallbackWithDetails = ReorderList;
+		}
+
+		public new void DoLayoutList()
+		{
+			list = LocalizationStorage.Localizations;
+			base.DoLayoutList();
 		}
 
 		private void DrawLanguageNames(Rect rect)
@@ -51,11 +53,6 @@ namespace ResourceLocalization
 			{
 				LocalizationStorage.AddLanguage("Language " + (count + 1));
 			}
-
-			if (GUI.changed)
-			{
-				this.list = LocalizationStorage.Localizations;
-			}
 		}
 
 		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
@@ -83,18 +80,6 @@ namespace ResourceLocalization
 			var localization = list.list[index] as Localization;
 			LocalizationStorage.RemoveResource(oldIndex);
 			LocalizationStorage.InsertResource(newIndex, localization);
-		}
-	
-		private void AddNewResources(ReorderableList reorderable)
-		{
-			//LocalizationStorage.AddResource("Avayar", new ImageResource(Resources.Load<Texture2D>("avatar")));
-			list = LocalizationStorage.Localizations;
-		}
-	
-		private void RemoveResources(ReorderableList reorderable)
-		{
-			LocalizationStorage.RemoveResource(reorderable.index);
-			list = LocalizationStorage.Localizations;
 		}
 	}
 }

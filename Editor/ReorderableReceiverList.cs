@@ -25,7 +25,7 @@ namespace ResourceLocalization
             {
                 if (list.Contains(receiver))
                 {
-                    throw new System.ArgumentException($"There is already a localizations with {receiver.LocalizationTag.ID}-{receiver.LocalizationTag.Name}");
+                    throw new System.ArgumentException($"There is already a localizations with {receiver.LocalizationTag.Name}-{receiver.LocalizationTag.ID}");
                 }
 
                 if ((LocalizationReceiver)list[index] != null)
