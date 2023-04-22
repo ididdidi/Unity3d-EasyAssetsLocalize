@@ -13,16 +13,16 @@ namespace ResourceLocalization
 
         void RemoveLanguage(string name);
 
-        bool Conteins(Tag tag);
+        bool Conteins(LocalizationTag tag);
 
-        void AddResource(Tag tag, Resource resource);
+        void AddResource(LocalizationTag tag, Resource resource);
 
         void InsertResource(int index, Localization localization);
 
         void RemoveResource(int index);
 
-        void RemoveResource(Tag tag);
+        void RemoveResource(LocalizationTag tag);
 
-        Dictionary<Tag, Resource> GetLocalization(string language);
+        Dictionary<LocalizationTag, Resource> GetLocalization(string language);
     }
 }

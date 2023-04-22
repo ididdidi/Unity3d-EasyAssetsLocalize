@@ -5,8 +5,8 @@ namespace ResourceLocalization
 {
     public class LocalizationStorage : ScriptableObject, ILocalizationRepository
     {
-        [SerializeField] private List<Tag> tags = new List<Tag>();
-        [SerializeField] private List<Language> languages = new List<Language>();
+        [SerializeField, HideInInspector] private List<LocalizationTag> tags = new List<LocalizationTag>();
+        [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();
 
         public Language[] Languages => languages.ToArray();
 
@@ -58,12 +58,12 @@ namespace ResourceLocalization
             }
         }
 
-        public bool Conteins(Tag tag)
+        public bool Conteins(LocalizationTag tag)
         {
             return tags.Contains(tag);
         }
 
-        public void AddResource(Tag tag, Resource resource)
+        public void AddResource(LocalizationTag tag, Resource resource)
         {
             if(tags.Contains(tag)) { throw new System.ArgumentException($"{tag.Name}-{tag.ID}: has already been added"); }
 
@@ -92,15 +92,15 @@ namespace ResourceLocalization
             }
         }
 
-        public void RemoveResource(Tag tag) => RemoveResource(tags.IndexOf(tag));
+        public void RemoveResource(LocalizationTag tag) => RemoveResource(tags.IndexOf(tag));
 
-        public Dictionary<Tag, Resource> GetLocalization(string language)
+        public Dictionary<LocalizationTag, Resource> GetLocalization(string language)
         {
             for (int i = 0; i < languages.Count; i++)
             {
                 if (languages[i].Name.Equals(language))
                 {
-                    var dictionary = new Dictionary<Tag, Resource>();
+                    var dictionary = new Dictionary<LocalizationTag, Resource>();
                     for (int j = 0; j < tags.Count; j++)
                     {
                         dictionary.Add(tags[j], languages[i].Resources[j]);

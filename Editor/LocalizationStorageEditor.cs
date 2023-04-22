@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ResourceLocalization
 {
 	[CustomEditor(typeof(LocalizationStorage))]
-	public class LocalizationDataEditor : Editor
+	public class LocalizationStorageEditor : Editor
 	{
 		public override void OnInspectorGUI()
 		{

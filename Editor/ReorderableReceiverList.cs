@@ -11,9 +11,46 @@ namespace ResourceLocalization
         public ReorderableReceiverList(List<LocalizationReceiver> receivers, ILocalizationRepository localizationStorege) : base(receivers, typeof(LocalizationReceiver))
         {
             LocalizationStorege = localizationStorege;
-            onAddCallback = AddRecever;
-            onRemoveCallback = RemoveRecever;
-            drawElementCallback = DrowLocalizationReceiver;
+
+            drawHeaderCallback = DrawHeader;
+
+            if (CheckingLanguages())
+            {
+                onAddCallback = AddRecever;
+                onRemoveCallback = RemoveRecever;
+                drawElementCallback = DrowLocalizationReceiver;
+            }
+            else
+            {
+                receivers.Clear();
+                drawNoneElementCallback = DrawLanguagesError;
+            }
+        }
+
+        private bool CheckingLanguages()
+        {
+            return LocalizationStorege.Languages.Length > 0;
+        }
+
+        private void DrawHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "Receivers");
+        }
+
+        private void DrawLanguagesError(Rect rect)
+        {
+            this.elementHeight = 40;
+            this.displayAdd = false;
+            this.displayRemove = false;
+
+            GUIStyle style = new GUIStyle();
+            style.richText = true;
+            style.wordWrap = true;
+
+            GUIContent label = new GUIContent("<color=red>Before adding objects, you must add at least one language</color>",
+                EditorGUIUtility.Load("icons/console.erroricon.png") as Texture2D);
+
+            EditorGUI.LabelField(rect, label, style);
         }
 
         private void DrowLocalizationReceiver(Rect rect, int index, bool isActive, bool isFocused)
@@ -36,7 +73,7 @@ namespace ResourceLocalization
 
                 if (receiver != null)
                 {
-                    receiver.LocalizationTag = new Tag(receiver.name);
+                    receiver.LocalizationTag = new LocalizationTag(receiver.name);
                     LocalizationStorege.AddResource(receiver.LocalizationTag, receiver.Resource);
                 }
                 list[index] = receiver;

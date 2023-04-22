@@ -4,10 +4,10 @@ namespace ResourceLocalization
 {
 	public class Localization
 	{
-		public Tag Tag { get; }
+		public LocalizationTag Tag { get; }
 		public List<Resource> Resources { get; }
 
-		public Localization(Tag tag, IEnumerable<Resource> resources)
+		public Localization(LocalizationTag tag, IEnumerable<Resource> resources)
 		{
 			Tag = tag;
 			Resources = new List<Resource>(resources);
