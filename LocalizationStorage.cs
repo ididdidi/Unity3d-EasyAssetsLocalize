@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-    public class LocalizationStorage : ScriptableObject, ILocalizationRepository
+    public class LocalizationStorage : ScriptableObject
     {
         [SerializeField, HideInInspector] private List<LocalizationTag> tags = new List<LocalizationTag>();
         [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();

@@ -7,8 +7,8 @@ namespace ResourceLocalization
 {
     public class ReorderableReceiverList : ReorderableList
     {
-        private ILocalizationRepository LocalizationStorege { get; }
-        public ReorderableReceiverList(List<LocalizationReceiver> receivers, ILocalizationRepository localizationStorege) : base(receivers, typeof(LocalizationReceiver))
+        private LocalizationStorage LocalizationStorege { get; }
+        public ReorderableReceiverList(List<LocalizationReceiver> receivers, LocalizationStorage localizationStorege) : base(receivers, typeof(LocalizationReceiver))
         {
             LocalizationStorege = localizationStorege;
 

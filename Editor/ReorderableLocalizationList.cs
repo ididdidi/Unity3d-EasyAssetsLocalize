@@ -9,9 +9,9 @@ namespace ResourceLocalization
 		private readonly float padding = 1f;
 		private readonly float fieldWidth = 150f;
 		private readonly float fieldHeight = 18f;
-		private ILocalizationRepository LocalizationStorage { get; }
+		private LocalizationStorage LocalizationStorage { get; }
 
-		public ReorderableLocalizationList(ILocalizationRepository localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
+		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
 		{
 			this.LocalizationStorage = localizationStorage;
 
