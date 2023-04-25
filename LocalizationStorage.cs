@@ -110,5 +110,18 @@ namespace ResourceLocalization
             }
             throw new System.ArgumentException($"{GetType()}: No resources found for {language}");
         }
+
+        public Dictionary<string, Resource> GetResources(LocalizationTag tag)
+        {
+            var resources = new Dictionary<string, Resource>();
+
+            var index = tags.IndexOf(tag);
+            for(int i=0; i < languages.Count; i++)
+            {
+                resources.Add(languages[i].Name, languages[i].Resources[index]);
+            }
+
+            return resources;
+        }
     }
 }
