@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-	public class LocalizationEditorWindow : EditorWindow
+	public class LocalizationStorageWindow : EditorWindow
 	{
 		public LocalizationStorage localizationStorage;
 		private ReorderableLocalizationList localizationsList;

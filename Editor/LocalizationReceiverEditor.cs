@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ResourceLocalization
 {
     [CustomEditor(typeof(LocalizationReceiver))]
-    public class LocalizationReceiverEditor : Editor
+    public abstract class LocalizationReceiverEditor : Editor
     {
         private LocalizationStorage LocalizationStorage { get; set; }
         private Dictionary<string, Resource> resources;

@@ -7,10 +7,11 @@ namespace ResourceLocalization
 {
     public class ReorderableReceiverList : ReorderableList
     {
-        private LocalizationStorage LocalizationStorege { get; }
+        private readonly float padding = 1f;
+        private LocalizationStorage LocalizationStorage { get; }
         public ReorderableReceiverList(List<LocalizationReceiver> receivers, LocalizationStorage localizationStorege) : base(receivers, typeof(LocalizationReceiver))
         {
-            LocalizationStorege = localizationStorege;
+            LocalizationStorage = localizationStorege;
 
             drawHeaderCallback = DrawHeader;
 
@@ -29,7 +30,7 @@ namespace ResourceLocalization
 
         private bool CheckingLanguages()
         {
-            return LocalizationStorege.Languages.Length > 0;
+            return LocalizationStorage.Languages.Length > 0;
         }
 
         private void DrawHeader(Rect rect)
@@ -55,29 +56,13 @@ namespace ResourceLocalization
 
         private void DrowLocalizationReceiver(Rect rect, int index, bool isActive, bool isFocused)
         {
-            var objectFieldRect = new Rect(new Vector2(rect.x, rect.y), new Vector2(150, rect.height));
             var receiver = (LocalizationReceiver)list[index];
+            var objectFieldRect = GetNewRect(rect, new Vector2(rect.width - 70, rect.height));
+            
             receiver = EditorGUI.ObjectField(objectFieldRect, receiver, typeof(LocalizationReceiver), true) as LocalizationReceiver;
-            if (GUI.changed && receiver != (LocalizationReceiver)list[index])
-            {
-                if (list.Contains(receiver))
-                {
-                    throw new System.ArgumentException($"There is already a localizations with {receiver.LocalizationTag.Name}-{receiver.LocalizationTag.ID}");
-                }
-
-                if ((LocalizationReceiver)list[index] != null)
-                {
-                    var tag = ((LocalizationReceiver)list[index]).LocalizationTag;
-                    if (LocalizationStorege.Conteins(tag)) { LocalizationStorege.RemoveResource(tag); }
-                }
-
-                if (receiver != null)
-                {
-                    receiver.LocalizationTag = new LocalizationTag(receiver.name);
-                    LocalizationStorege.AddResource(receiver.LocalizationTag, receiver.Resource);
-                }
-                list[index] = receiver;
-            }
+            
+            if (GUI.changed && receiver != (LocalizationReceiver)list[index]) { SetReceiver(receiver); }
+            if (receiver != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), receiver); }
         }
 
         private void AddRecever(ReorderableList reorderable)
@@ -88,8 +73,43 @@ namespace ResourceLocalization
         private void RemoveRecever(ReorderableList reorderable)
         {
             var receiver = (LocalizationReceiver)list[index];
-            if (receiver != null && LocalizationStorege.Conteins(receiver.LocalizationTag)) { LocalizationStorege.RemoveResource(receiver.LocalizationTag); }
+            if (receiver != null && LocalizationStorage.Conteins(receiver.LocalizationTag)) { LocalizationStorage.RemoveResource(receiver.LocalizationTag); }
             reorderable.list.RemoveAt(index);
+        }
+
+        private void SetReceiver(LocalizationReceiver receiver)
+        {
+            if (list.Contains(receiver))
+            {
+                throw new System.ArgumentException($"There is already a localizations with {receiver.LocalizationTag.Name}-{receiver.LocalizationTag.ID}");
+            }
+
+            if ((LocalizationReceiver)list[index] != null)
+            {
+                var tag = ((LocalizationReceiver)list[index]).LocalizationTag;
+                if (LocalizationStorage.Conteins(tag)) { LocalizationStorage.RemoveResource(tag); }
+            }
+
+            if (receiver != null)
+            {
+                receiver.LocalizationTag = new LocalizationTag(receiver.name);
+                LocalizationStorage.AddResource(receiver.LocalizationTag, receiver.Resource);
+            }
+            list[index] = receiver;
+        }
+
+        private void EditResourcesButton(Rect rect, LocalizationReceiver receiver)
+        {
+            if (GUI.Button(rect, "Edit"))
+            {
+                LocalizationReceiverWindow window = (LocalizationReceiverWindow)EditorWindow.GetWindow(typeof(LocalizationReceiverWindow));
+                window.LocalizationReceiver = receiver;
+            }
+        }
+
+        private Rect GetNewRect(Rect rect, Vector2 size, float dX = 0f, float dY = 0f)
+        {
+            return new Rect(new Vector2(rect.x + dX + padding, rect.y + dY + padding), new Vector2(size.x - padding * 2f, size.y - padding * 2f));
         }
     }
 }
