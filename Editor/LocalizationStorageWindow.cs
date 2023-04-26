@@ -7,6 +7,7 @@ namespace ResourceLocalization
 	{
 		public LocalizationStorage localizationStorage;
 		private ReorderableLocalizationList localizationsList;
+		private Vector2 scrollPosition = Vector2.zero;
 
 		void OnGUI()
 		{
@@ -15,7 +16,9 @@ namespace ResourceLocalization
 				this.minSize = localizationsList.GetSize();
 			}
 
+			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 			localizationsList?.DoLayoutList();
+			EditorGUILayout.EndScrollView();
 
 			if (GUI.changed)
 			{

@@ -9,7 +9,7 @@ namespace ResourceLocalization
     {
         private LocalizationStorage LocalizationStorage { get; set; }
         private Dictionary<string, Resource> resources;
-        private bool foldout;
+        public bool foldout;
 
         public virtual void OnEnable()
         {
