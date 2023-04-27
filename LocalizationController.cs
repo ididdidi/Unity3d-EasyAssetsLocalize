@@ -7,28 +7,13 @@ namespace ResourceLocalization
     {
         [SerializeField] private LocalizationStorage localizationStorage;
         [SerializeField, HideInInspector] private List<LocalizationReceiver> localizationreceivers;
-        private Dictionary<LocalizationTag, Resource> dictionary;
+        private Dictionary<string, Resource> dictionary;
 
-        public string Language
+        public Language Language
         {
-            get => PlayerPrefs.HasKey("Language") ? PlayerPrefs.GetString("Language") : Application.systemLanguage.ToString();
-            set => PlayerPrefs.SetString("Language", value);
+            get => new Language(PlayerPrefs.HasKey("Language") ? PlayerPrefs.GetString("Language") : Application.systemLanguage.ToString());
+            set => PlayerPrefs.SetString("Language", value.Name);
         }
-
-        public List<string> Languages
-        {
-            get
-            {
-                var languages = new string[localizationStorage.Languages.Length];
-                for(int i=0; i < languages.Length; i++)
-                {
-                    languages[i] = localizationStorage.Languages[i].Name;
-                }
-                return new List<string>(languages);
-            } 
-            
-        }
-
         public List<LocalizationReceiver> Receivers { get => localizationreceivers; }
         public LocalizationStorage LocalizationStorage { get => localizationStorage; }
 
@@ -43,14 +28,14 @@ namespace ResourceLocalization
             SetLanguage(Language);
         }
 
-        public void SetLanguage(string language)
+        public void SetLanguage(Language language)
         {
-            dictionary = localizationStorage.GetLocalization(language);
+            dictionary = localizationStorage.GetDictionary(language);
             Language = language;
 
             foreach (LocalizationReceiver receiver in localizationreceivers)
             {
-                receiver.Resource = dictionary[receiver.LocalizationTag];
+                receiver.Resource = dictionary[receiver.ID];
             }
         }
 
@@ -68,18 +53,20 @@ namespace ResourceLocalization
 
         private void ChangeLocalzation(Direction direction)
         {
-            if (Languages.Count < 2) { return; }
-            int index = Languages.IndexOf(Language);
+            var languages = new List<Language>(localizationStorage.Languages);
+            if (languages.Count < 2) { return; }
+
+            int index = languages.IndexOf(Language);
             if (index > -1)
             {
-                int newIndex = (index + (int)direction) % Languages.Count;
+                int newIndex = (index + (int)direction) % languages.Count;
                 if (newIndex >= 0) { index = newIndex; }
-                else { index = Languages.Count + newIndex; }
-                SetLanguage(Languages[index]);
+                else { index = languages.Count + newIndex; }
+                SetLanguage(languages[index]);
             }
             else
             {
-                throw new System.ArgumentException($"{Language} not found in the {Languages}");
+                throw new System.ArgumentException($"{Language} not found in the {localizationStorage}");
             }
         }
     }

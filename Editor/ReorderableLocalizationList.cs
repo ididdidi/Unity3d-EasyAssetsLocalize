@@ -41,26 +41,25 @@ namespace ResourceLocalization
 			GUI.Label(GetNewRect(rect, rect.size, dX), "Resources");
 			dX = fieldWidth - 10f;
 
-			var count = 0;
-			foreach (var language in LocalizationStorage.Languages)
+			var languages = LocalizationStorage.Languages;
+			for (int i=0; i < languages.Length; i++)
 			{
 				var width = fieldWidth - 20f;
-				language.Name = GUI.TextField(GetNewRect(rect, new Vector2(width, rect.height), dX), language.Name, "TextField");
+				languages[i].Name = GUI.TextField(GetNewRect(rect, new Vector2(width, rect.height), dX), languages[i].Name, "TextField");
 				dX += width;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
 				if (GUI.Button(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), iconButton, "SearchCancelButton"))
 				{
-					LocalizationStorage.RemoveLanguage(language.Name);
+					LocalizationStorage.RemoveLanguage(languages[i]);
 					break;
 				}
 				dX += fieldHeight + padding * 2;
-				count++;
 			}
 
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
 			if (GUI.Button(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), icon, "RL FooterButton"))
 			{
-				LocalizationStorage.AddLanguage("Language " + (count + 1));
+				LocalizationStorage.AddLanguage(new Language("Language " + (languages.Length + 1)));
 			}
 		}
 
@@ -68,7 +67,7 @@ namespace ResourceLocalization
 		{
 			var localsation = list[index] as Localization;
 			var width = fieldWidth - 24;
-			GUI.Label(GetNewRect(rect, new Vector2(width, rect.height)), localsation.Tag.Name);
+			GUI.Label(GetNewRect(rect, new Vector2(width, rect.height)), localsation.Name);
 			float dX = width;
 
 			for (int i = 0; i < localsation.Resources.Count; i++)
@@ -88,8 +87,8 @@ namespace ResourceLocalization
 		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
 		{
 			var localization = list.list[index] as Localization;
-			LocalizationStorage.RemoveResource(oldIndex);
-			LocalizationStorage.InsertResource(newIndex, localization);
+			LocalizationStorage.RemoveLocalization(oldIndex);
+			LocalizationStorage.InsertLocalization(newIndex, localization);
 		}
 
 		private Rect GetNewRect(Rect rect, Vector2 size, float dX = 0f, float dY = 0f)

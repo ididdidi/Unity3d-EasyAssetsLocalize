@@ -61,7 +61,7 @@ namespace ResourceLocalization
             
             receiver = EditorGUI.ObjectField(objectFieldRect, receiver, typeof(LocalizationReceiver), true) as LocalizationReceiver;
             
-            if (GUI.changed && receiver != (LocalizationReceiver)list[index]) { SetReceiver(receiver); }
+            if (GUI.changed && receiver != (LocalizationReceiver)list[index]) { SetReceiver(receiver, index); }
             if (receiver != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), receiver); }
         }
 
@@ -73,27 +73,26 @@ namespace ResourceLocalization
         private void RemoveRecever(ReorderableList reorderable)
         {
             var receiver = (LocalizationReceiver)list[index];
-            if (receiver != null && LocalizationStorage.Conteins(receiver.LocalizationTag)) { LocalizationStorage.RemoveResource(receiver.LocalizationTag); }
+            if (receiver != null && LocalizationStorage.ConteinsLocalization(receiver.ID)) { LocalizationStorage.RemoveLocalization(receiver.ID); }
             reorderable.list.RemoveAt(index);
         }
 
-        private void SetReceiver(LocalizationReceiver receiver)
+        private void SetReceiver(LocalizationReceiver receiver, int index)
         {
             if (list.Contains(receiver))
             {
-                throw new System.ArgumentException($"There is already a localizations with {receiver.LocalizationTag.Name}-{receiver.LocalizationTag.ID}");
+                throw new System.ArgumentException($"There is already a localizations with {receiver.name}-{receiver.ID}");
             }
 
             if ((LocalizationReceiver)list[index] != null)
             {
-                var tag = ((LocalizationReceiver)list[index]).LocalizationTag;
-                if (LocalizationStorage.Conteins(tag)) { LocalizationStorage.RemoveResource(tag); }
+                var id = ((LocalizationReceiver)list[index]).ID;
+                if (LocalizationStorage.ConteinsLocalization(id)) { LocalizationStorage.RemoveLocalization(id); }
             }
 
             if (receiver != null)
             {
-                receiver.LocalizationTag = new LocalizationTag(receiver.name);
-                LocalizationStorage.AddResource(receiver.LocalizationTag, receiver.Resource);
+                receiver.ID = LocalizationStorage.AddLocalization(receiver.name, receiver.Resource);
             }
             list[index] = receiver;
         }

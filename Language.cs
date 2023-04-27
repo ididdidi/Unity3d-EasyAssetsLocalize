@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ResourceLocalization
 {
@@ -7,16 +6,18 @@ namespace ResourceLocalization
     public class Language
     {
         [SerializeField] private string name;
-        [SerializeReference] private List<Resource> resources;
 
-        public Language(string name, IEnumerable<Resource> resources)
+        public Language(string name)
         {
             this.name = name;
-            this.resources = new List<Resource>(resources);
         }
 
         public string Name { get => name; set => name = value; }
 
-        public List<Resource> Resources { get => resources; }
+        public override bool Equals(object obj) => (obj is Language language)? name.Equals(language.name) : false;
+
+        public override int GetHashCode() => name.GetHashCode();
+
+        public override string ToString() => name;
     }
 }
