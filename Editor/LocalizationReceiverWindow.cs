@@ -7,7 +7,7 @@ namespace ResourceLocalization
 	{
 		private Vector2 scrollPosition = Vector2.zero;
 		private bool foldout = true;
-		public LocalizationReceiver LocalizationReceiver { 
+		public LocalizationTag LocalizationReceiver { 
 			set 
 			{
 				if (editor) { foldout = editor.foldout; }

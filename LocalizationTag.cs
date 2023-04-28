@@ -2,7 +2,7 @@
 
 namespace ResourceLocalization
 {
-    public abstract class LocalizationReceiver : MonoBehaviour
+    public abstract class LocalizationTag : MonoBehaviour
     {
         [SerializeField, HideInInspector] private string id;
         public string ID { get => id; set => id = value; }

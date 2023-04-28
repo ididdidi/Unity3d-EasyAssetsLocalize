@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-    [CustomEditor(typeof(LocalizationReceiver))]
+    [CustomEditor(typeof(LocalizationTag))]
     public abstract class LocalizationReceiverEditor : Editor
     {
         private LocalizationStorage LocalizationStorage { get; set; }
@@ -13,7 +13,7 @@ namespace ResourceLocalization
 
         public virtual void OnEnable()
         {
-            var receiver = target as LocalizationReceiver;
+            var receiver = target as LocalizationTag;
             LocalizationStorage = FindObjectOfType<LocalizationController>().LocalizationStorage;
             var localization = LocalizationStorage?.GetLocalization(receiver.ID);
 
