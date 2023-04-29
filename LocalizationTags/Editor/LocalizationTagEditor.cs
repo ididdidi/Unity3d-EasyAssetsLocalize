@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-    [CustomEditor(typeof(LocalizationTag))]
-    public abstract class LocalizationReceiverEditor : Editor
+    public abstract class LocalizationTagEditor : Editor
     {
         private LocalizationStorage LocalizationStorage { get; set; }
         private Dictionary<string, Resource> dictionary = new Dictionary<string, Resource>();

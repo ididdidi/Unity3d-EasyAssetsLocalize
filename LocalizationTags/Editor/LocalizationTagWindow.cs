@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-	public class LocalizationReceiverWindow : EditorWindow
+	public class LocalizationTagWindow : EditorWindow
 	{
 		private Vector2 scrollPosition = Vector2.zero;
 		private bool foldout = true;
@@ -11,10 +11,10 @@ namespace ResourceLocalization
 			set 
 			{
 				if (editor) { foldout = editor.foldout; }
-				if (value) { editor = (LocalizationReceiverEditor)Editor.CreateEditor(value); editor.foldout = foldout; } 
+				if (value) { editor = (LocalizationTagEditor)Editor.CreateEditor(value); editor.foldout = foldout; } 
 			} 
 		}
-		private LocalizationReceiverEditor editor;
+		private LocalizationTagEditor editor;
 
 		public void OnEnable()
 		{

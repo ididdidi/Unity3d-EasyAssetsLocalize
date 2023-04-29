@@ -5,11 +5,11 @@ using UnityEditor;
 
 namespace ResourceLocalization
 {
-    public class ReorderableReceiverList : ReorderableList
+    public class ReorderableTagList : ReorderableList
     {
         private readonly float padding = 1f;
         private LocalizationStorage LocalizationStorage { get; }
-        public ReorderableReceiverList(List<LocalizationTag> receivers, LocalizationStorage localizationStorege) : base(receivers, typeof(LocalizationTag))
+        public ReorderableTagList(List<LocalizationTag> receivers, LocalizationStorage localizationStorege) : base(receivers, typeof(LocalizationTag))
         {
             LocalizationStorage = localizationStorege;
 
@@ -101,7 +101,7 @@ namespace ResourceLocalization
         {
             if (GUI.Button(rect, "Edit"))
             {
-                LocalizationReceiverWindow window = (LocalizationReceiverWindow)EditorWindow.GetWindow(typeof(LocalizationReceiverWindow));
+                LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow));
                 window.LocalizationReceiver = receiver;
             }
         }

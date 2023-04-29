@@ -6,11 +6,11 @@ namespace ResourceLocalization
     public class LocalizationControllerEditor : Editor
     {
         private LocalizationController controller;
-        private ReorderableReceiverList receiverList;
+        private ReorderableTagList receiverList;
         private void OnEnable()
         {
             controller = target as LocalizationController;
-            receiverList = new ReorderableReceiverList(controller.Receivers, controller.LocalizationStorage);
+            receiverList = new ReorderableTagList(controller.Receivers, controller.LocalizationStorage);
         }
 
         public override void OnInspectorGUI()
