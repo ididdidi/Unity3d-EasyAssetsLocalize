@@ -40,15 +40,7 @@ namespace ResourceLocalization
             {
                 foreach (var resource in dictionary)
                 {
-                    if (typeof(string).IsAssignableFrom(resource.Value.Type))
-                    {
-                        EditorGUILayout.LabelField(resource.Key);
-                        resource.Value.Data = EditorGUILayout.TextArea((string)resource.Value.Data, GUILayout.Height(50f));
-                    }
-                    else
-                    {
-                        resource.Value.Data = EditorGUILayout.ObjectField(resource.Key, (Object)resource.Value.Data, resource.Value.Type, false);
-                    }
+                    LocalizationStorageWindow.DrawResources(resource.Key, resource.Value);
                 }
             }
         }
