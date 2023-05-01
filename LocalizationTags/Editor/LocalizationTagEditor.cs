@@ -40,7 +40,7 @@ namespace ResourceLocalization
             {
                 foreach (var resource in dictionary)
                 {
-                    LocalizationStorageWindow.DrawResources(resource.Key, resource.Value);
+                    LocalizationStorageEditor.DrawResource(resource.Key, resource.Value);
                 }
             }
         }

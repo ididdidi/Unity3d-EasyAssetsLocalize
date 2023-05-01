@@ -26,18 +26,5 @@ namespace ResourceLocalization
 				this.minSize = localizationsList.GetSize();
 			}
 		}
-
-        public static void DrawResources(string language, Resource resource)
-        {
-			if (typeof(string).IsAssignableFrom(resource.Type))
-			{
-				EditorGUILayout.LabelField(language);
-				resource.Data = EditorGUILayout.TextArea((string)resource.Data, GUILayout.Height(50f));
-			}
-			else
-			{
-				resource.Data = EditorGUILayout.ObjectField(language, (Object)resource.Data, resource.Type, false);
-			}
-		}
     }
 }
