@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -9,11 +10,17 @@ namespace ResourceLocalization
 		private readonly float padding = 1f;
 		private readonly float fieldWidth = 150f;
 		private readonly float fieldHeight = 18f;
+
+		private LocalizationSearch search;
+		private int storageVersion;
+
 		private LocalizationStorage LocalizationStorage { get; }
 
 		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
 		{
 			this.LocalizationStorage = localizationStorage;
+
+			storageVersion = localizationStorage.Version;
 
 			elementHeight = fieldHeight + padding * 2f;
 
@@ -22,6 +29,8 @@ namespace ResourceLocalization
 			drawElementCallback = DrawResources;
 		
 			onReorderCallbackWithDetails = ReorderList;
+
+			search = new LocalizationSearch(LocalizationStorage);
 		}
 
 		public Vector2 GetSize()
@@ -31,20 +40,28 @@ namespace ResourceLocalization
 
 		public new void DoLayoutList()
 		{
-			list = LocalizationStorage.Localizations;
+			if(storageVersion != LocalizationStorage.Version)
+			{
+				list = search.GetResult();
+				storageVersion = LocalizationStorage.Version;
+			}
 			base.DoLayoutList();
 		}
 
 		private void DrawLanguageNames(Rect rect)
 		{
-			float dX = 16f;
-			GUI.Label(GetNewRect(rect, rect.size, dX), "Resources");
-			dX = fieldWidth - 10f;
+			float dX = -4f;
+			var width = fieldWidth - 6f;
+			if(search.SearchFieldChanged(GetNewRect(rect, new Vector2(width, rect.height), dX)))
+			{
+				list = search.GetResult();
+			}
+			dX += width;
 
 			var languages = LocalizationStorage.Languages;
 			for (int i=0; i < languages.Length; i++)
 			{
-				var width = fieldWidth - 20f;
+				width = fieldWidth - 20f;
 				languages[i].Name = GUI.TextField(GetNewRect(rect, new Vector2(width, rect.height), dX), languages[i].Name, "TextField");
 				dX += width;
 				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");

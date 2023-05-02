@@ -17,7 +17,7 @@ namespace ResourceLocalization
 			storage = this.target as LocalizationStorage;
 			languages = storage.Languages;
 			localizations = storage.Localizations;
-			foldouts = new bool[storage.Localizations.Length];
+			foldouts = new bool[localizations.Length];
 		}
 
 		public override void OnInspectorGUI()

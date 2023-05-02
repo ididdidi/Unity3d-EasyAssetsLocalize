@@ -6,20 +6,19 @@ namespace ResourceLocalization
 {
     public abstract class LocalizationTagEditor : Editor
     {
-        private LocalizationStorage LocalizationStorage { get; set; }
+        private LocalizationTag receiver;
+        private LocalizationStorage storage;
+        private int storageVersion;
+
         private Dictionary<string, Resource> dictionary = new Dictionary<string, Resource>();
         public bool foldout;
 
         public virtual void OnEnable()
         {
-            var receiver = target as LocalizationTag;
-            LocalizationStorage = FindObjectOfType<LocalizationController>().LocalizationStorage;
-            var localization = LocalizationStorage?.GetLocalization(receiver.ID);
-
-            for (int i=0; i < LocalizationStorage.Languages.Length; i++)
-            {
-                dictionary.Add(LocalizationStorage.Languages[i].Name, localization.Resources[i]);
-            }
+            receiver = target as LocalizationTag;
+            storage = FindObjectOfType<LocalizationController>().LocalizationStorage;
+            storageVersion = storage.Version;
+            UpdateDictionary();
         }
 
         public override void OnInspectorGUI()
@@ -30,6 +29,8 @@ namespace ResourceLocalization
 
         private void DrawResources()
         {
+            if(storageVersion != storage?.Version) { UpdateDictionary(); }
+
             if(dictionary == null)
             {
                 EditorGUILayout.HelpBox(new GUIContent("LocalizationController"));
@@ -42,6 +43,16 @@ namespace ResourceLocalization
                 {
                     LocalizationStorageEditor.DrawResource(resource.Key, resource.Value);
                 }
+            }
+        }
+
+        private void UpdateDictionary()
+        {
+            dictionary.Clear();
+            var localization = storage?.GetLocalization(receiver.ID);
+            for (int i = 0; i < storage.Languages.Length; i++)
+            {
+                dictionary.Add(storage.Languages[i].Name, localization.Resources[i]);
             }
         }
     }
