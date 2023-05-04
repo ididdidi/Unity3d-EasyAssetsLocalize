@@ -6,6 +6,11 @@ namespace ResourceLocalization
     {
         [SerializeField, HideInInspector] private string id;
         public string ID { get => id; set => id = value; }
-        public abstract Resource Resource { get; set; }
+
+        public Resource Resource { get => GetResource(); set => SetResource(value); }
+
+        protected abstract Resource GetResource();
+
+        protected abstract void SetResource(Resource resource);
     }
 }

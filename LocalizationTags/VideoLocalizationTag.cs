@@ -5,8 +5,24 @@ namespace ResourceLocalization
 {
     public class VideoLocalizationTag : LocalizationTag
     {
-        [SerializeField] private VideoPlayer player;
+        [SerializeField] private VideoPlayer[] players;
 
-        public override Resource Resource { get => new VideoResource(player.clip); set => player.clip = (VideoClip)value.Data; }
+        protected override void SetResource(Resource resource)
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (players[i]) { players[i].clip = (VideoClip)resource.Data; }
+            }
+        }
+
+        protected override Resource GetResource()
+        {
+            VideoClip clip = null;
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (players[i]) { clip = players[i].clip; break; }
+            }
+            return new VideoResource(clip);
+        }
     }
 }

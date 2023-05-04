@@ -5,11 +5,24 @@ namespace ResourceLocalization
 {
     public class TextLocalizationTag : LocalizationTag
     {
-        [SerializeField] private Text textView;
-        public override Resource Resource 
+        [SerializeField] private Text[] textViews;
+
+        protected override void SetResource(Resource resource)
         {
-            get => new TextResource(textView?.text); 
-            set => textView.text = (string)value.Data; 
+            for (int i = 0; i < textViews.Length; i++)
+            {
+                if (textViews[i]) { textViews[i].text = (string)resource.Data; }
+            }
+        }
+
+        protected override Resource GetResource()
+        {
+            string text = "";
+            for (int i = 0; i < textViews.Length; i++)
+            {
+                if (textViews[i]) { text = textViews[i].text; break; }
+            }
+            return new TextResource(text);
         }
     }
 }

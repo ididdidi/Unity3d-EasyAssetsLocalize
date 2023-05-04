@@ -5,19 +5,26 @@ namespace ResourceLocalization
 {
     public class ImageLocalizationTag : LocalizationTag
     {
-        [SerializeField] private Image image;
+        [SerializeField] private Image[] images;
 
-        public override Resource Resource { get => new ImageResource(GetTexture()); set => SetTexture((Texture2D)value.Data); }
-
-        private void SetTexture(Texture2D texture)
+        protected override void SetResource(Resource resource)
         {
-            image.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            var texture = resource.Data as Texture2D;
+
+            for (int i=0; i < images.Length; i++)
+            {
+                if (images[i]) { images[i].sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f)); }
+            }
         }
 
-        private Texture2D GetTexture()
+        protected override Resource GetResource()
         {
-            if(image && image.sprite) { return image.sprite.texture; }
-            return null;
+            Texture2D texture = null;
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i] && images[i].sprite) { texture = images[i].sprite.texture; break; }
+            }
+            return new ImageResource(texture);
         }
     }
 }
