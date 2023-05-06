@@ -3,5 +3,5 @@
 namespace ResourceLocalization
 {
     [CustomEditor(typeof(VideoLocalizationTag))]
-    public class VideoLoaclTagEditor : LocalizationTagEditor { }
+    public class VideoLoaclTagEditor : ResourceLocalizationTagEditor<UnityEngine.Video.VideoPlayer> { }
 }

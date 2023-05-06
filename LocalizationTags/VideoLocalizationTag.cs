@@ -3,26 +3,10 @@ using UnityEngine.Video;
 
 namespace ResourceLocalization
 {
-    public class VideoLocalizationTag : LocalizationTag
+    public class VideoLocalizationTag : ResourceLocalizationTag<VideoPlayer>
     {
-        [SerializeField] private VideoPlayer[] players;
+        protected override void SetResource(VideoPlayer reciver, Resource resource) => reciver.clip = (VideoClip)resource.Data;
 
-        protected override void SetResource(Resource resource)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-                if (players[i]) { players[i].clip = (VideoClip)resource.Data; }
-            }
-        }
-
-        protected override Resource GetResource()
-        {
-            VideoClip clip = null;
-            for (int i = 0; i < players.Length; i++)
-            {
-                if (players[i]) { clip = players[i].clip; break; }
-            }
-            return new VideoResource(clip);
-        }
+        protected override Resource GetResource(VideoPlayer reciver) => new VideoResource(reciver.clip);
     }
 }

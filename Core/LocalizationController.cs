@@ -6,7 +6,7 @@ namespace ResourceLocalization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
-        [SerializeField, HideInInspector] private List<LocalizationTag> localizationreceivers;
+        [SerializeField, HideInInspector] private List<LocalizationTag> localizationreceivers = new List<LocalizationTag>();
         private Dictionary<string, Resource> dictionary;
 
         public Language Language
@@ -33,9 +33,9 @@ namespace ResourceLocalization
             dictionary = localizationStorage.GetDictionary(language);
             Language = language;
 
-            foreach (LocalizationTag receiver in localizationreceivers)
+            for(int i=0; i < localizationreceivers.Count; i++)
             {
-                receiver.Resource = dictionary[receiver.ID];
+                localizationreceivers[i].Resource = dictionary[localizationreceivers[i].ID];
             }
         }
 

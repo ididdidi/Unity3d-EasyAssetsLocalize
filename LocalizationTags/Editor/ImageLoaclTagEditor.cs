@@ -3,5 +3,5 @@
 namespace ResourceLocalization
 {
     [CustomEditor(typeof(ImageLocalizationTag))]
-    public class ImageLoaclTagEditor : LocalizationTagEditor { }
+    public class ImageLoaclTagEditor : ResourceLocalizationTagEditor<UnityEngine.UI.Image> { }
 }

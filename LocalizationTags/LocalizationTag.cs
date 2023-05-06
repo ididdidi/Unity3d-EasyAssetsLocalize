@@ -5,12 +5,11 @@ namespace ResourceLocalization
     public abstract class LocalizationTag : MonoBehaviour
     {
         [SerializeField, HideInInspector] private string id;
+
         public string ID { get => id; set => id = value; }
 
-        public Resource Resource { get => GetResource(); set => SetResource(value); }
+        public abstract Resource Resource { get; set; }
 
-        protected abstract Resource GetResource();
-
-        protected abstract void SetResource(Resource resource);
+       // public abstract System.Type ReciverType { get; }
     }
 }

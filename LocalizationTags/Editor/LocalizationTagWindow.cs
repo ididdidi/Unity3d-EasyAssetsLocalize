@@ -10,8 +10,8 @@ namespace ResourceLocalization
 		public LocalizationTag LocalizationReceiver { 
 			set 
 			{
-				if (editor) { foldout = editor.foldout; }
-				if (value) { editor = (LocalizationTagEditor)Editor.CreateEditor(value); editor.foldout = foldout; } 
+				if (editor) { foldout = editor.localizationfoldout; }
+				if (value) { editor = (LocalizationTagEditor)Editor.CreateEditor(value); editor.localizationfoldout = foldout; } 
 			} 
 		}
 		private LocalizationTagEditor editor;

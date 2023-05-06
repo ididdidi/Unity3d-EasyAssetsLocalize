@@ -2,26 +2,10 @@
 
 namespace ResourceLocalization
 {
-    public class AudioLocalizationTag : LocalizationTag
+    public class AudioLocalizationTag : ResourceLocalizationTag<AudioSource>
     {
-        [SerializeField] private AudioSource[] sources;
+        protected override void SetResource(AudioSource reciver, Resource resource) => (reciver).clip = (AudioClip)resource.Data;
 
-        protected override void SetResource(Resource resource)
-        {
-            for(int i=0; i < sources.Length; i++)
-            {
-                if (sources[i]) { sources[i].clip = (AudioClip)resource.Data; }
-            }
-        }
-
-        protected override Resource GetResource()
-        {
-            AudioClip clip = null;
-            for (int i = 0; i < sources.Length; i++)
-            {
-                if (sources[i]) { clip = sources[i].clip; break; }
-            }
-            return new AudioResource(clip);
-        }
+        protected override Resource GetResource(AudioSource reciver) => new AudioResource(reciver.clip);
     }
 }

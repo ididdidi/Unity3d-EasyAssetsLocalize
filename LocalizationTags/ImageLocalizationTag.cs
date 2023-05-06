@@ -3,28 +3,19 @@ using UnityEngine.UI;
 
 namespace ResourceLocalization
 {
-    public class ImageLocalizationTag : LocalizationTag
+    public class ImageLocalizationTag : ResourceLocalizationTag<Image>
     {
-        [SerializeField] private Image[] images;
-
-        protected override void SetResource(Resource resource)
+        protected override void SetResource(Image reciver, Resource resource)
         {
-            var texture = resource.Data as Texture2D;
-
-            for (int i=0; i < images.Length; i++)
-            {
-                if (images[i]) { images[i].sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f)); }
-            }
+            var texture = (Texture2D)resource.Data;
+            (reciver).sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
 
-        protected override Resource GetResource()
+        protected override Resource GetResource(Image reciver)
         {
-            Texture2D texture = null;
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i] && images[i].sprite) { texture = images[i].sprite.texture; break; }
-            }
-            return new ImageResource(texture);
+            var image = reciver;
+            if (image && image.sprite) { return new ImageResource(image.sprite.texture); }
+            else return new ImageResource(null);
         }
     }
 }

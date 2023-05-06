@@ -19,7 +19,7 @@ namespace ResourceLocalization
             {
                 onAddCallback = AddRecever;
                 onRemoveCallback = RemoveRecever;
-                drawElementCallback = DrowLocalizationReceiver;
+                drawElementCallback = DrowLocalizationTag;
             }
             else
             {
@@ -54,15 +54,15 @@ namespace ResourceLocalization
             EditorGUI.LabelField(rect, label, style);
         }
 
-        private void DrowLocalizationReceiver(Rect rect, int index, bool isActive, bool isFocused)
+        private void DrowLocalizationTag(Rect rect, int index, bool isActive, bool isFocused)
         {
-            var receiver = (LocalizationTag)list[index];
+            var tag = (LocalizationTag)list[index];
             var objectFieldRect = GetNewRect(rect, new Vector2(rect.width - 70, rect.height));
+
+            tag = EditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag),true) as LocalizationTag;
             
-            receiver = EditorGUI.ObjectField(objectFieldRect, receiver, typeof(LocalizationTag), true) as LocalizationTag;
-            
-            if (GUI.changed && receiver != (LocalizationTag)list[index]) { SetReceiver(receiver, index); }
-            if (receiver != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), receiver); }
+            if (GUI.changed && tag != (LocalizationTag)list[index]) { SetReceiver(tag, index); }
+            if (tag != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), tag); }
         }
 
         private void AddRecever(ReorderableList reorderable)

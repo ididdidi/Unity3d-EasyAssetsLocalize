@@ -6,18 +6,19 @@ namespace ResourceLocalization
 {
     public abstract class LocalizationTagEditor : Editor
     {
-        private LocalizationTag receiver;
+        private LocalizationTag tag;
         private LocalizationStorage storage;
         private int storageVersion;
 
         private Dictionary<string, Resource> dictionary = new Dictionary<string, Resource>();
-        public bool foldout;
+        public bool localizationfoldout;
 
         public virtual void OnEnable()
         {
-            receiver = target as LocalizationTag;
+            tag = target as LocalizationTag;
             storage = FindObjectOfType<LocalizationController>().LocalizationStorage;
             storageVersion = storage.Version;
+
             UpdateDictionary();
         }
 
@@ -29,15 +30,15 @@ namespace ResourceLocalization
 
         private void DrawResources()
         {
-            if(storageVersion != storage?.Version) { UpdateDictionary(); }
+            if (storageVersion != storage?.Version) { UpdateDictionary(); }
 
-            if(dictionary == null)
+            if (dictionary == null)
             {
                 EditorGUILayout.HelpBox(new GUIContent("LocalizationController"));
                 return;
             }
 
-            if (foldout = EditorGUILayout.Foldout(foldout, "Localizations"))
+            if (localizationfoldout = EditorGUILayout.Foldout(localizationfoldout, "Localizations"))
             {
                 foreach (var resource in dictionary)
                 {
@@ -49,11 +50,15 @@ namespace ResourceLocalization
         private void UpdateDictionary()
         {
             dictionary.Clear();
-            var localization = storage?.GetLocalization(receiver.ID);
-            for (int i = 0; i < storage.Languages.Length; i++)
+            try
             {
-                dictionary.Add(storage.Languages[i].Name, localization.Resources[i]);
+                var localization = storage?.GetLocalization(tag.ID);
+                for (int i = 0; i < storage.Languages.Length; i++)
+                {
+                    dictionary.Add(storage.Languages[i].Name, localization.Resources[i]);
+                }
             }
+            catch { }
         }
     }
 }

@@ -3,5 +3,5 @@
 namespace ResourceLocalization
 {
     [CustomEditor(typeof(TextLocalizationTag))]
-    public class TextLocalTagEditor : LocalizationTagEditor { }
+    public class TextLocalTagEditor : ResourceLocalizationTagEditor<UnityEngine.UI.Text> { }
 }
