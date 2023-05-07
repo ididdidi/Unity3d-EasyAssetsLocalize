@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ResourceLocalization
 {
-    public class ImageLocalizationTag : ResourceLocalizationTag<Image>
+    public class ImageLocalizationTag : ReceiversLocalizationTag<Image>
     {
         protected override void SetResource(Image reciver, Resource resource)
         {

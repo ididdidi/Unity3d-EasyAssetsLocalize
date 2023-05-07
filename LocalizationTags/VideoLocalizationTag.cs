@@ -3,7 +3,7 @@ using UnityEngine.Video;
 
 namespace ResourceLocalization
 {
-    public class VideoLocalizationTag : ResourceLocalizationTag<VideoPlayer>
+    public class VideoLocalizationTag : ReceiversLocalizationTag<VideoPlayer>
     {
         protected override void SetResource(VideoPlayer reciver, Resource resource) => reciver.clip = (VideoClip)resource.Data;
 

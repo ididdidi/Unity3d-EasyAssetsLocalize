@@ -9,7 +9,5 @@ namespace ResourceLocalization
         public string ID { get => id; set => id = value; }
 
         public abstract Resource Resource { get; set; }
-
-       // public abstract System.Type ReciverType { get; }
     }
 }

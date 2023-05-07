@@ -2,7 +2,7 @@
 
 namespace ResourceLocalization
 {
-    public class AudioLocalizationTag : ResourceLocalizationTag<AudioSource>
+    public class AudioLocalizationTag : ReceiversLocalizationTag<AudioSource>
     {
         protected override void SetResource(AudioSource reciver, Resource resource) => (reciver).clip = (AudioClip)resource.Data;
 

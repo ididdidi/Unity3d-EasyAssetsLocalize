@@ -2,27 +2,27 @@
 
 namespace ResourceLocalization
 {
-    public abstract class ResourceLocalizationTag<T> : LocalizationTag where T : Object
+    public abstract class ReceiversLocalizationTag<T> : LocalizationTag where T : Object
     {
-        [SerializeReference, HideInInspector] public T[] recivers = new T[0];
+        [SerializeField, HideInInspector] public T[] receivers = new T[0];
 
         public override Resource Resource
         {
             get
             {
                 Resource resource = null;
-                for (int i = 0; i < recivers.Length; i++)
+                for (int i = 0; i < receivers.Length; i++)
                 {
-                    if (recivers[i]) { resource = GetResource(recivers[i]); break; }
+                    if (receivers[i]) { resource = GetResource(receivers[i]); break; }
                 }
                 return resource;
             }
 
             set
             {
-                for (int i = 0; i < recivers.Length; i++)
+                for (int i = 0; i < receivers.Length; i++)
                 {
-                    if (recivers[i]) { SetResource(recivers[i], value); }
+                    if (receivers[i]) { SetResource(receivers[i], value); }
                 }
             }
 
