@@ -59,7 +59,9 @@ namespace ResourceLocalization
             var tag = (LocalizationTag)list[index];
             var objectFieldRect = GetNewRect(rect, new Vector2(rect.width - 70, rect.height));
 
-            tag = EditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag),true) as LocalizationTag;
+            ChecDragAndDrops(objectFieldRect, typeof(LocalizationTag));
+            DrawTagField(objectFieldRect, ref tag);
+
             
             if (GUI.changed && tag != (LocalizationTag)list[index]) { SetReceiver(tag, index); }
             if (tag != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), tag); }
@@ -110,5 +112,74 @@ namespace ResourceLocalization
         {
             return new Rect(new Vector2(rect.x + dX + padding, rect.y + dY + padding), new Vector2(size.x - padding * 2f, size.y - padding * 2f));
         }
+
+
+        /// <summary>
+        /// Checks the validity of the dragged objects
+        /// </summary>
+        /// <param name="position"><see cref="Rect"/> fields to activate validation</param>
+        /// <param name="requiredType">Required <see cref="System.Type"/> of reference being checked</param>
+        private void ChecDragAndDrops(Rect position, System.Type requiredType)
+        {
+            // If the cursor is in the area of the rendered field
+            if (position.Contains(Event.current.mousePosition))
+            {
+                // Iterate over all draggable references
+                foreach (var @object in DragAndDrop.objectReferences)
+                {
+                    // If we do not find the required type
+                    if (!IsValidObject(@object, requiredType))
+                    {
+                        // Disable drag and drop
+                        DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if an reference matches the required type
+        /// </summary>
+        /// <param name="object">Checked reference</param>
+        /// <param name="requiredType">Required <see cref="System.Type"/> of reference being checked</param>
+        /// <returns></returns>
+        private bool IsValidObject(Object @object, System.Type requiredType)
+        {
+            // If the object is a GameObject
+            if (@object is GameObject go)
+            {
+                // Check if it has a component of the required type and return result
+                return go.GetComponent(requiredType) != null;
+            }
+
+            // Check the reference itself for compliance with the required type
+            return requiredType.IsAssignableFrom(@object.GetType());
+        }
+
+        /// <summary>
+        /// Display a field for adding a reference to an object
+        /// </summary>
+        /// <param name="position"><see cref="Rect"/> fields to activate validation</param>
+        /// <param name="property">Serializedproperty the object</param>
+        /// <param name="label">Displaу field label</param>
+        private void DrawTagField(Rect position, ref LocalizationTag localizationTag)
+        {
+            // Start change checks
+            EditorGUI.BeginChangeCheck();
+            // Display a ObjectField
+            var @object = EditorGUI.ObjectField(position, localizationTag, typeof(object), true);
+            // If changes were made to the contents of the field and a GameObject was added to the field
+            if (EditorGUI.EndChangeCheck() && @object is GameObject gameObject)
+            {
+                // Get component of the required type on the object and save a reference to it in a property
+                foreach (var tag in gameObject.GetComponents(typeof(LocalizationTag)))
+                {
+                    if(!list.Contains(tag)) { @object = tag; break; }
+                }
+            }
+            localizationTag = @object as LocalizationTag;
+        }
+
     }
 }
