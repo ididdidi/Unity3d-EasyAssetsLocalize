@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -64,8 +63,7 @@ namespace ResourceLocalization
 				width = fieldWidth - 20f;
 				languages[i].Name = GUI.TextField(GetNewRect(rect, new Vector2(width, rect.height), dX), languages[i].Name, "TextField");
 				dX += width;
-				GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", "Delete language");
-				if (GUI.Button(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), iconButton, "SearchCancelButton"))
+				if (CancelButton(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), "Delete language"))
 				{
 					LocalizationStorage.RemoveLanguage(languages[i]);
 					break;
@@ -99,6 +97,15 @@ namespace ResourceLocalization
 				}
 				dX += fieldWidth;
 			}
+
+			if (CancelButton(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), "Delete localization"))
+			{
+				if(EditorUtility.DisplayDialog("Delete this localization?",
+					"Are you sure that this localization is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
+				{
+					LocalizationStorage.RemoveLocalization(index);
+				}
+			}
 		}
 
 		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
@@ -111,6 +118,13 @@ namespace ResourceLocalization
 		private Rect GetNewRect(Rect rect, Vector2 size, float dX = 0f, float dY = 0f)
 		{
 			return new Rect(new Vector2(rect.x + dX + padding, rect.y + dY + padding), new Vector2(size.x - padding * 2f, size.y - padding * 2f));
+		}
+
+		private bool CancelButton(Rect rect, string label = null)
+		{
+			GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", label);
+			if (GUI.Button(rect, iconButton, "SearchCancelButton")) { return true; }
+			return false;
 		}
 	}
 }

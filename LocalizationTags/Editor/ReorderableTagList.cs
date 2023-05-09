@@ -99,12 +99,12 @@ namespace ResourceLocalization
             list[index] = receiver;
         }
 
-        private void EditResourcesButton(Rect rect, LocalizationTag receiver)
+        private void EditResourcesButton(Rect rect, LocalizationTag tag)
         {
             if (GUI.Button(rect, "Edit"))
             {
-                LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow));
-                window.LocalizationReceiver = receiver;
+                LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow), false, tag.name);
+                window.LocalizationReceiver = tag;
             }
         }
 

@@ -29,7 +29,7 @@ namespace ResourceLocalization
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Open on window", GUILayout.Width(240f), GUILayout.Height(24f)))
 			{
-				LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow));
+				LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
 				window.localizationStorage = storage;
 			}
 			GUILayout.FlexibleSpace();
