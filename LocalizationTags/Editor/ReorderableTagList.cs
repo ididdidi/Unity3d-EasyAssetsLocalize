@@ -35,7 +35,7 @@ namespace ResourceLocalization
 
         private void DrawHeader(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Receivers");
+            EditorGUI.LabelField(rect, "Localization tags");
         }
 
         private void DrawLanguagesError(Rect rect)
