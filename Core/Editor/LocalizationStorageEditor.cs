@@ -7,6 +7,8 @@ namespace ResourceLocalization
 	public class LocalizationStorageEditor : Editor
 	{
 		private LocalizationStorage storage;
+		private int storageVersion;
+
 		private Language[] languages;
 		private Localization[] localizations;
 		private bool[] foldouts;
@@ -14,17 +16,18 @@ namespace ResourceLocalization
 		public void OnEnable()
 		{
 			storage = this.target as LocalizationStorage;
-			languages = storage.Languages;
-			localizations = storage.Localizations;
-			foldouts = new bool[localizations.Length];
 		}
 
 		public override void OnInspectorGUI()
 		{
 			DrawDefaultInspector();
-			
-			DrawResources();
+			UpdateLocalizations();
+			DrowLocalizations();
+			DrowButton();
+		}
 
+		private void DrowButton()
+		{
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Open on window", GUILayout.Width(240f), GUILayout.Height(24f)))
@@ -36,30 +39,25 @@ namespace ResourceLocalization
 			GUILayout.EndHorizontal();
 		}
 
-		private void DrawResources()
+		private void DrowLocalizations()
 		{
-			for (int i = 0; i < localizations.Length; i++)
+			for(int i=0; i < localizations.Length; i++)
 			{
-				if(foldouts[i] = EditorGUILayout.Foldout(foldouts[i], localizations[i].Name))
+				if (foldouts[i] = EditorGUILayout.Foldout(foldouts[i], localizations[i].Name))
 				{
-					for (int j = 0; j < languages.Length; j++)
-					{
-						DrawResource(languages[j].Name, localizations[i].Resources[j]);
-					}
+					LocalizationResourceView.DrawResources(localizations[i], languages);
 				}
 			}
 		}
 
-		public static void DrawResource(string language, Resource resource)
+		private void UpdateLocalizations()
 		{
-			if (typeof(string).IsAssignableFrom(resource.Type))
+			if (localizations == null || storageVersion != storage.Version)
 			{
-				EditorGUILayout.LabelField(language);
-				resource.Data = EditorGUILayout.TextArea((string)resource.Data, GUILayout.Height(50f));
-			}
-			else
-			{
-				resource.Data = EditorGUILayout.ObjectField(language, (Object)resource.Data, resource.Type, false);
+				languages = storage.Languages;
+				localizations = storage.Localizations;
+				foldouts = new bool[localizations.Length];
+				storageVersion = storage.Version;
 			}
 		}
 	}

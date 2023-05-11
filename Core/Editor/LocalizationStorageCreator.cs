@@ -24,14 +24,15 @@ namespace ResourceLocalization
 
             if (path.Length > 0)
             {
-                var asset = ScriptableObject.CreateInstance<LocalizationStorage>();
+                var storage = ScriptableObject.CreateInstance<LocalizationStorage>();
+                storage.AddLanguage(new Language(Application.systemLanguage.ToString()));
 
-                AssetDatabase.CreateAsset(asset, path);
+                AssetDatabase.CreateAsset(storage, path);
                 AssetDatabase.SaveAssets();
 
                 EditorUtility.FocusProjectWindow();
 
-                Selection.activeObject = asset;
+                Selection.activeObject = storage;
             }
         }
     }

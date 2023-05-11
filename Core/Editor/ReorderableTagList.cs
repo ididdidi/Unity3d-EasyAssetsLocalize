@@ -9,6 +9,7 @@ namespace ResourceLocalization
     {
         private readonly float padding = 1f;
         private LocalizationStorage LocalizationStorage { get; }
+
         public ReorderableTagList(List<LocalizationTag> receivers, LocalizationStorage localizationStorege) : base(receivers, typeof(LocalizationTag))
         {
             LocalizationStorage = localizationStorege;
@@ -101,11 +102,14 @@ namespace ResourceLocalization
 
         private void EditResourcesButton(Rect rect, LocalizationTag tag)
         {
-            if (GUI.Button(rect, "Edit"))
-            {
-                LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow), false, tag.name);
-                window.LocalizationReceiver = tag;
-            }
+            if (GUI.Button(rect, "Edit")) { DisplayTagWindow(tag); }
+        }
+
+        private void DisplayTagWindow(LocalizationTag tag)
+        {
+            LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow), false, tag.name);
+
+            window.ResourceView = new LocalizationResourceView(LocalizationStorage, tag);
         }
 
         private Rect GetNewRect(Rect rect, Vector2 size, float dX = 0f, float dY = 0f)

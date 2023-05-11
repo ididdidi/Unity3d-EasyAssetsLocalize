@@ -6,15 +6,8 @@ namespace ResourceLocalization
 	public class LocalizationTagWindow : EditorWindow
 	{
 		private Vector2 scrollPosition = Vector2.zero;
-		private bool foldout = true;
-		public LocalizationTag LocalizationReceiver { 
-			set 
-			{
-				if (editor) { foldout = editor.localizationfoldout; }
-				if (value) { editor = (LocalizationTagEditor)Editor.CreateEditor(value); editor.localizationfoldout = foldout; } 
-			} 
-		}
-		private LocalizationTagEditor editor;
+
+		public LocalizationResourceView ResourceView { get; set; }
 
 		public void OnEnable()
 		{
@@ -24,7 +17,7 @@ namespace ResourceLocalization
 		void OnGUI()
 		{
 			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-			editor?.OnInspectorGUI();
+			ResourceView?.DrawResources();
 			EditorGUILayout.EndScrollView();
 		}
 	}

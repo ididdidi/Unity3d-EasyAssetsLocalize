@@ -65,8 +65,12 @@ namespace ResourceLocalization
 				dX += width;
 				if (CancelButton(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), "Delete language"))
 				{
-					LocalizationStorage.RemoveLanguage(languages[i]);
-					break;
+					if (EditorUtility.DisplayDialog("Delete this language?",
+		"Are you sure that this language is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
+					{
+						LocalizationStorage.RemoveLanguage(languages[i]);
+						break;
+					}
 				}
 				dX += fieldHeight + padding * 2;
 			}
