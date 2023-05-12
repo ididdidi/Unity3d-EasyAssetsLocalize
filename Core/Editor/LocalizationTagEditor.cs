@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class LocalizationTagEditor : Editor
     {
         private LocalizationResourceView resourceView;

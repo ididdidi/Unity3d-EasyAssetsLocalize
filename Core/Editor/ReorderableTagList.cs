@@ -60,8 +60,7 @@ namespace ResourceLocalization
             var tag = (LocalizationTag)list[index];
             var objectFieldRect = GetNewRect(rect, new Vector2(rect.width - 70, rect.height));
 
-            ChecDragAndDrops(objectFieldRect, typeof(LocalizationTag));
-            DrawTagField(objectFieldRect, ref tag);
+            tag = ObjectField(objectFieldRect, tag, typeof(LocalizationTag), null, (item) => { return !list.Contains(item); }) as LocalizationTag;
 
             
             if (GUI.changed && tag != (LocalizationTag)list[index]) { SetReceiver(tag, index); }
@@ -119,6 +118,40 @@ namespace ResourceLocalization
 
 
         /// <summary>
+        /// Display a field for adding a reference to an object
+        /// </summary>
+        /// <param name="position"><see cref="Rect"/> fields to activate validation</param>
+        /// <param name="property">Serializedproperty the object</param>
+        /// <param name="label">Displaу field label</param>
+        private Object ObjectField(Rect position, Object field, System.Type requiredType, string label = null, System.Predicate<Object> predicate = null)
+        {
+            // Make sure the objects being moved are of the right type
+            ChecDragAndDrops(position, requiredType);
+
+            // Start change checks
+            EditorGUI.BeginChangeCheck();
+            // Display a ObjectField
+            if (!string.IsNullOrEmpty(label)) { field = EditorGUI.ObjectField(position, label, field, typeof(object), true); }
+            else { field = EditorGUI.ObjectField(position, field, typeof(object), true); }
+
+            // If changes were made to the contents of the field and a GameObject was added to the field
+            if (EditorGUI.EndChangeCheck() && field is GameObject gameObject)
+            {
+                // Get component of the required type on the object and save a reference to it in a property
+                foreach (var component in gameObject.GetComponents(requiredType))
+                {
+                    if (predicate == null || predicate.Invoke(component)) { return component; }
+                }
+            }
+            else
+            {
+                if (predicate != null && predicate.Invoke(field)) return field;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Checks the validity of the dragged objects
         /// </summary>
         /// <param name="position"><see cref="Rect"/> fields to activate validation</param>
@@ -160,30 +193,5 @@ namespace ResourceLocalization
             // Check the reference itself for compliance with the required type
             return requiredType.IsAssignableFrom(@object.GetType());
         }
-
-        /// <summary>
-        /// Display a field for adding a reference to an object
-        /// </summary>
-        /// <param name="position"><see cref="Rect"/> fields to activate validation</param>
-        /// <param name="property">Serializedproperty the object</param>
-        /// <param name="label">Displaу field label</param>
-        private void DrawTagField(Rect position, ref LocalizationTag localizationTag)
-        {
-            // Start change checks
-            EditorGUI.BeginChangeCheck();
-            // Display a ObjectField
-            var @object = EditorGUI.ObjectField(position, localizationTag, typeof(object), true);
-            // If changes were made to the contents of the field and a GameObject was added to the field
-            if (EditorGUI.EndChangeCheck() && @object is GameObject gameObject)
-            {
-                // Get component of the required type on the object and save a reference to it in a property
-                foreach (var tag in gameObject.GetComponents(typeof(LocalizationTag)))
-                {
-                    if(!list.Contains(tag)) { @object = tag; break; }
-                }
-            }
-            localizationTag = @object as LocalizationTag;
-        }
-
     }
 }
