@@ -1,4 +1,5 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
@@ -16,7 +17,7 @@ namespace ResourceLocalization
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            tag.receivers = tag.receivers.ArrayFields("Recivers", ref receiversfoldout);
+            tag.receivers = ExtendedEditorGUI.ArrayFields(tag.receivers, "Recivers", ref receiversfoldout, true);
         }
     }
 }

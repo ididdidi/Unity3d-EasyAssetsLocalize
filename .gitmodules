@@ -1,0 +1,3 @@
+[submodule "SubModules/ExtendedEditor"]
+	path = SubModules/ExtendedEditor
+	url = https://github.com/ididdidi/Unity3d-ExtendedEditor.git
