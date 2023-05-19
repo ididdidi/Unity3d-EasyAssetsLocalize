@@ -19,7 +19,7 @@ namespace ResourceLocalization
                 EditorGUILayout.HelpBox($"The {controller.LocalizationStorage} field must not be empty!", MessageType.Error); return;
             }
 
-            if (receiverList == null) { receiverList = new ReorderableTagList(controller.Receivers, controller.LocalizationStorage); }
+            if (receiverList == null) { receiverList = new ReorderableTagList(controller.LocalizationTags, controller.LocalizationStorage); }
             else { receiverList.DoLayoutList(); }
         }
     }

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class LocalizationStorageWindow : EditorWindow
 	{
 		public LocalizationStorage localizationStorage;
