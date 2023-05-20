@@ -1,12 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.Video;
+﻿using UnityEngine.Video;
 
 namespace ResourceLocalization
 {
     public class VideoLocalizationTag : ReceiversLocalizationTag<VideoPlayer>
     {
-        protected override void SetResource(VideoPlayer reciver, Resource resource) => reciver.clip = (VideoClip)resource.Data;
+        protected override void SetResource(VideoPlayer reciver, Resource resource) 
+        {
+            if (reciver) reciver.clip = (VideoClip)resource.Data;
+        }
 
-        protected override Resource GetResource(VideoPlayer reciver) => new VideoResource(reciver.clip);
+        protected override Resource GetResource(VideoPlayer reciver) => new VideoResource(reciver? reciver.clip : null);
     }
 }

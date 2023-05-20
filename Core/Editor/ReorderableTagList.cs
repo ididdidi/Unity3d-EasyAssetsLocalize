@@ -64,7 +64,7 @@ namespace ResourceLocalization
             tag = ExtendedEditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag), null, (item) => { return !list.Contains(item); }) as LocalizationTag;
 
             
-            if (GUI.changed && tag != (LocalizationTag)list[index]) { SetReceiver(tag, index); }
+            if (GUI.changed && tag != (LocalizationTag)list[index]) { SetLocalizationTag(tag, index); }
             if (tag != null) { EditResourcesButton(GetNewRect(rect, new Vector2(56f, rect.height), rect.width - 60f), tag); }
         }
 
@@ -80,11 +80,11 @@ namespace ResourceLocalization
             reorderable.list.RemoveAt(index);
         }
 
-        private void SetReceiver(LocalizationTag receiver, int index)
+        private void SetLocalizationTag(LocalizationTag tag, int index)
         {
-            if (list.Contains(receiver))
+            if (list.Contains(tag))
             {
-                throw new System.ArgumentException($"There is already a localizations with {receiver.name}-{receiver.ID}");
+                throw new System.ArgumentException($"There is already a localizations with {tag.name}-{tag.ID}");
             }
 
             if ((LocalizationTag)list[index] != null)
@@ -93,11 +93,11 @@ namespace ResourceLocalization
                 if (LocalizationStorage.ConteinsLocalization(id)) { LocalizationStorage.RemoveLocalization(id); }
             }
 
-            if (receiver != null)
+            if (tag != null)
             {
-                receiver.ID = LocalizationStorage.AddLocalization(receiver.name, receiver.Resource);
+                tag.ID = LocalizationStorage.AddLocalization(tag.name, tag.Resource);
             }
-            list[index] = receiver;
+            list[index] = tag;
         }
 
         private void EditResourcesButton(Rect rect, LocalizationTag tag)

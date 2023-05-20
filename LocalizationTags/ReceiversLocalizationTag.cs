@@ -10,7 +10,7 @@ namespace ResourceLocalization
         {
             get
             {
-                Resource resource = null;
+                var resource = GetResource(null);
                 for (int i = 0; i < receivers.Length; i++)
                 {
                     if (receivers[i]) { resource = GetResource(receivers[i]); break; }
