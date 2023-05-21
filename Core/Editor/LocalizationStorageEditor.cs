@@ -45,7 +45,7 @@ namespace ResourceLocalization
 			{
 				if (foldouts[i] = EditorGUILayout.Foldout(foldouts[i], localizations[i].Name))
 				{
-					LocalizationResourceView.DrawResources(localizations[i], languages);
+					LocalizationResourceView.DisplayResources(localizations[i], languages);
 				}
 			}
 		}

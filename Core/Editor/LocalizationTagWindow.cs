@@ -17,7 +17,7 @@ namespace ResourceLocalization
 		void OnGUI()
 		{
 			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-			ResourceView?.DrawResources();
+			ResourceView?.Show();
 			EditorGUILayout.EndScrollView();
 		}
 	}

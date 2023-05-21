@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
+	/// <summary>
+	/// Displays localization resources for a single tag.
+	/// </summary>
 	public class LocalizationResourceView
 	{
 		private LocalizationStorage storage;
@@ -11,14 +14,30 @@ namespace ResourceLocalization
 		private Language[] languages;
 		private LocalizationTag tag;
 		private Localization localization;
-		private bool foldout;
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="storage">Repository with data about localization resources</param>
+		/// <param name="tag">Localization resource tag</param>
 		public LocalizationResourceView(LocalizationStorage storage, LocalizationTag tag)
 		{
 			this.storage = storage;
 			this.tag = tag;
 		}
 
+		/// <summary>
+		/// Method for displaying localization data in the inspector
+		/// </summary>
+		public void Show()
+		{
+			UpdateLocalization();
+			DisplayResources(localization, languages);
+		}
+
+		/// <summary>
+		/// Method for updating localization data.
+		/// </summary>
 		private void UpdateLocalization()
 		{
 			if (localization == null || storageVersion != storage.Version)
@@ -29,13 +48,12 @@ namespace ResourceLocalization
 			}
 		}
 
-		public void DrawResources()
-		{
-			UpdateLocalization();
-			DrawResources(localization, languages);
-		}
-
-		public static void DrawResources(Localization localization, Language[] languages)
+		/// <summary>
+		/// Displays a list of localization resources.
+		/// </summary>
+		/// <param name="localization">Localization resources</param>
+		/// <param name="languages">List of languages</param>
+		public static void DisplayResources(Localization localization, Language[] languages)
 		{
 			if (localization == null)
 			{
@@ -47,6 +65,11 @@ namespace ResourceLocalization
 			}
 		}
 
+		/// <summary>
+		/// Displays localization resource
+		/// </summary>
+		/// <param name="resource">localization resource</param>
+		/// <param name="language">language of the resource</param>
 		private static void DrawResource(Resource resource, string language)
 		{
 			if (typeof(string).IsAssignableFrom(resource.Type))

@@ -168,22 +168,5 @@ namespace ResourceLocalization
             }
             return dictionary;
         }
-
-        /// <summary>
-        /// Method for searching for localization in storage by localization tag name.
-        /// </summary>
-        /// <param name="mask">Localization tag name or part of it</param>
-        /// <returns>Localization</returns>
-        public Localization[] FindLocalizations(string mask)
-        {
-            if(string.IsNullOrWhiteSpace(mask)) { return localizations.ToArray(); }
-
-            var result = new List<Localization>();
-            for(int i=0; i < localizations.Count; i++)
-            {
-                if (localizations[i].Name.ToLower().Contains(mask.ToLower())) { result.Add(localizations[i]); }
-            }
-            return result.ToArray();
-        }
     }
 }

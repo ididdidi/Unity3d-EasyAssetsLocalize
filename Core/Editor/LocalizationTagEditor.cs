@@ -23,7 +23,7 @@ namespace ResourceLocalization
 
             if (foldout = EditorGUILayout.Foldout(foldout, "Resources"))
             {
-                resourceView.DrawResources();
+                resourceView.Show();
             }
         }
     }

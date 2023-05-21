@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Creates an instance of a script object of type LocalizationStorage
+    /// </summary>
     public class LocalizationStorageCreator
     {
         [MenuItem("Assets/Create/Localization", false, 1)]
