@@ -1,12 +1,16 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
+	/// <summary>
+	/// Display localization storage data in a reorderable list.
+	/// </summary>
 	public class ReorderableLocalizationList : ReorderableList
 	{
-		private readonly float padding = 1f;
+		private readonly Vector2 padding = new Vector2(1f, 1f);
 		private readonly float fieldWidth = 150f;
 		private readonly float fieldHeight = 18f;
 
@@ -15,15 +19,19 @@ namespace ResourceLocalization
 
 		private LocalizationStorage LocalizationStorage { get; }
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="localizationStorage">LocalizationStorage</param>
 		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
 		{
 			this.LocalizationStorage = localizationStorage;
 
 			storageVersion = localizationStorage.Version;
 
-			elementHeight = fieldHeight + padding * 2f;
+			elementHeight = fieldHeight + padding.y * 2f;
 
-			drawHeaderCallback = DrawLanguageNames;
+			drawHeaderCallback = DrawHeader;
 
 			drawElementCallback = DrawResources;
 		
@@ -32,11 +40,18 @@ namespace ResourceLocalization
 			search = new LocalizationSearch(LocalizationStorage);
 		}
 
+		/// <summary>
+		/// Calculates the required window size.
+		/// </summary>
+		/// <returns>Minimum window dimensions</returns>
 		public Vector2 GetSize()
 		{
 			return new Vector2((LocalizationStorage.Languages.Length + 1) * (fieldWidth + 2f) + 12f, 320f);
 		}
 
+		/// <summary>
+		/// Method for displaying the contents of a spike in the Inspector window.
+		/// </summary>
 		public new void DoLayoutList()
 		{
 			if(storageVersion != LocalizationStorage.Version)
@@ -46,24 +61,53 @@ namespace ResourceLocalization
 			}
 			base.DoLayoutList();
 		}
-
-		private void DrawLanguageNames(Rect rect)
+		#region Header
+		/// <summary>
+		/// Display the title in which the search string is located and the list of supported languages.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		private void DrawHeader(Rect rect)
 		{
-			float dX = -4f;
+			float dX = DrawSearchField(rect, -4f);
+			dX = DrowLanguages(rect, dX);
+
+			AddNewLanguageButton(rect, dX);
+		}
+
+		/// <summary>
+		/// Draws a field for searching by tags.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		/// <param name="dX">Offset X</param>
+		/// <returns>New offset X</returns>
+		private float DrawSearchField(Rect rect, float dX)
+		{
 			var width = fieldWidth - 6f;
-			if(search.SearchFieldChanged(GetNewRect(rect, new Vector2(width, rect.height), dX)))
+			if (search.SearchFieldChanged(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX)))
 			{
 				list = search.GetResult();
 			}
-			dX += width;
+			return dX + width;
+		}
 
+		/// <summary>
+		/// Drows Language fields.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		/// <param name="dX">Offset X</param>
+		/// <returns>New offset X</returns>
+		private float DrowLanguages(Rect rect, float dX)
+		{
 			var languages = LocalizationStorage.Languages;
-			for (int i=0; i < languages.Length; i++)
+			for (int i = 0; i < languages.Length; i++)
 			{
-				width = fieldWidth - 20f;
-				languages[i].Name = GUI.TextField(GetNewRect(rect, new Vector2(width, rect.height), dX), languages[i].Name, "TextField");
+				var width = fieldWidth - 20f;
+				languages[i].Name = GUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX), languages[i].Name, "TextField");
 				dX += width;
-				if (CancelButton(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), "Delete language"))
+
+				// Delete language button. Inactive if there is only one language.
+				EditorGUI.BeginDisabledGroup(languages.Length < 2);
+				if (ExtendedEditorGUI.CancelButton(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldHeight, rect.height), padding, dX), "Delete language"))
 				{
 					if (EditorUtility.DisplayDialog("Delete this language?",
 		"Are you sure that this language is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
@@ -72,37 +116,58 @@ namespace ResourceLocalization
 						break;
 					}
 				}
-				dX += fieldHeight + padding * 2;
+				EditorGUI.EndDisabledGroup();
+				dX += fieldHeight + padding.y * 2;
 			}
-
-			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
-			if (GUI.Button(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), icon, "RL FooterButton"))
-			{
-				LocalizationStorage.AddLanguage(new Language("Language " + (languages.Length + 1)));
-			}
+			return dX;
 		}
 
+		/// <summary>
+		/// Draws a button to add a new language.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		/// <param name="dX">Offset X</param>
+		private void AddNewLanguageButton(Rect rect, float dX)
+		{
+			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add language");
+			if (GUI.Button(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldHeight, rect.height), padding, dX), icon, "RL FooterButton"))
+			{
+				LocalizationStorage.AddLanguage(new Language("Language " + (LocalizationStorage.Languages.Length + 1)));
+			}
+		}
+		#endregion
+
+		/// <summary>
+		/// Renders a tag of its associated resources.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		/// <param name="index">The index of the tag in the list</param>
+		/// <param name="isActive"></param>
+		/// <param name="isFocused"></param>
 		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			var localsation = list[index] as Localization;
 			var width = fieldWidth - 24;
-			GUI.Label(GetNewRect(rect, new Vector2(width, rect.height)), localsation.Name);
+			GUI.Label(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding), localsation.Name);
 			float dX = width;
 
 			for (int i = 0; i < localsation.Resources.Count; i++)
 			{
 				if (typeof(string).IsAssignableFrom(localsation.Resources[i].Type))
 				{
-					localsation.Resources[i].Data = GUI.TextField(GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), dX), (string)localsation.Resources[i].Data, "PR TextField");
+					localsation.Resources[i].Data = GUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+						(string)localsation.Resources[i].Data, "PR TextField");
 				}
 				else
 				{
-					localsation.Resources[i].Data = EditorGUI.ObjectField(GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), dX), (Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
+					localsation.Resources[i].Data = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+						(Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
 				}
 				dX += fieldWidth;
 			}
 
-			if (CancelButton(GetNewRect(rect, new Vector2(fieldHeight, rect.height), dX), "Delete localization"))
+			// Delete localization button.
+			if (ExtendedEditorGUI.CancelButton(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldHeight, rect.height), padding, dX), "Delete localization"))
 			{
 				if(EditorUtility.DisplayDialog("Delete this localization?",
 					"Are you sure that this localization is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
@@ -112,23 +177,17 @@ namespace ResourceLocalization
 			}
 		}
 
+		/// <summary>
+		/// Changes the order of elements in a list.
+		/// </summary>
+		/// <param name="list">Mutable list</param>
+		/// <param name="oldIndex">Old list item index</param>
+		/// <param name="newIndex">New list item index</param>
 		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
 		{
 			var localization = list.list[index] as Localization;
 			LocalizationStorage.RemoveLocalization(oldIndex);
 			LocalizationStorage.InsertLocalization(newIndex, localization);
-		}
-
-		private Rect GetNewRect(Rect rect, Vector2 size, float dX = 0f, float dY = 0f)
-		{
-			return new Rect(new Vector2(rect.x + dX + padding, rect.y + dY + padding), new Vector2(size.x - padding * 2f, size.y - padding * 2f));
-		}
-
-		private bool CancelButton(Rect rect, string label = null)
-		{
-			GUIContent iconButton = EditorGUIUtility.TrIconContent("Toolbar Minus", label);
-			if (GUI.Button(rect, iconButton, "SearchCancelButton")) { return true; }
-			return false;
 		}
 	}
 }

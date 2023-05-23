@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ResourceLocalization
 {
 	/// <summary>
-	/// 
+	/// Display localization storage data in a separate inspector window.
 	/// </summary>
 	public class LocalizationStorageWindow : EditorWindow
 	{
