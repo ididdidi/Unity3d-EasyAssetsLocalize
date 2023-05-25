@@ -56,7 +56,7 @@ namespace ResourceLocalization
 			if (GUILayout.Button("Edit in window", GUILayout.Width(240f), GUILayout.Height(24f)))
 			{
 				LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
-				window.localizationStorage = storage;
+				window.LocalizationStorage = storage;
 			}
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();

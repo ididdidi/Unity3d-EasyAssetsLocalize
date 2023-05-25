@@ -8,9 +8,17 @@ namespace ResourceLocalization
 	/// </summary>
 	public class LocalizationStorageWindow : EditorWindow
 	{
-		public LocalizationStorage localizationStorage;
+		private LocalizationStorage localizationStorage;
 		private ReorderableLocalizationList localizationsList;
 		private Vector2 scrollPosition = Vector2.zero;
+
+		public LocalizationStorage LocalizationStorage { get => localizationStorage; set => CreateLocalizationList(localizationStorage = value); }
+		
+		private void CreateLocalizationList(LocalizationStorage localizationStorage)
+		{
+			localizationsList = new ReorderableLocalizationList(localizationStorage);
+			this.minSize = localizationsList.GetSize();
+		}
 
 		void OnGUI()
 		{
