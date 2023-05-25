@@ -3,6 +3,10 @@ using UnityExtended;
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Class for displaying typed localization tag data.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class ReceiversLocalizationTagEditor<T> : LocalizationTagEditor where T : Object
     {
         private ReceiversLocalizationTag<T> tag;

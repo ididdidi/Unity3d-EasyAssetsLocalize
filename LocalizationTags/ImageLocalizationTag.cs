@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Tag for the <see cref="Image"/> type of the receiving <see cref="Texture2D"/>.
+    /// </summary>
     public class ImageLocalizationTag : ReceiversLocalizationTag<Image>
     {
         protected override void SetResource(Image reciver, Resource resource)

@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Encapsulates textures.
+    /// </summary>
     [System.Serializable]
     public class ImageResource : Resource
     {

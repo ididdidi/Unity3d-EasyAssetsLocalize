@@ -2,6 +2,10 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Typed localization tag. Encapsulates receivers of a specific type.
+    /// </summary>
+    /// <typeparam name="T">Receiver type</typeparam>
     public abstract class ReceiversLocalizationTag<T> : LocalizationTag where T : Object
     {
         [SerializeField, HideInInspector] public T[] receivers = new T[0];

@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Encapsulates AudioClip data.
+    /// </summary>
     [System.Serializable]
     public class AudioResource : Resource
     {

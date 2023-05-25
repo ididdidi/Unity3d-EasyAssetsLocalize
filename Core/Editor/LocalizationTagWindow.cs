@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
+	/// <summary>
+	/// Display localization tag  data in a separate inspector window.
+	/// </summary>
 	public class LocalizationTagWindow : EditorWindow
 	{
 		private Vector2 scrollPosition = Vector2.zero;

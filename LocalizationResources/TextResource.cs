@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Encapsulates text resources
+    /// </summary>
     [System.Serializable]
     public class TextResource : Resource
     {

@@ -1,5 +1,8 @@
 ﻿namespace ResourceLocalization
 {
+    /// <summary>
+    /// Base class for storing localization resources.
+    /// </summary>
     [System.Serializable]
     public abstract class Resource
     {

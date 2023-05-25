@@ -75,7 +75,7 @@ namespace ResourceLocalization
 		}
 
 		/// <summary>
-		/// Draws a field for searching by tags.
+		/// Display a field for searching by tags.
 		/// </summary>
 		/// <param name="rect"><see cref="Rect"/></param>
 		/// <param name="dX">Offset X</param>
@@ -91,7 +91,7 @@ namespace ResourceLocalization
 		}
 
 		/// <summary>
-		/// Drows Language fields.
+		/// Display Language fields.
 		/// </summary>
 		/// <param name="rect"><see cref="Rect"/></param>
 		/// <param name="dX">Offset X</param>
@@ -123,7 +123,7 @@ namespace ResourceLocalization
 		}
 
 		/// <summary>
-		/// Draws a button to add a new language.
+		/// Display a button to add a new language.
 		/// </summary>
 		/// <param name="rect"><see cref="Rect"/></param>
 		/// <param name="dX">Offset X</param>
@@ -138,12 +138,10 @@ namespace ResourceLocalization
 		#endregion
 
 		/// <summary>
-		/// Renders a tag of its associated resources.
+		/// Display a tag of lits associated resources.
 		/// </summary>
 		/// <param name="rect"><see cref="Rect"/></param>
 		/// <param name="index">The index of the tag in the list</param>
-		/// <param name="isActive"></param>
-		/// <param name="isFocused"></param>
 		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			var localsation = list[index] as Localization;
@@ -180,12 +178,12 @@ namespace ResourceLocalization
 		/// <summary>
 		/// Changes the order of elements in a list.
 		/// </summary>
-		/// <param name="list">Mutable list</param>
+		/// <param name="reorderable">Mutable list</param>
 		/// <param name="oldIndex">Old list item index</param>
 		/// <param name="newIndex">New list item index</param>
-		private void ReorderList(ReorderableList list, int oldIndex, int newIndex)
+		private void ReorderList(ReorderableList reorderable, int oldIndex, int newIndex)
 		{
-			var localization = list.list[index] as Localization;
+			var localization = reorderable.list[index] as Localization;
 			LocalizationStorage.RemoveLocalization(oldIndex);
 			LocalizationStorage.InsertLocalization(newIndex, localization);
 		}

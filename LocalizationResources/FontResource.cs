@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Encapsulates the text font.
+    /// </summary>
     [System.Serializable]
     public class FontResource : Resource
     {

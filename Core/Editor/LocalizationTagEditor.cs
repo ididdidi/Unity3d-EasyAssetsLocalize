@@ -3,7 +3,7 @@
 namespace ResourceLocalization
 {
     /// <summary>
-    /// 
+    /// Base class for displaying localization tag data.
     /// </summary>
     public abstract class LocalizationTagEditor : Editor
     {

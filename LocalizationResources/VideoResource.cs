@@ -3,6 +3,9 @@ using UnityEngine.Video;
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Encapsulates VideoClip data.
+    /// </summary>
     [System.Serializable]
     public class VideoResource : Resource
     {

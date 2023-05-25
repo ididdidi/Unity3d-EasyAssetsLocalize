@@ -2,6 +2,9 @@
 
 namespace ResourceLocalization
 {
+    /// <summary>
+    /// Tag for the <see cref="VideoPlayer"/> type of the receiving <see cref="VideoClip"/>.
+    /// </summary>
     public class VideoLocalizationTag : ReceiversLocalizationTag<VideoPlayer>
     {
         protected override void SetResource(VideoPlayer reciver, Resource resource) 
