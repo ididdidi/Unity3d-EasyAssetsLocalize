@@ -12,9 +12,10 @@ namespace ResourceLocalization
 		private LocalizationStorage storage;
 		private int storageVersion;
 
+		private bool foldout;
 		private Language[] languages;
 		private Localization[] localizations;
-		private bool[] foldouts;
+		private bool[] foldoutItems;
 
 		/// <summary>
 		/// Storage link caching.
@@ -41,7 +42,7 @@ namespace ResourceLocalization
 			{
 				languages = storage.Languages;
 				localizations = storage.Localizations;
-				foldouts = new bool[localizations.Length];
+				foldoutItems = new bool[localizations.Length];
 				storageVersion = storage.Version;
 			}
 		}
@@ -67,16 +68,20 @@ namespace ResourceLocalization
 		/// </summary>
 		private void DrowLocalizations()
 		{
-			var style = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleCenter };
-			EditorGUILayout.LabelField("Localization resources", style, GUILayout.ExpandWidth(true));
-
-			for(int i=0; i < localizations.Length; i++)
+			EditorGUI.indentLevel++;
+			if (foldout = EditorGUILayout.Foldout(foldout, "Localization resources"))
 			{
-				if (foldouts[i] = EditorGUILayout.Foldout(foldouts[i], localizations[i].Name))
+				EditorGUI.indentLevel++;
+				for (int i = 0; i < localizations.Length; i++)
 				{
-					LocalizationResourceView.DisplayResources(localizations[i], languages);
+					if (foldoutItems[i] = EditorGUILayout.Foldout(foldoutItems[i], localizations[i].Name))
+					{
+						LocalizationResourceView.DisplayResources(localizations[i], languages);
+					}
 				}
+				EditorGUI.indentLevel--;
 			}
+			EditorGUI.indentLevel--;
 		}
 	}
 }
