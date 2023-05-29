@@ -58,9 +58,12 @@ namespace ResourceLocalization
 
             tag = ExtendedEditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag), null, (item) => { return !list.Contains(item); }) as LocalizationTag;
 
-            
             if (GUI.changed && tag != (LocalizationTag)list[index]) { SetLocalizationTag(tag, index); }
-            if (tag != null) { EditResourcesButton(ExtendedEditorGUI.GetNewRect(rect, new Vector2(56f, rect.height), padding, rect.width - 60f), tag); }
+
+            if (tag != null && LocalizationStorage.ConteinsLocalization(tag)) 
+            {
+                EditResourcesButton(ExtendedEditorGUI.GetNewRect(rect, new Vector2(56f, rect.height), padding, rect.width - 60f), tag);
+            }
         }
 
         /// <summary>
@@ -72,13 +75,13 @@ namespace ResourceLocalization
         {
             if ((LocalizationTag)list[index] != null)
             {
-                var id = ((LocalizationTag)list[index]).ID;
-                if (LocalizationStorage.ConteinsLocalization(id)) { LocalizationStorage.RemoveLocalization(id); }
+                var curentTag = list[index] as LocalizationTag;
+                if (LocalizationStorage.ConteinsLocalization(curentTag)) { LocalizationStorage.RemoveLocalization(curentTag); }
             }
 
             if (tag != null)
             {
-                tag.ID = LocalizationStorage.AddLocalization(tag.name, tag.Resource);
+               // tag.ID = LocalizationStorage.AddLocalization(tag.name, tag.Resource);
             }
             list[index] = tag;
         }
@@ -98,8 +101,8 @@ namespace ResourceLocalization
         /// <param name="reorderable"><see cref="ReorderableList"/></param>
         private void RemoveTag(ReorderableList reorderable)
         {
-            var receiver = (LocalizationTag)list[index];
-            if (receiver != null && LocalizationStorage.ConteinsLocalization(receiver.ID)) { LocalizationStorage.RemoveLocalization(receiver.ID); }
+            var tag = list[index] as LocalizationTag;
+            if (tag != null && LocalizationStorage.ConteinsLocalization(tag)) { LocalizationStorage.RemoveLocalization(tag); }
             reorderable.list.RemoveAt(index);
         }
 

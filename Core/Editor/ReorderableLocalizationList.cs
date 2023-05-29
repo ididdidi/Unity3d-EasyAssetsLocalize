@@ -23,7 +23,7 @@ namespace ResourceLocalization
 		/// Constructor.
 		/// </summary>
 		/// <param name="localizationStorage">LocalizationStorage</param>
-		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, false, false)
+		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -36,6 +36,10 @@ namespace ResourceLocalization
 			drawElementCallback = DrawResources;
 		
 			onReorderCallbackWithDetails = ReorderList;
+			
+			onAddCallback = AddLocalisatrion;
+			
+			onRemoveCallback = RemoveLocalisatrion;
 
 			search = new LocalizationSearch(LocalizationStorage);
 		}
@@ -151,27 +155,17 @@ namespace ResourceLocalization
 
 			for (int i = 0; i < localsation.Resources.Count; i++)
 			{
-				if (typeof(string).IsAssignableFrom(localsation.Resources[i].Type))
-				{
-					localsation.Resources[i].Data = GUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
-						(string)localsation.Resources[i].Data, "PR TextField");
-				}
-				else
-				{
-					localsation.Resources[i].Data = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
-						(Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
-				}
+		//		if (typeof(string).IsAssignableFrom(localsation.Resources[i].Type))
+		//		{
+		//			localsation.Resources[i].Data = GUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+		//				(string)localsation.Resources[i].Data, "PR TextField");
+		//		}
+		//		else
+		//		{
+		//			localsation.Resources[i].Data = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+		//				(Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
+		//		}
 				dX += fieldWidth;
-			}
-
-			// Delete localization button.
-			if (ExtendedEditorGUI.CancelButton(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldHeight, rect.height), padding, dX), "Delete localization"))
-			{
-				if(EditorUtility.DisplayDialog("Delete this localization?",
-					"Are you sure that this localization is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
-				{
-					LocalizationStorage.RemoveLocalization(index);
-				}
 			}
 		}
 
@@ -186,6 +180,29 @@ namespace ResourceLocalization
 			var localization = reorderable.list[index] as Localization;
 			LocalizationStorage.RemoveLocalization(oldIndex);
 			LocalizationStorage.InsertLocalization(newIndex, localization);
+		}
+
+		/// <summary>
+		/// Add localization button.
+		/// </summary>
+		/// <param name="reorderable"></param>
+		private void AddLocalisatrion(ReorderableList reorderable)
+		{
+			var window = (LocalizationCreateWindow)EditorWindow.GetWindow(typeof(LocalizationCreateWindow), false, "Create Localization");
+			window.LocalizationStorage = LocalizationStorage;
+		}
+
+		/// <summary>
+		/// Delete localization button.
+		/// </summary>
+		/// <param name="reorderable"></param>
+		private void RemoveLocalisatrion(ReorderableList reorderable)
+		{
+			if (EditorUtility.DisplayDialog("Delete this localization?",
+	"Are you sure that this localization is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
+			{
+				LocalizationStorage.RemoveLocalization(index);
+			}
 		}
 	}
 }

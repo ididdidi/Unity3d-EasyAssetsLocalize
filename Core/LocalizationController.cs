@@ -10,7 +10,7 @@ namespace ResourceLocalization
     {
         [SerializeField] private LocalizationStorage localizationStorage;
         [SerializeField, HideInInspector] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
-        private Dictionary<string, Resource> dictionary;
+        private Dictionary<string, Object> dictionary;
 
         /// <summary>
         /// The current language.
@@ -27,7 +27,17 @@ namespace ResourceLocalization
         /// <summary>
         /// Link to localization repository.
         /// </summary>
-        public LocalizationStorage LocalizationStorage { get => localizationStorage; }
+        public LocalizationStorage LocalizationStorage 
+        {
+            get
+            {
+                try {
+                    if (!localizationStorage) { localizationStorage = Resources.Load<LocalizationStorage>(nameof(ResourceLocalization.LocalizationStorage)); }
+                }
+                catch (System.Exception exp) { Debug.LogError(exp); }
+                return localizationStorage;
+            }
+        }
         
         /// <summary>
         /// Start is called before the first frame update.
@@ -59,7 +69,7 @@ namespace ResourceLocalization
 
             for(int i=0; i < localizationTags.Count; i++)
             {
-                localizationTags[i].Resource = dictionary[localizationTags[i].ID];
+            //    localizationTags[i].Resource = dictionary[localizationTags[i].ID];
             }
         }
 

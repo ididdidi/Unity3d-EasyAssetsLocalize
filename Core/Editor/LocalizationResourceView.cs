@@ -42,7 +42,7 @@ namespace ResourceLocalization
 		{
 			if (localization == null || storageVersion != storage.Version)
 			{
-				localization = storage.GetLocalization(tag.ID);
+				localization = storage.GetLocalization(tag);
 				languages = storage.Languages;
 				storageVersion = storage.Version;
 			}
@@ -61,7 +61,7 @@ namespace ResourceLocalization
 			}
 			for (int i = 0; i < languages.Length; i++)
 			{
-				DrawResource(localization.Resources[i], languages[i].Name);
+				//DrawResource(localization.Resources[i], languages[i].Name);
 			}
 		}
 

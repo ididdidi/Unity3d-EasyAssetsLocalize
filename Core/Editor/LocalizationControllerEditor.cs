@@ -11,7 +11,10 @@ namespace ResourceLocalization
         private LocalizationController controller;
         private ReorderableTagList receiverList;
 
-        private void OnEnable() { controller = target as LocalizationController; }
+        private void OnEnable()
+        { 
+            controller = target as LocalizationController;
+        }
 
         public override void OnInspectorGUI()
         {

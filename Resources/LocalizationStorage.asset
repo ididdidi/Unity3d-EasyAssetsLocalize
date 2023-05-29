@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
+  m_Name: LocalizationStorage
+  m_EditorClassIdentifier: 
+  version: 19
+  languages:
+  - name: English
+  - name: Russian
+  localizations:
+  - id: 6b137c6b905f447e98592ab3dbda8d4f
+    name: Text
+    resources:
+    - id: 0
+    - id: 1
+  - id: 8ce6f94a3d0f4097bd2c1313f70523d9
+    name: Text
+    resources:
+    - id: 2
+    - id: 3
+  - id: 3bbc44036dfe4ddcb6b959b0fddb656b
+    name: Image
+    resources:
+    - id: 4
+    - id: 5
+  l:
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  - resources:
+    - {fileID: 0}
+    - {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: English
+    00000001:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
+    00000002:
+      type: {class: FontResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    00000003:
+      type: {class: FontResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    00000004:
+      type: {class: ImageResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: 2887294cc7f1fe840bff6e349409648d, type: 3}
+    00000005:
+      type: {class: ImageResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: cf3fbf98d5c3f1941bd9c0256918a4c8, type: 3}
