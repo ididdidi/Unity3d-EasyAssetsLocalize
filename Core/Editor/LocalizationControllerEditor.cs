@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace ResourceLocalization
 {
@@ -29,6 +30,24 @@ namespace ResourceLocalization
             // Display a reorderable list of localization tags
             if (receiverList == null) { receiverList = new ReorderableTagList(controller.LocalizationTags, controller.LocalizationStorage); }
             else { receiverList.DoLayoutList(); }
+
+            DrowButton();
+        }
+
+        /// <summary>
+        /// Button to display localization choice window.
+        /// </summary>
+        private void DrowButton()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Choice localization", GUILayout.Width(240f), GUILayout.Height(24f)))
+            {
+                var window = (LocalizationChoiceWindow)EditorWindow.GetWindow(typeof(LocalizationChoiceWindow), true, controller.name);
+                window.LocalizationStorage = controller.LocalizationStorage;
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
     }
 }

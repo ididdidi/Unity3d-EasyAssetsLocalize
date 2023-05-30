@@ -61,7 +61,7 @@ namespace ResourceLocalization
 			}
 			for (int i = 0; i < languages.Length; i++)
 			{
-				//DrawResource(localization.Resources[i], languages[i].Name);
+				DrawResource(localization.Resources[i], languages[i].Name);
 			}
 		}
 
@@ -70,17 +70,9 @@ namespace ResourceLocalization
 		/// </summary>
 		/// <param name="resource">localization resource</param>
 		/// <param name="language">language of the resource</param>
-		private static void DrawResource(Resource resource, string language)
+		private static void DrawResource(Object resource, string language)
 		{
-			if (typeof(string).IsAssignableFrom(resource.Type))
-			{
-				EditorGUILayout.LabelField(language);
-				resource.Data = EditorGUILayout.TextArea((string)resource.Data, GUILayout.Height(50f));
-			}
-			else
-			{
-				resource.Data = EditorGUILayout.ObjectField(language, (Object)resource.Data, resource.Type, false);
-			}
+			resource = EditorGUILayout.ObjectField(language, resource, resource.GetType(), false);
 		}
 	}
 }

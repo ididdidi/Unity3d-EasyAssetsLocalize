@@ -26,6 +26,20 @@ namespace ResourceLocalization
         /// <summary>
         /// Method for rendering the search field.
         /// </summary>
+        /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
+        public bool SearchFieldChanged()
+        {
+            var mask = searchField.OnGUI(searchMask);
+            if (GUI.changed && !mask.Equals(searchMask))
+            {
+                searchMask = mask; return true;
+            }
+            else return false;
+        }
+
+        /// <summary>
+        /// Method for rendering the search field.
+        /// </summary>
         /// <param name="rect"><see>Rect</see> of the search field</param>
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
         public bool SearchFieldChanged(Rect rect)

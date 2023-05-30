@@ -141,6 +141,7 @@ namespace ResourceLocalization
 		}
 		#endregion
 
+		#region Element
 		/// <summary>
 		/// Display a tag of lits associated resources.
 		/// </summary>
@@ -155,27 +156,20 @@ namespace ResourceLocalization
 
 			for (int i = 0; i < localsation.Resources.Count; i++)
 			{
-		//		if (typeof(string).IsAssignableFrom(localsation.Resources[i].Type))
-		//		{
-		//			localsation.Resources[i].Data = GUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
-		//				(string)localsation.Resources[i].Data, "PR TextField");
-		//		}
-		//		else
-		//		{
-		//			localsation.Resources[i].Data = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
-		//				(Object)localsation.Resources[i].Data, localsation.Resources[i].Type, false);
-		//		}
+				localsation.Resources[i] = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+																	localsation.Resources[i], localsation.Resources[i].GetType(), false);
 				dX += fieldWidth;
 			}
 		}
+        #endregion
 
-		/// <summary>
-		/// Changes the order of elements in a list.
-		/// </summary>
-		/// <param name="reorderable">Mutable list</param>
-		/// <param name="oldIndex">Old list item index</param>
-		/// <param name="newIndex">New list item index</param>
-		private void ReorderList(ReorderableList reorderable, int oldIndex, int newIndex)
+        /// <summary>
+        /// Changes the order of elements in a list.
+        /// </summary>
+        /// <param name="reorderable">Mutable list</param>
+        /// <param name="oldIndex">Old list item index</param>
+        /// <param name="newIndex">New list item index</param>
+        private void ReorderList(ReorderableList reorderable, int oldIndex, int newIndex)
 		{
 			var localization = reorderable.list[index] as Localization;
 			LocalizationStorage.RemoveLocalization(oldIndex);

@@ -81,7 +81,6 @@ namespace ResourceLocalization
             var localization = new Localization(name, resources);
             localizations.Add(localization);
             version++;
-            Debug.Log(localization.ID);
             return localization.ID;
         }
 
