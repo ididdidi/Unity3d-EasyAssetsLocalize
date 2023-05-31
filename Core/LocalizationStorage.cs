@@ -98,7 +98,7 @@ namespace ResourceLocalization
                     return localizations[i];
                 } 
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {tag.name}");
+            throw new System.ArgumentException($"{GetType()}: No resources found for {tag}");
         }
 
         /// <summary>

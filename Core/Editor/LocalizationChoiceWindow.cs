@@ -6,7 +6,7 @@ namespace ResourceLocalization
 {
     public class LocalizationChoiceWindow : EditorWindow
 	{
-		private readonly Vector2 size = new Vector2(240f, 320f);
+		private readonly Vector2 size = new Vector2(230f, 320f);
 		public LocalizationStorage LocalizationStorage { get; set; }
 
 		private Vector2 scrollPosition = Vector2.zero;
@@ -17,6 +17,7 @@ namespace ResourceLocalization
 		public void OnEnable()
 		{
 			minSize = size;
+			maxSize = size;
 		}
 
 		private void OnGUI()

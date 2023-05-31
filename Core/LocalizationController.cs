@@ -9,7 +9,7 @@ namespace ResourceLocalization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
-        [SerializeField, HideInInspector] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
+        [SerializeField] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
         private Dictionary<string, Object> dictionary;
 
         /// <summary>

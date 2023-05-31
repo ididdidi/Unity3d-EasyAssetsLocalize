@@ -56,7 +56,7 @@ namespace ResourceLocalization
             var tag = (LocalizationTag)list[index];
             var objectFieldRect = ExtendedEditorGUI.GetNewRect(rect, new Vector2(rect.width - 70, rect.height), padding);
 
-            tag = ExtendedEditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag), null, (item) => { return !list.Contains(item); }) as LocalizationTag;
+            //tag = ExtendedEditorGUI.ObjectField(objectFieldRect, tag, typeof(LocalizationTag), null, (item) => { return !list.Contains(item); }) as LocalizationTag;
 
             if (GUI.changed && tag != (LocalizationTag)list[index]) { SetLocalizationTag(tag, index); }
 
@@ -122,9 +122,9 @@ namespace ResourceLocalization
         /// <param name="tag"><see cref="LocalizationTag"/></param>
         private void DisplayTagWindow(LocalizationTag tag)
         {
-            LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow), false, tag.name);
+          //  LocalizationTagWindow window = (LocalizationTagWindow)EditorWindow.GetWindow(typeof(LocalizationTagWindow), false, tag.name);
 
-            window.ResourceView = new LocalizationResourceView(LocalizationStorage, tag);
+         //   window.ResourceView = new LocalizationResourceView(LocalizationStorage, tag);
         }
     }
 }
