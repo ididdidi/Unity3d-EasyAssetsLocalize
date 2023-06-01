@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
@@ -27,27 +28,63 @@ namespace ResourceLocalization
                 EditorGUILayout.HelpBox($"The {controller.LocalizationStorage} field must not be empty!", MessageType.Error); return;
             }
 
-            // Display a reorderable list of localization tags
-            if (receiverList == null) { receiverList = new ReorderableTagList(controller.LocalizationTags, controller.LocalizationStorage); }
-            else { receiverList.DoLayoutList(); }
+            DrawLocalisationTags();
 
-            DrowButton();
+            if(AddLocalizationButton()) { AddLocalization(); };
+        }
+
+        private void DrawLocalisationTags()
+        {
+            for(int i=0; i < controller.LocalizationTags.Count; i++)
+            {
+                DrawLocalisationTag(controller.LocalizationTags[i]);
+            }
+        }
+
+        private void DrawLocalisationTag(LocalizationTag tag)
+        {
+            GUILayout.BeginVertical(EditorStyles.helpBox);
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(tag.Name);
+            if(RemoveLocalizationButton()) { RemoveLocalization(tag); }
+            GUILayout.EndHorizontal();
+            
+            EditorGUI.indentLevel++;
+            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open);
+            EditorGUI.indentLevel--;
+
+            GUILayout.EndVertical();
         }
 
         /// <summary>
         /// Button to display localization choice window.
         /// </summary>
-        private void DrowButton()
+        private bool AddLocalizationButton()
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Choice localization", GUILayout.Width(240f), GUILayout.Height(24f)))
-            {
-                var window = (LocalizationChoiceWindow)EditorWindow.GetWindow(typeof(LocalizationChoiceWindow), true, controller.name);
-                window.LocalizationStorage = controller.LocalizationStorage;
-            }
+            var result = GUILayout.Button("Choice localization", GUILayout.Width(240f), GUILayout.Height(24f));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            
+            return result;
+        }
+
+        private void AddLocalization()
+        {
+            var window = (LocalizationChoiceWindow)EditorWindow.GetWindow(typeof(LocalizationChoiceWindow), true, controller.name);
+            window.LocalizationController = controller;
+        }
+
+        private bool RemoveLocalizationButton()
+        {
+            return GUILayout.Button(EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove"), "SearchCancelButton");
+        }
+
+        private void RemoveLocalization(LocalizationTag tag)
+        {
+            controller.RemoveLocalizationTag(tag);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ResourceLocalization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
-        [SerializeField] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
+        [SerializeField, HideInInspector] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
         private Dictionary<string, Object> dictionary;
 
         /// <summary>
@@ -111,6 +111,16 @@ namespace ResourceLocalization
             {
                 throw new System.ArgumentException($"{Language} not found in the {localizationStorage}");
             }
+        }
+
+        public void AddLocalizationTag(LocalizationTag tag)
+        {
+            localizationTags.Add(tag);
+        }
+
+        public void RemoveLocalizationTag(LocalizationTag tag)
+        {
+            localizationTags.Remove(tag);
         }
     }
 }

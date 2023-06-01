@@ -7,7 +7,7 @@ namespace ResourceLocalization
     public class LocalizationChoiceWindow : EditorWindow
 	{
 		private readonly Vector2 size = new Vector2(230f, 320f);
-		public LocalizationStorage LocalizationStorage { get; set; }
+		public LocalizationController LocalizationController { get; set; }
 
 		private Vector2 scrollPosition = Vector2.zero;
 		private Localization[] localizations;
@@ -38,9 +38,9 @@ namespace ResourceLocalization
 
 		private void Initiate()
 		{
-			if (search == null && LocalizationStorage)
+			if (search == null && LocalizationController)
 			{
-				search = new LocalizationSearch(LocalizationStorage);
+				search = new LocalizationSearch(LocalizationController.LocalizationStorage);
 				localizations = search.GetResult();
 			}
 		}
@@ -64,7 +64,7 @@ namespace ResourceLocalization
 				{
 					var isSelected = selected.Contains(localizations[i]);
 					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.LabelField(localizations[i].Name);
+					EditorGUILayout.LabelField($"{localizations[i].Name} ({localizations[i].Resources[0].GetType().Name})");
 					if (isSelected != EditorGUILayout.Toggle(isSelected))
 					{
 						if (isSelected) { selected.Remove(localizations[i]); }
@@ -75,14 +75,26 @@ namespace ResourceLocalization
 			}
 		}
 
+		private void AddLocalizations()
+		{
+			for (int i = 0; i < selected.Count; i++)
+			{
+				///
+				/// Нужен Creator!!!!
+				///
+				LocalizationController.AddLocalizationTag(new LocalizationTag(selected[i]));
+			}
+		}
+
 		private void CreateButton()
 		{
-			GUI.enabled = selected?.Count > 0;
+			EditorGUI.BeginDisabledGroup(selected?.Count < 1);
 			if (GUILayout.Button("Confirm choice"))
 			{
+				AddLocalizations();
 				this.Close();
 			}
-			GUI.enabled = true;
+			EditorGUI.EndDisabledGroup();
 		}
 
 		private void CancelButton()
