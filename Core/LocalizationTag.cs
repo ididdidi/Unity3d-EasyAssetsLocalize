@@ -11,7 +11,7 @@ namespace ResourceLocalization
         [SerializeField] private string name;
         [SerializeField] private string id;
         [SerializeField] private string type;
-        [SerializeField] private Object[] receivers;
+        [SerializeField] private MonoBehaviour[] receivers;
         public bool open;
         
         /// <summary>
@@ -20,7 +20,7 @@ namespace ResourceLocalization
         public string ID { get => id; set => id = value; }
         public string Name { get => name; }
         public string Type { get => type; private set => type = value; }
-        public Object[] Receivers { get => receivers; set => receivers = value; }
+        public MonoBehaviour[] Receivers { get => receivers; set => receivers = value; }
 
         public LocalizationTag(Localization localization)
         {

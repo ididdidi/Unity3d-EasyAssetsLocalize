@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 19
+  version: 23
   languages:
   - name: English
   - name: Russian
   localizations:
+  - id: 3bbc44036dfe4ddcb6b959b0fddb656b
+    name: Image
+    resources:
+    - {fileID: 0}
+    - {fileID: 0}
   - id: 6b137c6b905f447e98592ab3dbda8d4f
     name: Text
     resources:
@@ -24,11 +29,6 @@ MonoBehaviour:
     - {fileID: 0}
   - id: 8ce6f94a3d0f4097bd2c1313f70523d9
     name: Text
-    resources:
-    - {fileID: 0}
-    - {fileID: 0}
-  - id: 3bbc44036dfe4ddcb6b959b0fddb656b
-    name: Image
     resources:
     - {fileID: 0}
     - {fileID: 0}

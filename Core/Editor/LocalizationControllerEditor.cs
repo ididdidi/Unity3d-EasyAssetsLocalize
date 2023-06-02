@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityExtended;
 
 namespace ResourceLocalization
@@ -11,7 +12,6 @@ namespace ResourceLocalization
     public class LocalizationControllerEditor : Editor
     {
         private LocalizationController controller;
-        private ReorderableTagList receiverList;
 
         private void OnEnable()
         { 
@@ -41,6 +41,10 @@ namespace ResourceLocalization
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tag"></param>
         private void DrawLocalisationTag(LocalizationTag tag)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
@@ -51,7 +55,7 @@ namespace ResourceLocalization
             GUILayout.EndHorizontal();
             
             EditorGUI.indentLevel++;
-            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open);
+            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open, true, typeof(Image));
             EditorGUI.indentLevel--;
 
             GUILayout.EndVertical();
