@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityExtended;
 
 namespace ResourceLocalization
@@ -55,7 +54,7 @@ namespace ResourceLocalization
             GUILayout.EndHorizontal();
             
             EditorGUI.indentLevel++;
-            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open, true, typeof(Image));
+            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open, true, tag.Type);
             EditorGUI.indentLevel--;
 
             GUILayout.EndVertical();

@@ -35,7 +35,7 @@ namespace ResourceLocalization
 
             for (int i = 0; i < localizations.Count; i++)
             {
-             //   localizations[i].Resources.Add(localizations[i].Resources[0].Clone());
+                localizations[i].Resources.Add(localizations[i].Resources[0]);
             }
             languages.Add(language);
             version++;
@@ -164,7 +164,7 @@ namespace ResourceLocalization
             var dictionary = new Dictionary<string, Object>();
             for (int i= 0; i < localizations.Count; i++)
             {
-                dictionary.Add(localizations[i].ID, localizations[i].Resources[index]);
+               // dictionary.Add(localizations[i].ID, localizations[i].Resources[index]);
             }
             return dictionary;
         }
