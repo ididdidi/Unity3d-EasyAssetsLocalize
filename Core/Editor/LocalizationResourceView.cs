@@ -12,15 +12,15 @@ namespace ResourceLocalization
 		private int storageVersion;
 
 		private Language[] languages;
-		private LocalizationTag tag;
-		private Localization localization;
+		private Receiver tag;
+		private LocalizationTag localizationTag;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="storage">Repository with data about localization resources</param>
 		/// <param name="tag">Localization resource tag</param>
-		public LocalizationResourceView(LocalizationStorage storage, LocalizationTag tag)
+		public LocalizationResourceView(LocalizationStorage storage, Receiver tag)
 		{
 			this.storage = storage;
 			this.tag = tag;
@@ -32,7 +32,7 @@ namespace ResourceLocalization
 		public void Show()
 		{
 			UpdateLocalization();
-			DisplayResources(localization, languages);
+			DisplayResources(localizationTag, languages);
 		}
 
 		/// <summary>
@@ -40,9 +40,9 @@ namespace ResourceLocalization
 		/// </summary>
 		private void UpdateLocalization()
 		{
-			if (localization == null || storageVersion != storage.Version)
+			if (localizationTag == null || storageVersion != storage.Version)
 			{
-				localization = storage.GetLocalization(tag);
+				localizationTag = storage.GetLocalization(tag);
 				languages = storage.Languages;
 				storageVersion = storage.Version;
 			}
@@ -53,15 +53,15 @@ namespace ResourceLocalization
 		/// </summary>
 		/// <param name="localization">Localization resources</param>
 		/// <param name="languages">List of languages</param>
-		public static void DisplayResources(Localization localization, Language[] languages)
+		public static void DisplayResources(LocalizationTag localizationTag, Language[] languages)
 		{
-			if (localization == null)
+			if (localizationTag == null)
 			{
 				EditorGUILayout.HelpBox("Localization for this tag is not found! Add the tag to the localization controller for this scene.", MessageType.Error, true);
 			}
 			for (int i = 0; i < languages.Length; i++)
 			{
-				DrawResource(localization.Resources[i], languages[i].Name);
+				DrawResource(localizationTag.Resources[i], languages[i].Name);
 			}
 		}
 

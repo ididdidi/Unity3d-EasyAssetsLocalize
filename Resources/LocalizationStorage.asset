@@ -12,23 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 31
+  version: 33
   languages:
   - name: English
   - name: Russian
-  localizations:
-  - id: 09d75933064f4508b51fbcebd1cf94ae
+  localizationTags:
+  - id: edf5f2e51cb24b8ea71a9deb4beec7d9
     name: Image
     resources:
+    - {fileID: 2800000, guid: af24c542434a025448222d576f61a956, type: 3}
+    - {fileID: 2800000, guid: af24c542434a025448222d576f61a956, type: 3}
+  - id: d3d2a23d169c43dda15427f6ecc7684d
+    name: Image2
+    resources:
     - {fileID: 2800000, guid: 7b4b3cedf598c954cb2f38d6e2e34c0d, type: 3}
     - {fileID: 2800000, guid: 7b4b3cedf598c954cb2f38d6e2e34c0d, type: 3}
-  - id: 58686e903c99468ba49b6149972d417a
-    name: Video
-    resources:
-    - {fileID: 2800000, guid: f6717d61970edba4686c297677881a77, type: 3}
-    - {fileID: 2800000, guid: f6717d61970edba4686c297677881a77, type: 3}
-  - id: 473b675dddaf4737a86aab57a6cd2578
-    name: Test
-    resources:
-    - {fileID: 11500000, guid: 4f939b9e23a0946439b812551e07ac81, type: 3}
-    - {fileID: 11500000, guid: 4f939b9e23a0946439b812551e07ac81, type: 3}

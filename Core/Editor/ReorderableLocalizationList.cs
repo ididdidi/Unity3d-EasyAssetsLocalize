@@ -23,7 +23,7 @@ namespace ResourceLocalization
 		/// Constructor.
 		/// </summary>
 		/// <param name="localizationStorage">LocalizationStorage</param>
-		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.Localizations, typeof(Localization), true, true, true, true)
+		public ReorderableLocalizationList(LocalizationStorage localizationStorage) : base(localizationStorage.LocalizationTags, typeof(LocalizationTag), true, true, true, true)
 		{
 			this.LocalizationStorage = localizationStorage;
 
@@ -149,7 +149,7 @@ namespace ResourceLocalization
 		/// <param name="index">The index of the tag in the list</param>
 		private void DrawResources(Rect rect, int index, bool isActive, bool isFocused)
 		{
-			var localsation = list[index] as Localization;
+			var localsation = list[index] as LocalizationTag;
 			var width = fieldWidth - 24;
 			GUI.Label(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding), localsation.Name);
 			float dX = width;
@@ -171,7 +171,7 @@ namespace ResourceLocalization
         /// <param name="newIndex">New list item index</param>
         private void ReorderList(ReorderableList reorderable, int oldIndex, int newIndex)
 		{
-			var localization = reorderable.list[index] as Localization;
+			var localization = reorderable.list[index] as LocalizationTag;
 			LocalizationStorage.RemoveLocalization(oldIndex);
 			LocalizationStorage.InsertLocalization(newIndex, localization);
 		}

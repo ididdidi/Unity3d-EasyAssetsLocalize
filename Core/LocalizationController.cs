@@ -9,7 +9,7 @@ namespace ResourceLocalization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
-        [SerializeField, HideInInspector] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
+        [SerializeReference, HideInInspector] private List<LocalizationReceiver> receives = new List<LocalizationReceiver>();
         private Dictionary<string, Object> dictionary;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace ResourceLocalization
         /// <summary>
         /// List of localization tags on this scene.
         /// </summary>
-        public List<LocalizationTag> LocalizationTags { get => localizationTags; }
+        public List<LocalizationReceiver> LocalizationReceivers { get => receives; }
         /// <summary>
         /// Link to localization repository.
         /// </summary>
@@ -50,7 +50,7 @@ namespace ResourceLocalization
         /// <summary>
         /// Sets localization.
         /// </summary>
-        /// <param name="localizationStorage">Localization repository</param>
+        /// <param name="localizationStorage">LocalizationTagrepository</param>
         public void LoadLocalization(LocalizationStorage localizationStorage)
         {
             this.localizationStorage = localizationStorage;
@@ -61,13 +61,13 @@ namespace ResourceLocalization
         /// <summary>
         /// Sets the current language and loads localized resources.
         /// </summary>
-        /// <param name="language">Localization language</param>
+        /// <param name="language">LocalizationTaglanguage</param>
         public void SetLanguage(Language language)
         {
             dictionary = localizationStorage.GetDictionary(language);
             Language = language;
 
-            for(int i=0; i < localizationTags.Count; i++)
+            for(int i=0; i < LocalizationReceivers.Count; i++)
             {
             //    localizationTags[i].Resource = dictionary[localizationTags[i].ID];
             }
@@ -113,14 +113,14 @@ namespace ResourceLocalization
             }
         }
 
-        public void AddLocalizationTag(LocalizationTag tag)
+        public void AddLocalizationTag(LocalizationReceiver tag)
         {
-            localizationTags.Add(tag);
+            LocalizationReceivers.Add(tag);
         }
 
-        public void RemoveLocalizationTag(LocalizationTag tag)
+        public void RemoveLocalizationTag(LocalizationReceiver tag)
         {
-            localizationTags.Remove(tag);
+            LocalizationReceivers.Remove(tag);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace ResourceLocalization
         /// Method for getting an array of localizations whose tag names match the query in the search.
         /// </summary>
         /// <returns>Array of localizations</returns>
-        public Localization[] GetResult() => FindLocalizations(searchMask);
+        public LocalizationTag[] GetResult() => FindLocalizations(searchMask);
 
 
         /// <summary>
@@ -64,12 +64,12 @@ namespace ResourceLocalization
         /// </summary>
         /// <param name="mask">Localization tag name or part of it</param>
         /// <returns>Localization</returns>
-        private Localization[] FindLocalizations(string mask)
+        private LocalizationTag[] FindLocalizations(string mask)
         {
-            var localizations = storage.Localizations;
+            var localizations = storage.LocalizationTags;
             if (string.IsNullOrWhiteSpace(mask)) { return localizations; }
 
-            var result = new List<Localization>();
+            var result = new List<LocalizationTag>();
             for (int i = 0; i < localizations.Length; i++)
             {
                 if (localizations[i].Name.ToLower().Contains(mask.ToLower())) { result.Add(localizations[i]); }

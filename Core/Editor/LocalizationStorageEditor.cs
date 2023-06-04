@@ -14,7 +14,7 @@ namespace ResourceLocalization
 
 		private bool foldout;
 		private Language[] languages;
-		private Localization[] localizations;
+		private LocalizationTag[] localizationTags;
 		private bool[] foldoutItems;
 
 		/// <summary>
@@ -38,11 +38,11 @@ namespace ResourceLocalization
 		/// </summary>
 		private void UpdateLocalizations()
 		{
-			if (localizations == null || storageVersion != storage.Version)
+			if (localizationTags == null || storageVersion != storage.Version)
 			{
 				languages = storage.Languages;
-				localizations = storage.Localizations;
-				foldoutItems = new bool[localizations.Length];
+				localizationTags = storage.LocalizationTags;
+				foldoutItems = new bool[localizationTags.Length];
 				storageVersion = storage.Version;
 			}
 		}
@@ -72,11 +72,11 @@ namespace ResourceLocalization
 			if (foldout = EditorGUILayout.Foldout(foldout, "Localization resources"))
 			{
 				EditorGUI.indentLevel++;
-				for (int i = 0; i < localizations.Length; i++)
+				for (int i = 0; i < localizationTags.Length; i++)
 				{
-					if (foldoutItems[i] = EditorGUILayout.Foldout(foldoutItems[i], localizations[i].Name))
+					if (foldoutItems[i] = EditorGUILayout.Foldout(foldoutItems[i], localizationTags[i].Name))
 					{
-						LocalizationResourceView.DisplayResources(localizations[i], languages);
+						LocalizationResourceView.DisplayResources(localizationTags[i], languages);
 					}
 				}
 				EditorGUI.indentLevel--;

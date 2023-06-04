@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace ResourceLocalization
@@ -10,8 +11,8 @@ namespace ResourceLocalization
 		public LocalizationController LocalizationController { get; set; }
 
 		private Vector2 scrollPosition = Vector2.zero;
-		private Localization[] localizations;
-		private List<Localization> selected = new List<Localization>();
+		private LocalizationTag[] localizations;
+		private List<LocalizationTag> selected = new List<LocalizationTag>();
 		private LocalizationSearch search;
 
 		public void OnEnable()
@@ -82,7 +83,7 @@ namespace ResourceLocalization
 				///
 				/// Нужен Creator!!!!
 				///
-				LocalizationController.AddLocalizationTag(new LocalizationTag(selected[i]));
+				LocalizationController.AddLocalizationTag(new ImageReceiver(selected[i]));
 			}
 		}
 
@@ -92,6 +93,8 @@ namespace ResourceLocalization
 			if (GUILayout.Button("Confirm choice"))
 			{
 				AddLocalizations();
+				EditorUtility.SetDirty(LocalizationController);
+				EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);
 				this.Close();
 			}
 			EditorGUI.EndDisabledGroup();

@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityExtended;
 
@@ -27,34 +28,40 @@ namespace ResourceLocalization
                 EditorGUILayout.HelpBox($"The {controller.LocalizationStorage} field must not be empty!", MessageType.Error); return;
             }
 
+            EditorGUI.BeginChangeCheck();
             DrawLocalisationTags();
+            if(EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(controller);
+                EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
+            }
 
-            if(AddLocalizationButton()) { AddLocalization(); };
+            if (AddLocalizationButton()) { AddLocalization(); };
         }
 
         private void DrawLocalisationTags()
         {
-            for(int i=0; i < controller.LocalizationTags.Count; i++)
+            for(int i=0; i < controller.LocalizationReceivers.Count; i++)
             {
-                DrawLocalisationTag(controller.LocalizationTags[i]);
+                DrawLocalisationTag(controller.LocalizationReceivers[i]);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tag"></param>
-        private void DrawLocalisationTag(LocalizationTag tag)
+        /// <param name="receiver"></param>
+        private void DrawLocalisationTag(LocalizationReceiver receiver)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(tag.Name);
-            if(RemoveLocalizationButton()) { RemoveLocalization(tag); }
+            EditorGUILayout.LabelField(receiver.Name);
+            if(RemoveLocalizationButton()) { RemoveLocalization(receiver); }
             GUILayout.EndHorizontal();
-            
+
             EditorGUI.indentLevel++;
-            tag.Receivers = ExtendedEditorGUI.ArrayFields(tag.Receivers, "Receivers", ref tag.open, true, tag.Type);
+            receiver.Components = ExtendedEditorGUI.ArrayFields(receiver.Components, "Components", ref receiver.open, true, receiver.Type);
             EditorGUI.indentLevel--;
 
             GUILayout.EndVertical();
@@ -85,9 +92,9 @@ namespace ResourceLocalization
             return GUILayout.Button(EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove"), "SearchCancelButton");
         }
 
-        private void RemoveLocalization(LocalizationTag tag)
+        private void RemoveLocalization(LocalizationReceiver receiver)
         {
-            controller.RemoveLocalizationTag(tag);
+            controller.RemoveLocalizationTag(receiver);
         }
     }
 }
