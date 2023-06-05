@@ -35,6 +35,6 @@ namespace ResourceLocalization
             }
         }
 
-        public abstract void SetLocalization(Behaviour receiver, object resource);
+        protected abstract void SetLocalization(Behaviour receiver, object resource);
     }
 }

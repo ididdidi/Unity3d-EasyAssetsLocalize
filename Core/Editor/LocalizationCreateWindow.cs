@@ -40,7 +40,7 @@ namespace ResourceLocalization
 		{
 			GUI.enabled = CheckProperties();
 			if (GUILayout.Button("Create localization")) {
-				LocalizationStorage.AddLocalization(TagName, Resource);
+				LocalizationStorage.AddLocalizationTag(TagName, Resource);
 				this.Close();
 			}
 			GUI.enabled = true;

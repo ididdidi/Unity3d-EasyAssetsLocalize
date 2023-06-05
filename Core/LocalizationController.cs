@@ -64,12 +64,10 @@ namespace ResourceLocalization
         /// <param name="language">LocalizationTaglanguage</param>
         public void SetLanguage(Language language)
         {
-            dictionary = localizationStorage.GetDictionary(language);
             Language = language;
-
             for(int i=0; i < LocalizationReceivers.Count; i++)
             {
-            //    localizationTags[i].Resource = dictionary[localizationTags[i].ID];
+                LocalizationReceivers[i].SetLocalizationResource(LocalizationStorage.GetLocalizationResource(LocalizationReceivers[i].ID, Language));
             }
         }
 

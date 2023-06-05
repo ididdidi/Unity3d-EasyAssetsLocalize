@@ -12,7 +12,7 @@ namespace ResourceLocalization
 		private int storageVersion;
 
 		private Language[] languages;
-		private Receiver tag;
+		private LocalizationReceiver receiver;
 		private LocalizationTag localizationTag;
 
 		/// <summary>
@@ -20,10 +20,10 @@ namespace ResourceLocalization
 		/// </summary>
 		/// <param name="storage">Repository with data about localization resources</param>
 		/// <param name="tag">Localization resource tag</param>
-		public LocalizationResourceView(LocalizationStorage storage, Receiver tag)
+		public LocalizationResourceView(LocalizationStorage storage, LocalizationReceiver receiver)
 		{
 			this.storage = storage;
-			this.tag = tag;
+			this.receiver = receiver;
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace ResourceLocalization
 		{
 			if (localizationTag == null || storageVersion != storage.Version)
 			{
-				localizationTag = storage.GetLocalization(tag);
+				localizationTag = storage.GetLocalizationTag(receiver.ID);
 				languages = storage.Languages;
 				storageVersion = storage.Version;
 			}
@@ -61,18 +61,18 @@ namespace ResourceLocalization
 			}
 			for (int i = 0; i < languages.Length; i++)
 			{
-				DrawResource(localizationTag.Resources[i], languages[i].Name);
+				localizationTag.Resources[i] = EditorGUILayout.ObjectField(languages[i].Name, localizationTag.Resources[i], localizationTag.Resources[i].GetType(), false);
 			}
 		}
 
-		/// <summary>
-		/// Displays localization resource
-		/// </summary>
-		/// <param name="resource">localization resource</param>
-		/// <param name="language">language of the resource</param>
-		private static void DrawResource(Object resource, string language)
-		{
-			resource = EditorGUILayout.ObjectField(language, resource, resource.GetType(), false);
-		}
+	//	/// <summary>
+	//	/// Displays localization resource
+	//	/// </summary>
+	//	/// <param name="resource">localization resource</param>
+	//	/// <param name="language">language of the resource</param>
+	//	private static void DrawResource(Object resource, string language)
+	//	{
+	//		resource = EditorGUILayout.ObjectField(language, resource, resource.GetType(), false);
+	//	}
 	}
 }

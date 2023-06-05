@@ -172,8 +172,8 @@ namespace ResourceLocalization
         private void ReorderList(ReorderableList reorderable, int oldIndex, int newIndex)
 		{
 			var localization = reorderable.list[index] as LocalizationTag;
-			LocalizationStorage.RemoveLocalization(oldIndex);
-			LocalizationStorage.InsertLocalization(newIndex, localization);
+			LocalizationStorage.RemoveLocalizationTag(oldIndex);
+			LocalizationStorage.InsertLocalizationTag(newIndex, localization);
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace ResourceLocalization
 			if (EditorUtility.DisplayDialog("Delete this localization?",
 	"Are you sure that this localization is not used anywhere and you want to delete it?", "Yes Delete", "Do Not Delete"))
 			{
-				LocalizationStorage.RemoveLocalization(index);
+				LocalizationStorage.RemoveLocalizationTag(index);
 			}
 		}
 	}

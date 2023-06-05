@@ -65,13 +65,15 @@ namespace ResourceLocalization
         /// <returns></returns>
         public bool ConteinsLanguage(Language language) => languages.Contains(language);
 
+        public int IndexOf(Language language) => languages.IndexOf(language);
+
         /// <summary>
         /// Adds a new localization object to the repository.
         /// </summary>
         /// <param name="name">Object name</param>
         /// <param name="resource">Default localization resource</param>
         /// <returns>Identifier of the localization tag in the repository</returns>
-        public string AddLocalization(string name, Object resource)
+        public void AddLocalizationTag(string name, Object resource)
         {
             var resources = new Object[languages.Count];
             for (int i = 0; i < resources.Length; i++)
@@ -81,38 +83,24 @@ namespace ResourceLocalization
             var localizationTag = new LocalizationTag(name, resources);
             localizationTags.Add(localizationTag);
             version++;
-            return localizationTag.ID;
+            return;
         }
 
         /// <summary>
         /// Used to get localized resources by localization tag ID, which is assigned when adding localization to the repository.
         /// </summary>
-        /// <param name="tag"><see cref="Receiver"/></param>
+        /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        public LocalizationTag GetLocalization(Receiver tag)
+        public LocalizationTag GetLocalizationTag(string id)
         {
             for(int i=0; i < localizationTags.Count; i++)
             {
-                if (localizationTags[i].ID.Equals(tag.ID))
+                if (localizationTags[i].ID.Equals(id))
                 {
                     return localizationTags[i];
                 } 
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {tag}");
-        }
-
-        /// <summary>
-        /// Checks for localization by localization tag ID, which is assigned when adding localization to the repository.
-        /// </summary>
-        /// <param name="tag"><see cref="Receiver"/></param>
-        /// <returns><see>true</see> if the localization for the tag is in the repository, otherwise <see>false</see></returns>
-        public bool ConteinsLocalization(Receiver tag)
-        {
-            for (int i = 0; i < localizationTags.Count; i++)
-            {
-                if (localizationTags[i].ID.Equals(tag.ID)) { return true; }
-            }
-            return false;
+            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
         }
 
         /// <summary>
@@ -120,53 +108,32 @@ namespace ResourceLocalization
         /// </summary>
         /// <param name="index">Place on the list to insert</param>
         /// <param name="localizationTag">LocalizationTag to insert</param>
-        public void InsertLocalization(int index, LocalizationTag localizationTag)
+        public void InsertLocalizationTag(int index, LocalizationTag localizationTag)
         {
             localizationTags.Insert(index, localizationTag);
             version++;
         }
 
         /// <summary>
-        /// Deletes localization data from storage.
-        /// </summary>
-        /// <param name="tag"><see cref="Receiver"/></param>
-        public void RemoveLocalization(Receiver tag)
-        {
-            for (int i = localizationTags.Count-1; i > -1; i--)
-            {
-                if (localizationTags[i].ID.Equals(tag.ID)) {
-                    localizationTags.RemoveAt(i);
-                    version++;
-                }
-            }
-        }
-
-        /// <summary>
         /// Removes localization data by index in the list of localizations.
         /// </summary>
         /// <param name="index">Index in the list of localizationTags</param>
-        public void RemoveLocalization(int index)
+        public void RemoveLocalizationTag(int index)
         {
             localizationTags.RemoveAt(index);
             version++;
         }
 
-        /// <summary>
-        /// Method for getting a dictionary of localization resources for the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <returns><see>Dictionary</see> localization resources for the specified language</returns>
-        public Dictionary<string, Object> GetDictionary(Language language)
+        public object GetLocalizationResource(string id, Language language)
         {
-            if (!languages.Contains(language)) { throw new System.ArgumentException($"{GetType()}: No resources found for {language}"); }
-
-            var index = languages.IndexOf(language);
-            var dictionary = new Dictionary<string, Object>();
-            for (int i= 0; i < localizationTags.Count; i++)
+            for (int i = 0; i < localizationTags.Count; i++)
             {
-               // dictionary.Add(localizations[i].ID, localizations[i].Resources[index]);
+                if (localizationTags[i].ID.Equals(id))
+                {
+                    return localizationTags[i].Resources[languages.IndexOf(language)];
+                }
             }
-            return dictionary;
+            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
         }
     }
 }
