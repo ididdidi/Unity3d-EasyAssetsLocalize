@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-	public class LocalizationCreateWindow : EditorWindow
+	public class LocalizationTagCreateWindow : EditorWindow
 	{
 		public LocalizationStorage LocalizationStorage { get; set; }
 		private string TagName { get; set; }
-		private Object Resource { get; set; }
+		private string Text { get; set; }
+		private Object @object { get; set; }
 
 		private Vector2 scrollPosition = Vector2.zero;
 
@@ -33,14 +34,25 @@ namespace ResourceLocalization
 		private void DisplayFields()
 		{
 			TagName = EditorGUILayout.TextField("Tag name", TagName);
-			Resource = EditorGUILayout.ObjectField("Resource", Resource, typeof(Object), false);
+			if (!@object) {
+				EditorGUILayout.LabelField("Text");
+				Text = EditorGUILayout.TextArea(Text, EditorStyles.textArea, GUILayout.MinHeight(50));
+			}
+
+			if (!@object && string.IsNullOrEmpty(Text))
+			{
+				EditorGUILayout.LabelField("OR", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, }, GUILayout.ExpandWidth(true));
+			}
+
+			if (string.IsNullOrEmpty(Text)) { @object = EditorGUILayout.ObjectField("Resource", @object, typeof(Object), false); }
 		}
 
 		private void CreateButton()
 		{
 			GUI.enabled = CheckProperties();
 			if (GUILayout.Button("Create localization")) {
-				LocalizationStorage.AddLocalizationTag(TagName, Resource);
+				var resource = @object ? new UnityResource(@object) : new TextResource(Text) as IResource;
+				LocalizationStorage.AddLocalizationTag(TagName, resource);
 				this.Close();
 			}
 			GUI.enabled = true;
@@ -53,7 +65,7 @@ namespace ResourceLocalization
 
 		private bool CheckProperties()
 		{
-			return (!string.IsNullOrEmpty(TagName)) && Resource;
+			return (!string.IsNullOrEmpty(TagName)) && (@object || !string.IsNullOrEmpty(Text));
 		}
 	}
 }

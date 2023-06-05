@@ -61,18 +61,21 @@ namespace ResourceLocalization
 			}
 			for (int i = 0; i < languages.Length; i++)
 			{
-				localizationTag.Resources[i] = EditorGUILayout.ObjectField(languages[i].Name, localizationTag.Resources[i], localizationTag.Resources[i].GetType(), false);
+				DrawResource(localizationTag.Resources[i], languages[i].Name);
 			}
 		}
 
-	//	/// <summary>
-	//	/// Displays localization resource
-	//	/// </summary>
-	//	/// <param name="resource">localization resource</param>
-	//	/// <param name="language">language of the resource</param>
-	//	private static void DrawResource(Object resource, string language)
-	//	{
-	//		resource = EditorGUILayout.ObjectField(language, resource, resource.GetType(), false);
-	//	}
+		/// <summary>
+		/// Displays localization resource
+		/// </summary>
+		/// <param name="resource">localization resource</param>
+		/// <param name="language">language of the resource</param>
+		private static void DrawResource(IResource resource, string language)
+		{
+			if(resource.Data is Object @object)
+			{
+				resource.Data = EditorGUILayout.ObjectField(language, @object, resource.Data.GetType(), false);
+			}
+		}
 	}
 }

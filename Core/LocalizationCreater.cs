@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-
-namespace ResourceLocalization
+﻿namespace ResourceLocalization
 {
     public class LocalizationCreater
     {
-        public LocalizationTag Create<T>(string name,  T obj, int quantity) where T : Object
+        public LocalizationTag Create(string name, IResource resource, int quantity)
         {
-            var localizationTag = new LocalizationTag(name, System.Linq.Enumerable.Repeat(obj, quantity));
+            var localizationTag = new LocalizationTag(name, System.Linq.Enumerable.Repeat(resource.Clone(), quantity));
             return localizationTag;
         }
     }

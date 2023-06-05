@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
+  m_Name: LocalizationData
+  m_EditorClassIdentifier: 
+  version: 16
+  languages:
+  - name: Russian
+  - name: English
+  localizationTags:
+  - id: 82e011fe84b3466cb2aadb0c79a283a2
+    name: Imag
+    resources:
+    - id: 0
+    - id: 1
+  - id: 37c1150d082f46d8afae9c60fe3dada5
+    name: Text
+    resources:
+    - id: 2
+    - id: 3
+  references:
+    version: 1
+    00000000:
+      type: {class: UnityResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: 945f4ecec6df62244b9ebcc363833642, type: 3}
+    00000001:
+      type: {class: UnityResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: 2887294cc7f1fe840bff6e349409648d, type: 3}
+    00000002:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test text
+    00000003:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test text

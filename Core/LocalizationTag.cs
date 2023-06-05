@@ -11,7 +11,7 @@ namespace ResourceLocalization
     {
         [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");
         [SerializeField] private string name;
-        [SerializeReference] private List<Object> resources;
+        [SerializeReference] private List<IResource> resources;
 
         /// <summary>
         /// Tag ID.
@@ -24,17 +24,17 @@ namespace ResourceLocalization
         /// <summary>
         /// List of localized resources.
         /// </summary>
-        public List<Object> Resources { get => resources; }
+        public List<IResource> Resources { get => resources; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name">Tag name</param>
         /// <param name="resources">List of localized resources</param>
-        public LocalizationTag(string name, IEnumerable<Object> resources)
+        public LocalizationTag(string name, IEnumerable<IResource> resources)
         {
             this.name = name;
-            this.resources = new List<Object>(resources);
+            this.resources = new List<IResource>(resources);
         }
     }
 }

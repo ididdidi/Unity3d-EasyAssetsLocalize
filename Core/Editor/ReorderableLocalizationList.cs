@@ -156,8 +156,15 @@ namespace ResourceLocalization
 
 			for (int i = 0; i < localsation.Resources.Count; i++)
 			{
-				localsation.Resources[i] = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
-																	localsation.Resources[i], localsation.Resources[i].GetType(), false);
+				if (localsation.Resources[i].Data is string str) 
+				{
+					localsation.Resources[i].Data = EditorGUI.TextField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX), str);
+				}
+				else if(localsation.Resources[i].Data is Object @object)
+				{
+					localsation.Resources[i].Data = EditorGUI.ObjectField(ExtendedEditorGUI.GetNewRect(rect, new Vector2(fieldWidth - 8f, rect.height), padding, dX),
+																		@object, @object.GetType(), false);
+				}
 				dX += fieldWidth;
 			}
 		}
@@ -182,7 +189,7 @@ namespace ResourceLocalization
 		/// <param name="reorderable"></param>
 		private void AddLocalisatrion(ReorderableList reorderable)
 		{
-			var window = (LocalizationCreateWindow)EditorWindow.GetWindow(typeof(LocalizationCreateWindow), false, "Create Localization");
+			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), false, "Create Localization");
 			window.LocalizationStorage = LocalizationStorage;
 		}
 

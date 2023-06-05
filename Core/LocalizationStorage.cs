@@ -35,7 +35,7 @@ namespace ResourceLocalization
 
             for (int i = 0; i < localizationTags.Count; i++)
             {
-                localizationTags[i].Resources.Add(localizationTags[i].Resources[0]);
+                localizationTags[i].Resources.Add(localizationTags[i].Resources[0].Clone());
             }
             languages.Add(language);
             version++;
@@ -73,12 +73,12 @@ namespace ResourceLocalization
         /// <param name="name">Object name</param>
         /// <param name="resource">Default localization resource</param>
         /// <returns>Identifier of the localization tag in the repository</returns>
-        public void AddLocalizationTag(string name, Object resource)
+        public void AddLocalizationTag(string name, IResource resource)
         {
-            var resources = new Object[languages.Count];
+            var resources = new IResource[languages.Count];
             for (int i = 0; i < resources.Length; i++)
             {
-                resources[i] = resource;
+                resources[i] = resource.Clone();
             }
             var localizationTag = new LocalizationTag(name, resources);
             localizationTags.Add(localizationTag);
