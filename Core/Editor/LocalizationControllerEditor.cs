@@ -36,14 +36,18 @@ namespace ResourceLocalization
                 EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
             }
 
-            if (AddLocalizationButton()) { AddLocalization(); };
+            if (AddLocalizationButton())
+            {
+                var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
+                window.LocalizationController = controller;
+            };
         }
 
         private void DrawLocalisationTags()
         {
             for(int i=0; i < controller.LocalizationReceivers.Count; i++)
             {
-                DrawLocalisationTag(controller.LocalizationReceivers[i]);
+                DrawLocalisationReceiver(controller.LocalizationReceivers[i]);
             }
         }
 
@@ -51,13 +55,13 @@ namespace ResourceLocalization
         /// 
         /// </summary>
         /// <param name="receiver"></param>
-        private void DrawLocalisationTag(LocalizationReceiver receiver)
+        private void DrawLocalisationReceiver(LocalizationReceiver receiver)
         {
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(receiver.Name);
-            if(RemoveLocalizationButton()) { RemoveLocalization(receiver); }
+            if(RemoveLocalizationButton()) { controller.RemoveLocalizationReceiver(receiver); }
             GUILayout.EndHorizontal();
 
             EditorGUI.indentLevel++;
@@ -81,20 +85,9 @@ namespace ResourceLocalization
             return result;
         }
 
-        private void AddLocalization()
-        {
-            var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
-            window.LocalizationController = controller;
-        }
-
         private bool RemoveLocalizationButton()
         {
             return GUILayout.Button(EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove"), "SearchCancelButton");
-        }
-
-        private void RemoveLocalization(LocalizationReceiver receiver)
-        {
-            controller.RemoveLocalizationTag(receiver);
         }
     }
 }

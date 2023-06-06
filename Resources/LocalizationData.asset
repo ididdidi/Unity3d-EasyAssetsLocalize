@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationData
   m_EditorClassIdentifier: 
-  version: 16
+  version: 31
   languages:
   - name: Russian
   - name: English
@@ -22,11 +22,16 @@ MonoBehaviour:
     resources:
     - id: 0
     - id: 1
-  - id: 37c1150d082f46d8afae9c60fe3dada5
-    name: Text
+  - id: 75122b89381a4dc0bda48256df21030c
+    name: Test
     resources:
     - id: 2
     - id: 3
+  - id: b6130540e7a2402492f860c8befc8776
+    name: Test2
+    resources:
+    - id: 4
+    - id: 5
   references:
     version: 1
     00000000:
@@ -40,8 +45,16 @@ MonoBehaviour:
     00000002:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
-        data: Test text
+        data: trrrdd
     00000003:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
-        data: Test textee
+        data: dddsdd
+    00000004:
+      type: {class: UnityResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: 183f7b7549219ab47becb461a16df882, type: 3}
+    00000005:
+      type: {class: UnityResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: {fileID: 2800000, guid: 2887294cc7f1fe840bff6e349409648d, type: 3}

@@ -111,14 +111,14 @@ namespace ResourceLocalization
             }
         }
 
-        public void AddLocalizationTag(LocalizationReceiver tag)
+        public void AddLocalizationReceiver(LocalizationReceiver receiver)
         {
-            LocalizationReceivers.Add(tag);
+            LocalizationReceivers.Add(receiver);
         }
 
-        public void RemoveLocalizationTag(LocalizationReceiver tag)
+        public void RemoveLocalizationReceiver(LocalizationReceiver receiver)
         {
-            LocalizationReceivers.Remove(tag);
+            LocalizationReceivers.Remove(receiver);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ResourceLocalization
         public string Name { get => name; }
         public Behaviour[] Components { get => components; set => components = value; }
         public abstract System.Type Type { get; }
-        public LocalizationReceiver(LocalizationTag localizationTag)
+        protected LocalizationReceiver(LocalizationTag localizationTag)
         {
             var resourceType = localizationTag.Resources[0]?.Data.GetType();
             this.name = $"{localizationTag.Name} ({resourceType.Name})";

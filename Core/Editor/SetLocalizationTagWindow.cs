@@ -80,10 +80,7 @@ namespace ResourceLocalization
 		{
 			for (int i = 0; i < selected.Count; i++)
 			{
-				///
-				/// Нужен Creator!!!!
-				///
-				LocalizationController.AddLocalizationTag(new ImageReceiver(selected[i]));
+				LocalizationController.AddLocalizationReceiver(selected[i].CreateReceiver());
 			}
 		}
 
