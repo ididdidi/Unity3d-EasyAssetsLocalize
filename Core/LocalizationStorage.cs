@@ -65,23 +65,15 @@ namespace ResourceLocalization
         /// <returns></returns>
         public bool ConteinsLanguage(Language language) => languages.Contains(language);
 
-        public int IndexOf(Language language) => languages.IndexOf(language);
-
         /// <summary>
         /// Adds a new localization object to the repository.
         /// </summary>
         /// <param name="name">Object name</param>
         /// <param name="resource">Default localization resource</param>
         /// <returns>Identifier of the localization tag in the repository</returns>
-        public void AddLocalizationTag(string name, IResource resource)
+        public void AddLocalizationTag(LocalizationTag tag)
         {
-            var resources = new IResource[languages.Count];
-            for (int i = 0; i < resources.Length; i++)
-            {
-                resources[i] = resource.Clone();
-            }
-            var localizationTag = new LocalizationTag(name, resources);
-            localizationTags.Add(localizationTag);
+            localizationTags.Add(tag);
             version++;
             return;
         }

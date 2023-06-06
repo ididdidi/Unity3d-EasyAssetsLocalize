@@ -44,4 +44,4 @@ MonoBehaviour:
     00000003:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
-        data: Test text
+        data: Test textee

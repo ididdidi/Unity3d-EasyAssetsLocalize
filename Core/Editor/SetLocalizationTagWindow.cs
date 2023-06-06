@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-    public class LocalizationChoiceWindow : EditorWindow
+    public class SetLocalizationTagWindow : EditorWindow
 	{
 		private readonly Vector2 size = new Vector2(230f, 320f);
 		public LocalizationController LocalizationController { get; set; }
@@ -65,7 +65,7 @@ namespace ResourceLocalization
 				{
 					var isSelected = selected.Contains(localizations[i]);
 					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.LabelField($"{localizations[i].Name} ({localizations[i].Resources[0].GetType().Name})");
+					EditorGUILayout.LabelField($"{localizations[i].Name} ({localizations[i].Resources[0].Data.GetType().Name})");
 					if (isSelected != EditorGUILayout.Toggle(isSelected))
 					{
 						if (isSelected) { selected.Remove(localizations[i]); }

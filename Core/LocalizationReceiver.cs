@@ -22,7 +22,7 @@ namespace ResourceLocalization
         public abstract System.Type Type { get; }
         public LocalizationReceiver(LocalizationTag localizationTag)
         {
-            var resourceType = localizationTag.Resources[0]?.GetType();
+            var resourceType = localizationTag.Resources[0]?.Data.GetType();
             this.name = $"{localizationTag.Name} ({resourceType.Name})";
             this.id = localizationTag.ID;
         }

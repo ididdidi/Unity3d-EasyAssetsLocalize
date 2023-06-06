@@ -83,7 +83,7 @@ namespace ResourceLocalization
 
         private void AddLocalization()
         {
-            var window = (LocalizationChoiceWindow)EditorWindow.GetWindow(typeof(LocalizationChoiceWindow), true, controller.name);
+            var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
             window.LocalizationController = controller;
         }
 

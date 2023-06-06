@@ -36,5 +36,22 @@ namespace ResourceLocalization
             this.name = name;
             this.resources = new List<IResource>(resources);
         }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name">Tag name</param>
+        /// <param name="resource">Example resource for localization</param>
+        /// <param name="languages">Array of Languages</param>
+        public LocalizationTag(string name, IResource resource, Language[] languages)
+        {
+            this.name = name;
+            var resources = new IResource[languages.Length];
+            for(int i=0; i < resources.Length; i++)
+            {
+                resources[i] = resource.Clone();
+            }
+            this.resources = new List<IResource>(resources);
+        }
     }
 }

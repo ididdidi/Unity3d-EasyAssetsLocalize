@@ -44,7 +44,7 @@ namespace ResourceLocalization
 				EditorGUILayout.LabelField("OR", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, }, GUILayout.ExpandWidth(true));
 			}
 
-			if (string.IsNullOrEmpty(Text)) { @object = EditorGUILayout.ObjectField("Resource", @object, typeof(Object), false); }
+			if (string.IsNullOrEmpty(Text)) { @object = EditorGUILayout.ObjectField("Object", @object, typeof(Object), false); }
 		}
 
 		private void CreateButton()
@@ -52,7 +52,7 @@ namespace ResourceLocalization
 			GUI.enabled = CheckProperties();
 			if (GUILayout.Button("Create localization")) {
 				var resource = @object ? new UnityResource(@object) : new TextResource(Text) as IResource;
-				LocalizationStorage.AddLocalizationTag(TagName, resource);
+				LocalizationStorage.AddLocalizationTag(new LocalizationTag(TagName, resource, LocalizationStorage.Languages));
 				this.Close();
 			}
 			GUI.enabled = true;
