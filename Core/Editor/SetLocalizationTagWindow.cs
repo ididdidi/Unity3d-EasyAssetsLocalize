@@ -7,7 +7,7 @@ namespace ResourceLocalization
 {
     public class SetLocalizationTagWindow : EditorWindow
 	{
-		private readonly Vector2 size = new Vector2(230f, 320f);
+		private readonly Vector2 size = new Vector2(242f, 320f);
 		public LocalizationController LocalizationController { get; set; }
 
 		private Vector2 scrollPosition = Vector2.zero;
@@ -24,17 +24,16 @@ namespace ResourceLocalization
 		private void OnGUI()
 		{
 			Initiate();
-			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
 			DrawSearchField();
+
+			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 			DrawLocalizationsList();
+			EditorGUILayout.EndScrollView();
 
 			GUILayout.BeginHorizontal();
-			CreateButton();
 			CancelButton();
+			SetLocalizationTagsButton();
 			GUILayout.EndHorizontal();
-
-			EditorGUILayout.EndScrollView();
 		}
 
 		private void Initiate()
@@ -76,7 +75,7 @@ namespace ResourceLocalization
 			}
 		}
 
-		private void AddLocalizations()
+		private void SetLocalizationTags()
 		{
 			for (int i = 0; i < selected.Count; i++)
 			{
@@ -84,12 +83,12 @@ namespace ResourceLocalization
 			}
 		}
 
-		private void CreateButton()
+		private void SetLocalizationTagsButton()
 		{
 			EditorGUI.BeginDisabledGroup(selected?.Count < 1);
 			if (GUILayout.Button("Confirm choice"))
 			{
-				AddLocalizations();
+				SetLocalizationTags();
 				EditorUtility.SetDirty(LocalizationController);
 				EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);
 				this.Close();

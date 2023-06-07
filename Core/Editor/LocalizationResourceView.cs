@@ -72,7 +72,12 @@ namespace ResourceLocalization
 		/// <param name="language">language of the resource</param>
 		private static void DrawResource(IResource resource, string language)
 		{
-			if(resource.Data is Object @object)
+			if(resource.Data is string text)
+			{
+				EditorGUILayout.LabelField(language);
+				resource.Data = EditorGUILayout.TextArea(text, GUILayout.Height(50f));
+			}
+			else if(resource.Data is Object @object)
 			{
 				resource.Data = EditorGUILayout.ObjectField(language, @object, resource.Data.GetType(), false);
 			}

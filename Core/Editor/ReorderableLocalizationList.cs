@@ -50,7 +50,7 @@ namespace ResourceLocalization
 		/// <returns>Minimum window dimensions</returns>
 		public Vector2 GetSize()
 		{
-			return new Vector2((LocalizationStorage.Languages.Length + 1) * (fieldWidth + 2f) + 12f, 320f);
+			return new Vector2((LocalizationStorage.Languages.Length + 1) * (fieldWidth + 2f) + 22f, 320f);
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ namespace ResourceLocalization
 		/// <param name="reorderable"></param>
 		private void AddLocalisatrion(ReorderableList reorderable)
 		{
-			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), false, "Create Localization");
+			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
 			window.LocalizationStorage = LocalizationStorage;
 		}
 

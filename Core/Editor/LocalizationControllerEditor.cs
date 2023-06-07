@@ -36,7 +36,7 @@ namespace ResourceLocalization
                 EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
             }
 
-            if (AddLocalizationButton())
+            if (SetLocalizationTagButton())
             {
                 var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
                 window.LocalizationController = controller;
@@ -61,7 +61,7 @@ namespace ResourceLocalization
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(receiver.Name);
-            if(RemoveLocalizationButton()) { controller.RemoveLocalizationReceiver(receiver); }
+            if(RemoveLocalizationTagButton()) { controller.RemoveLocalizationReceiver(receiver); }
             GUILayout.EndHorizontal();
 
             EditorGUI.indentLevel++;
@@ -74,18 +74,18 @@ namespace ResourceLocalization
         /// <summary>
         /// Button to display localization choice window.
         /// </summary>
-        private bool AddLocalizationButton()
+        private bool SetLocalizationTagButton()
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            var result = GUILayout.Button("Choice localization", GUILayout.Width(240f), GUILayout.Height(24f));
+            var result = GUILayout.Button("Set localization tag", GUILayout.Width(240f), GUILayout.Height(24f));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             
             return result;
         }
 
-        private bool RemoveLocalizationButton()
+        private bool RemoveLocalizationTagButton()
         {
             return GUILayout.Button(EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove"), "SearchCancelButton");
         }

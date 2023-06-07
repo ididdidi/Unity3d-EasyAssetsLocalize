@@ -12,19 +12,21 @@ namespace ResourceLocalization
 		private ReorderableLocalizationList localizationsList;
 		private Vector2 scrollPosition = Vector2.zero;
 
+		private Vector2 Size { set => this.minSize = this.maxSize = value; }
+
 		public LocalizationStorage LocalizationStorage { get => localizationStorage; set => CreateLocalizationList(localizationStorage = value); }
 		
 		private void CreateLocalizationList(LocalizationStorage localizationStorage)
 		{
 			localizationsList = new ReorderableLocalizationList(localizationStorage);
-			this.minSize = localizationsList.GetSize();
+			Size = localizationsList.GetSize();
 		}
 
 		void OnGUI()
 		{
 			if (localizationsList == null && localizationStorage) {
 				localizationsList = new ReorderableLocalizationList(localizationStorage);
-				this.minSize = localizationsList.GetSize();
+				Size = localizationsList.GetSize();
 			}
 
 			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
@@ -34,7 +36,7 @@ namespace ResourceLocalization
 			if (GUI.changed)
 			{
 				EditorUtility.SetDirty(localizationStorage);
-				this.minSize = localizationsList.GetSize();
+				Size = localizationsList.GetSize();
 			}
 		}
     }

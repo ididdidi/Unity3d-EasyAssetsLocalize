@@ -10,41 +10,46 @@ namespace ResourceLocalization
 		private string Text { get; set; }
 		private Object @object { get; set; }
 
-		private Vector2 scrollPosition = Vector2.zero;
+		private readonly Vector2 size = new Vector2(320f, 200f);
 
 		public void OnEnable()
 		{
-			minSize = new Vector2(240f, 240f);
+			minSize = size;
+			maxSize = size;
 		}
 
 		private void OnGUI()
 		{
-			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
 			DisplayFields();
 
+			GUILayout.FlexibleSpace();
 			GUILayout.BeginHorizontal();
 			CreateButton();
 			CancelButton();
 			GUILayout.EndHorizontal();
 
-			EditorGUILayout.EndScrollView();
 		}
 
 		private void DisplayFields()
 		{
 			TagName = EditorGUILayout.TextField("Tag name", TagName);
+			
+			EditorGUILayout.Separator();
 			if (!@object) {
-				EditorGUILayout.LabelField("Text");
+				EditorGUILayout.LabelField("Text", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, });
 				Text = EditorGUILayout.TextArea(Text, EditorStyles.textArea, GUILayout.MinHeight(50));
 			}
 
+
+			EditorGUILayout.Separator();
 			if (!@object && string.IsNullOrEmpty(Text))
 			{
 				EditorGUILayout.LabelField("OR", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, }, GUILayout.ExpandWidth(true));
 			}
+			EditorGUILayout.Separator();
 
 			if (string.IsNullOrEmpty(Text)) { @object = EditorGUILayout.ObjectField("Object", @object, typeof(Object), false); }
+			EditorGUILayout.Separator();
 		}
 
 		private void CreateButton()
