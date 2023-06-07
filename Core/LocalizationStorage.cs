@@ -122,7 +122,7 @@ namespace ResourceLocalization
             {
                 if (localizationTags[i].ID.Equals(id))
                 {
-                    return localizationTags[i].Resources[languages.IndexOf(language)];
+                    return localizationTags[i].Resources[languages.IndexOf(language)].Data;
                 }
             }
             throw new System.ArgumentException($"{GetType()}: No resources found for {id}");

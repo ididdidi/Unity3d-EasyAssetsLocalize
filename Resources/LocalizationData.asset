@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationData
   m_EditorClassIdentifier: 
-  version: 33
+  version: 57
   languages:
   - name: Russian
   - name: English
@@ -32,6 +32,56 @@ MonoBehaviour:
     resources:
     - id: 4
     - id: 5
+  - id: 0c46eb852f404494be76488a190e012a
+    name: Test
+    resources:
+    - id: 6
+    - id: 7
+  - id: 4b4f632f0917460d92ce76f3256871bf
+    name: Test
+    resources:
+    - id: 8
+    - id: 9
+  - id: 6c90b82330f440ae8353bf99e6230fc3
+    name: Test
+    resources:
+    - id: 10
+    - id: 11
+  - id: e31ecbe6f40a43588ac895d45e041991
+    name: Test
+    resources:
+    - id: 12
+    - id: 13
+  - id: 1ac6cf5cba2a40c2b3e4ca3c59243caf
+    name: Test
+    resources:
+    - id: 14
+    - id: 15
+  - id: 3d7a4b1a4972487a9a1f3bf542b0bde5
+    name: Test
+    resources:
+    - id: 16
+    - id: 17
+  - id: 75dc41b78fdc49bb8d3df3cb4a583995
+    name: Test
+    resources:
+    - id: 18
+    - id: 19
+  - id: c78530ed34c14832907ac01b5c677f54
+    name: Test
+    resources:
+    - id: 20
+    - id: 21
+  - id: 43deb6c138f740c79ae2c663bbb42d28
+    name: Test
+    resources:
+    - id: 22
+    - id: 23
+  - id: 27b52ce6148f4de48824635be08fae0c
+    name: Test
+    resources:
+    - id: 24
+    - id: 25
   references:
     version: 1
     00000000:
@@ -58,3 +108,83 @@ MonoBehaviour:
       type: {class: UnityResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
         data: {fileID: 2800000, guid: 2887294cc7f1fe840bff6e349409648d, type: 3}
+    00000006:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000007:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000008:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000009:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000A:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000B:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000C:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000D:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000E:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000000F:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000010:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000011:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000012:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000013:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000014:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000015:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000016:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000017:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000018:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    00000019:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
