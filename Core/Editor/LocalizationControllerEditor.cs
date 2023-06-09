@@ -61,7 +61,11 @@ namespace ResourceLocalization
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(receiver.Name);
-            if(RemoveLocalizationTagButton()) { controller.RemoveLocalizationReceiver(receiver); }
+            if(RemoveLocalizationTagButton())
+            {
+                Undo.RecordObject(controller, controller.name);
+                controller.RemoveLocalizationReceiver(receiver);
+            }
             GUILayout.EndHorizontal();
 
             EditorGUI.indentLevel++;

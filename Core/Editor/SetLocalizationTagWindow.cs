@@ -88,6 +88,7 @@ namespace ResourceLocalization
 			EditorGUI.BeginDisabledGroup(selected?.Count < 1);
 			if (GUILayout.Button("Confirm choice"))
 			{
+				Undo.RecordObject(LocalizationController, LocalizationController.name);
 				SetLocalizationTags();
 				EditorUtility.SetDirty(LocalizationController);
 				EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);
