@@ -8,24 +8,19 @@ namespace ResourceLocalization
     [System.Serializable]
     public class Language
     {
-        [SerializeField] private string name;
-
-        public Language(string name)
-        {
-            this.name = name;
-        }
+        public Language(string name) => Name = name;
 
         /// <summary>
         /// Language name.
         /// </summary>
-        public string Name { get => name; set => name = value; }
+        [field: SerializeField] public string Name { get; set; }
 
         #region Methods for comparing languages
-        public override bool Equals(object obj) => (obj is Language language)? name.Equals(language.name) : false;
+        public override bool Equals(object obj) => (obj is Language language)? Name.Equals(language.Name) : false;
 
-        public override int GetHashCode() => name.GetHashCode();
+        public override int GetHashCode() => Name.GetHashCode();
 
-        public override string ToString() => name;
+        public override string ToString() => Name;
         #endregion
     }
 }
