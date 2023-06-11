@@ -23,7 +23,7 @@ namespace ResourceLocalization
         /// <summary>
         /// List of localization tags on this scene.
         /// </summary>
-        public List<LocalizationReceiver> LocalizationReceivers { get => receives; }
+        [SerializeField] public List<LocalizationReceiver> LocalizationReceivers { get => receives; }
         /// <summary>
         /// Link to localization repository.
         /// </summary>

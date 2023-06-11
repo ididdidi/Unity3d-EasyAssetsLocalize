@@ -41,6 +41,20 @@ namespace ResourceLocalization
                 var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
                 window.LocalizationController = controller;
             };
+
+
+            var someArrayProperty = serializedObject.FindProperty("receives");
+
+            serializedObject.Update();
+
+            for (int i = 0; i < someArrayProperty.arraySize; i++)
+            {
+                var someArrayItem = someArrayProperty.GetArrayElementAtIndex(i);
+
+                EditorGUILayout.PropertyField(someArrayItem);
+            }
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawLocalisationTags()
@@ -68,11 +82,20 @@ namespace ResourceLocalization
             }
             GUILayout.EndHorizontal();
 
+            DrawComponents(receiver);
+
+            GUILayout.EndVertical();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="receiver"></param>
+        private void DrawComponents(LocalizationReceiver receiver)
+        {
             EditorGUI.indentLevel++;
             receiver.Components = ExtendedEditorGUI.ArrayFields(receiver.Components, "Components", ref receiver.open, true, receiver.Type);
             EditorGUI.indentLevel--;
-
-            GUILayout.EndVertical();
         }
 
         /// <summary>
