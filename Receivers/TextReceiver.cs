@@ -6,10 +6,10 @@ namespace ResourceLocalization
     [System.Serializable]
     public class TextReceiver : LocalizationReceiver
     {
-        public override System.Type Type { get => typeof(Text); }
+        public override System.Type[] Types { get => new System.Type[] { typeof(Text)}; }
 
         public TextReceiver(LocalizationTag localizationTag) : base(localizationTag) { }
 
-        protected override void SetLocalization(Behaviour component, object resource) => ((Text)component).text = resource as string;
+        protected override void SetLocalization(Component component, object resource) => ((Text)component).text = resource as string;
     }
 }

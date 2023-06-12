@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationData
   m_EditorClassIdentifier: 
-  script: {fileID: 11500000, guid: b15b419bb97ef1147b3b0152de7e5b3d, type: 3}
-  version: 57
+  version: 61
   languages:
-  - name: Russian
-  - name: English
+  - <Name>k__BackingField: Russian
+  - <Name>k__BackingField: English
   localizationTags:
   - id: 82e011fe84b3466cb2aadb0c79a283a2
     name: Imag
@@ -83,6 +82,16 @@ MonoBehaviour:
     resources:
     - id: 24
     - id: 25
+  - id: c2566cad57ed4b3f994d70a625039b95
+    name: Test
+    resources:
+    - id: 26
+    - id: 27
+  - id: 523ee686597644e48f4d10b1b9bd61f9
+    name: Test
+    resources:
+    - id: 28
+    - id: 29
   references:
     version: 1
     00000000:
@@ -186,6 +195,22 @@ MonoBehaviour:
       data:
         data: Test
     00000019:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000001A:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000001B:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000001C:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Test
+    0000001D:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
         data: Test

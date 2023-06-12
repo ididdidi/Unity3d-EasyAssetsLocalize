@@ -10,16 +10,17 @@ namespace ResourceLocalization
     {
         [SerializeField] private string name;
         [SerializeField] private string id;
-        [SerializeField] private Behaviour[] components;
+        [SerializeField] private Component[] components;
+#if UNITY_EDITOR
         [System.NonSerialized] public bool open;
-
+#endif
         /// <summary>
         /// Identifier of the localization tag in the repository
         /// </summary>
         public string ID { get => id; set => id = value; }
         public string Name { get => name; }
-        public Behaviour[] Components { get => components; set => components = value; }
-        public abstract System.Type Type { get; }
+        public Component[] Components { get => components; set => components = value; }
+        public abstract System.Type[] Types { get; }
         protected LocalizationReceiver(LocalizationTag localizationTag)
         {
             var resourceType = localizationTag.Resources[0]?.Data.GetType();
@@ -35,6 +36,6 @@ namespace ResourceLocalization
             }
         }
 
-        protected abstract void SetLocalization(Behaviour receiver, object resource);
+        protected abstract void SetLocalization(Component receiver, object resource);
     }
 }

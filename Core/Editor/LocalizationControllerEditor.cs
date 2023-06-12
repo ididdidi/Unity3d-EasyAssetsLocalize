@@ -41,61 +41,22 @@ namespace ResourceLocalization
                 var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
                 window.LocalizationController = controller;
             };
-
-
-            var someArrayProperty = serializedObject.FindProperty("receives");
-
-            serializedObject.Update();
-
-            for (int i = 0; i < someArrayProperty.arraySize; i++)
-            {
-                var someArrayItem = someArrayProperty.GetArrayElementAtIndex(i);
-
-                EditorGUILayout.PropertyField(someArrayItem);
-            }
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawLocalisationTags()
         {
             for(int i=0; i < controller.LocalizationReceivers.Count; i++)
             {
-                DrawLocalisationReceiver(controller.LocalizationReceivers[i]);
+                var rect = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                if (ExtendedEditorGUI.CancelButton(new Rect(rect.x + rect.width - 16, rect.y + 2, rect.width, rect.height), "Remove"))
+                {
+                    Undo.RecordObject(controller, controller.name);
+                    controller.RemoveLocalizationReceiver(controller.LocalizationReceivers[i]);
+                    return;
+                }
+                controller.LocalizationReceivers[i].OnInspectorGUI();
+                EditorGUILayout.EndVertical();
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="receiver"></param>
-        private void DrawLocalisationReceiver(LocalizationReceiver receiver)
-        {
-            GUILayout.BeginVertical(EditorStyles.helpBox);
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(receiver.Name);
-            if(RemoveLocalizationTagButton())
-            {
-                Undo.RecordObject(controller, controller.name);
-                controller.RemoveLocalizationReceiver(receiver);
-            }
-            GUILayout.EndHorizontal();
-
-            DrawComponents(receiver);
-
-            GUILayout.EndVertical();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="receiver"></param>
-        private void DrawComponents(LocalizationReceiver receiver)
-        {
-            EditorGUI.indentLevel++;
-            receiver.Components = ExtendedEditorGUI.ArrayFields(receiver.Components, "Components", ref receiver.open, true, receiver.Type);
-            EditorGUI.indentLevel--;
         }
 
         /// <summary>
@@ -110,11 +71,6 @@ namespace ResourceLocalization
             GUILayout.EndHorizontal();
             
             return result;
-        }
-
-        private bool RemoveLocalizationTagButton()
-        {
-            return GUILayout.Button(EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove"), "SearchCancelButton");
         }
     }
 }
