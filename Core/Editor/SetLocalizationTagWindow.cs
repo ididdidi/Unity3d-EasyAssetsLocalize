@@ -23,8 +23,10 @@ namespace ResourceLocalization
 
 		private void OnGUI()
 		{
-			Initiate();
+			GUILayout.BeginHorizontal();
+			if (AddNewTagButton()) { AddLocalisatrion(); }
 			DrawSearchField();
+			GUILayout.EndHorizontal();
 
 			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 			DrawLocalizationsList();
@@ -36,24 +38,41 @@ namespace ResourceLocalization
 			GUILayout.EndHorizontal();
 		}
 
-		private void Initiate()
+		/// <summary>
+		/// Display a field for searching by tags.
+		/// </summary>
+		private void DrawSearchField()
 		{
 			if (search == null && LocalizationController)
 			{
 				search = new LocalizationSearch(LocalizationController.LocalizationStorage);
 				localizations = search.GetResult();
 			}
-		}
 
-		/// <summary>
-		/// Display a field for searching by tags.
-		/// </summary>
-		private void DrawSearchField()
-		{
 			if (search != null && search.SearchFieldChanged())
 			{
 				localizations = search.GetResult();
 			}
+		}
+
+		/// <summary>
+		/// Display a button to add a new language.
+		/// </summary>
+		/// <param name="rect"><see cref="Rect"/></param>
+		/// <param name="dX">Offset X</param>
+		private bool AddNewTagButton()
+		{
+			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add Localization Tag");
+			GUIStyle style = "RL FooterButton";
+			style.margin.top = 2;
+			style.margin.left = 2;
+			return GUILayout.Button(icon, style);
+		}
+
+		private void AddLocalisatrion()
+		{
+			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
+			window.LocalizationStorage = LocalizationController.LocalizationStorage;
 		}
 
 		private void DrawLocalizationsList()

@@ -45,10 +45,11 @@ namespace ResourceLocalization
 
         private void DrawLocalisationTags()
         {
-            for(int i=0; i < controller.LocalizationReceivers.Count; i++)
+            var buttonSize = EditorGUIUtility.singleLineHeight;
+            for (int i=0; i < controller.LocalizationReceivers.Count; i++)
             {
                 var rect = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                if (ExtendedEditorGUI.CancelButton(new Rect(rect.x + rect.width - 16, rect.y + 2, rect.width, rect.height), "Remove"))
+                if (ExtendedEditorGUI.CancelButton(new Rect(rect.x + rect.width - buttonSize, rect.y + 2f, buttonSize, buttonSize), "Remove"))
                 {
                     Undo.RecordObject(controller, controller.name);
                     controller.RemoveLocalizationReceiver(controller.LocalizationReceivers[i]);
