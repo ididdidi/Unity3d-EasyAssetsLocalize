@@ -36,11 +36,7 @@ namespace ResourceLocalization
                 EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
             }
 
-            if (SetLocalizationTagButton())
-            {
-                var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, controller.name);
-                window.LocalizationController = controller;
-            };
+            SetLocalizationTagButton();
         }
 
         private void DrawLocalisationTags()
@@ -63,15 +59,16 @@ namespace ResourceLocalization
         /// <summary>
         /// Button to display localization choice window.
         /// </summary>
-        private bool SetLocalizationTagButton()
+        private void SetLocalizationTagButton()
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            var result = GUILayout.Button("Set localization tag", GUILayout.Width(240f), GUILayout.Height(24f));
+            if (GUILayout.Button("Set localization tag", GUILayout.Width(240f), GUILayout.Height(24f)))
+            {
+                SetLocalizationTagWindow.GetInstance(controller, "Set Localization Tag");
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            
-            return result;
         }
     }
 }

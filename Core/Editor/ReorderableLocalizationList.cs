@@ -12,7 +12,7 @@ namespace ResourceLocalization
 	{
 		private readonly Vector2 padding = new Vector2(1f, 1f);
 		private readonly float fieldWidth = 150f;
-		private readonly float fieldHeight = 18f;
+		private readonly float fieldHeight = EditorGUIUtility.singleLineHeight;
 
 		private LocalizationSearch search;
 		private int storageVersion;
@@ -189,8 +189,7 @@ namespace ResourceLocalization
 		/// <param name="reorderable"></param>
 		private void AddLocalisatrion(ReorderableList reorderable)
 		{
-			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
-			window.LocalizationStorage = LocalizationStorage;
+			LocalizationTagCreateWindow.GetInstance(LocalizationStorage);
 		}
 
 		/// <summary>

@@ -12,7 +12,9 @@ namespace ResourceLocalization
         private LocalizationStorage storage;
 
         private SearchField searchField = new SearchField();
-        private string searchMask ="";
+        private string key ="";
+
+        public string Key { get => key; set => key = value; }
 
         /// <summary>
         /// Constructor
@@ -29,10 +31,10 @@ namespace ResourceLocalization
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
         public bool SearchFieldChanged()
         {
-            var mask = searchField.OnGUI(searchMask);
-            if (GUI.changed && !mask.Equals(searchMask))
+            var mask = searchField.OnGUI(Key);
+            if (GUI.changed && !mask.Equals(Key))
             {
-                searchMask = mask; return true;
+                Key = mask; return true;
             }
             else return false;
         }
@@ -44,10 +46,10 @@ namespace ResourceLocalization
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
         public bool SearchFieldChanged(Rect rect)
         {
-            var mask = searchField.OnGUI(rect, searchMask);
-            if(GUI.changed && !mask.Equals(searchMask))  
+            var mask = searchField.OnGUI(rect, Key);
+            if(GUI.changed && !mask.Equals(Key))  
             { 
-                searchMask = mask; return true;
+                Key = mask; return true;
             }
             else return false;
         }
@@ -56,7 +58,7 @@ namespace ResourceLocalization
         /// Method for getting an array of localizations whose tag names match the query in the search.
         /// </summary>
         /// <returns>Array of localizations</returns>
-        public LocalizationTag[] GetResult() => FindLocalizations(searchMask);
+        public LocalizationTag[] GetResult() => FindLocalizations(Key);
 
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace ResourceLocalization
 	public class LocalizationTagCreateWindow : EditorWindow
 	{
 		public LocalizationStorage LocalizationStorage { get; set; }
-		private string TagName { get; set; }
+		public string TagName { get; set; }
 		private string Text { get; set; }
 		private Object @object { get; set; }
 
@@ -16,6 +16,14 @@ namespace ResourceLocalization
 		{
 			minSize = size;
 			maxSize = size;
+		}
+
+		public static LocalizationTagCreateWindow GetInstance(LocalizationStorage storage, string tagName = "")
+		{
+			var window = (LocalizationTagCreateWindow)GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
+			window.TagName = tagName;
+			window.LocalizationStorage = storage;
+			return window;
 		}
 
 		private void OnGUI()

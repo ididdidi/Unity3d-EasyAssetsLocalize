@@ -2,7 +2,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
 namespace ResourceLocalization
 {
     public class SetLocalizationTagWindow : EditorWindow
@@ -14,6 +13,7 @@ namespace ResourceLocalization
 		private LocalizationTag[] localizations;
 		private List<LocalizationTag> selected = new List<LocalizationTag>();
 		private LocalizationSearch search;
+		private LocalizationTagCreateWindow tagCreateWindow;
 
 		public void OnEnable()
 		{
@@ -21,10 +21,17 @@ namespace ResourceLocalization
 			maxSize = size;
 		}
 
+		public static SetLocalizationTagWindow GetInstance(LocalizationController controller, string tagName = "")
+		{
+			var window = (SetLocalizationTagWindow)EditorWindow.GetWindow(typeof(SetLocalizationTagWindow), true, tagName);
+			window.LocalizationController = controller;
+			return window;
+		}
+
 		private void OnGUI()
 		{
 			GUILayout.BeginHorizontal();
-			if (AddNewTagButton()) { AddLocalisatrion(); }
+			AddNewTagButton();
 			DrawSearchField();
 			GUILayout.EndHorizontal();
 
@@ -60,19 +67,16 @@ namespace ResourceLocalization
 		/// </summary>
 		/// <param name="rect"><see cref="Rect"/></param>
 		/// <param name="dX">Offset X</param>
-		private bool AddNewTagButton()
+		private void AddNewTagButton()
 		{
 			GUIContent icon = EditorGUIUtility.TrIconContent("Toolbar Plus", "Add Localization Tag");
 			GUIStyle style = "RL FooterButton";
 			style.margin.top = 2;
 			style.margin.left = 2;
-			return GUILayout.Button(icon, style);
-		}
-
-		private void AddLocalisatrion()
-		{
-			var window = (LocalizationTagCreateWindow)EditorWindow.GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
-			window.LocalizationStorage = LocalizationController.LocalizationStorage;
+			if (GUILayout.Button(icon, style))
+			{
+				tagCreateWindow = LocalizationTagCreateWindow.GetInstance(LocalizationController.LocalizationStorage, search.Key);
+			}
 		}
 
 		private void DrawLocalizationsList()
@@ -98,7 +102,7 @@ namespace ResourceLocalization
 		{
 			for (int i = 0; i < selected.Count; i++)
 			{
-				LocalizationController.AddLocalizationReceiver(selected[i].CreateReceiver());
+				LocalizationController?.AddLocalizationReceiver(selected[i].CreateReceiver());
 			}
 		}
 
@@ -120,5 +124,7 @@ namespace ResourceLocalization
 		{
 			if (GUILayout.Button("Cancel")) { this.Close(); }
 		}
+
+		private void OnDestroy() => tagCreateWindow?.Close();
 	}
 }
