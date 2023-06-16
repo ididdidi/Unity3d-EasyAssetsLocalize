@@ -73,6 +73,10 @@ namespace ResourceLocalization
         /// <returns>Identifier of the localization tag in the repository</returns>
         public void AddLocalizationTag(LocalizationTag tag)
         {
+            for (int i = 1; i < languages.Count; i++)
+            {
+                tag.Resources.Add(tag.Resources[i - 1].Clone());
+            }
             localizationTags.Add(tag);
             version++;
             return;

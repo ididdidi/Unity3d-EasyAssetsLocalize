@@ -10,7 +10,7 @@ namespace ResourceLocalization
     public class LocalizationSearch
     {
         private LocalizationStorage storage;
-
+        private int storageVersion;
         private SearchField searchField = new SearchField();
         private string key ="";
 
@@ -29,27 +29,29 @@ namespace ResourceLocalization
         /// Method for rendering the search field.
         /// </summary>
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
-        public bool SearchFieldChanged()
-        {
-            var mask = searchField.OnGUI(Key);
-            if (GUI.changed && !mask.Equals(Key))
-            {
-                Key = mask; return true;
-            }
-            else return false;
-        }
+        public bool IsChanged() => IsChanged(searchField.OnGUI(Key));
 
         /// <summary>
         /// Method for rendering the search field.
         /// </summary>
         /// <param name="rect"><see>Rect</see> of the search field</param>
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
-        public bool SearchFieldChanged(Rect rect)
+        public bool IsChanged(Rect rect) => IsChanged(searchField.OnGUI(rect, Key));
+
+        /// <summary>
+        /// Method for rendering the search field.
+        /// </summary>
+        /// <param name="rect"><see>Rect</see> of the search field</param>
+        /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
+        private bool IsChanged(string key)
         {
-            var mask = searchField.OnGUI(rect, Key);
-            if(GUI.changed && !mask.Equals(Key))  
-            { 
-                Key = mask; return true;
+            if (GUI.changed && !key.Equals(Key))
+            {
+                Key = key; return true;
+            }
+            else if (storageVersion != storage.Version)
+            {
+                storageVersion = storage.Version; return true;
             }
             else return false;
         }

@@ -5,8 +5,8 @@ namespace ResourceLocalization
 {
 	public class LocalizationTagCreateWindow : EditorWindow
 	{
-		public LocalizationStorage LocalizationStorage { get; set; }
 		public string TagName { get; set; }
+		public System.Action<LocalizationTag> Request { get; set; }
 		private string Text { get; set; }
 		private Object @object { get; set; }
 
@@ -18,11 +18,11 @@ namespace ResourceLocalization
 			maxSize = size;
 		}
 
-		public static LocalizationTagCreateWindow GetInstance(LocalizationStorage storage, string tagName = "")
+		public static LocalizationTagCreateWindow GetInstance(System.Action<LocalizationTag> request, string tagName = "")
 		{
 			var window = (LocalizationTagCreateWindow)GetWindow(typeof(LocalizationTagCreateWindow), true, "Create Localization");
 			window.TagName = tagName;
-			window.LocalizationStorage = storage;
+			window.Request = request;
 			return window;
 		}
 
@@ -65,7 +65,7 @@ namespace ResourceLocalization
 			GUI.enabled = CheckProperties();
 			if (GUILayout.Button("Create localization")) {
 				var resource = @object ? new UnityResource(@object) : new TextResource(Text) as IResource;
-				LocalizationStorage.AddLocalizationTag(new LocalizationTag(TagName, resource, LocalizationStorage.Languages));
+				Request?.Invoke(new LocalizationTag(TagName, resource));
 				this.Close();
 			}
 			GUI.enabled = true;

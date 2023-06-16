@@ -15,6 +15,7 @@ namespace ResourceLocalization
 		private LocalizationSearch search;
 		private LocalizationTagCreateWindow tagCreateWindow;
 
+
 		public void OnEnable()
 		{
 			minSize = size;
@@ -56,7 +57,7 @@ namespace ResourceLocalization
 				localizations = search.GetResult();
 			}
 
-			if (search != null && search.SearchFieldChanged())
+			if (search != null && search.IsChanged())
 			{
 				localizations = search.GetResult();
 			}
@@ -73,10 +74,17 @@ namespace ResourceLocalization
 			GUIStyle style = "RL FooterButton";
 			style.margin.top = 2;
 			style.margin.left = 2;
-			if (GUILayout.Button(icon, style))
-			{
-				tagCreateWindow = LocalizationTagCreateWindow.GetInstance(LocalizationController.LocalizationStorage, search.Key);
-			}
+			if (GUILayout.Button(icon, style)) { CreateNewTag(); }
+		}
+
+		private void CreateNewTag()
+		{
+			tagCreateWindow = LocalizationTagCreateWindow.GetInstance(
+				(tag) => { 
+					LocalizationController.LocalizationStorage.AddLocalizationTag(tag); 
+					selected.Add(tag);
+					search.Key = tag.Name;
+				}, search.Key);
 		}
 
 		private void DrawLocalizationsList()
@@ -100,10 +108,14 @@ namespace ResourceLocalization
 
 		private void SetLocalizationTags()
 		{
+			Undo.RecordObject(LocalizationController, LocalizationController.name);
 			for (int i = 0; i < selected.Count; i++)
 			{
 				LocalizationController?.AddLocalizationReceiver(selected[i].CreateReceiver());
 			}
+			EditorUtility.SetDirty(LocalizationController);
+			EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);
+			this.Close();
 		}
 
 		private void SetLocalizationTagsButton()
@@ -111,11 +123,7 @@ namespace ResourceLocalization
 			EditorGUI.BeginDisabledGroup(selected?.Count < 1);
 			if (GUILayout.Button("Confirm choice"))
 			{
-				Undo.RecordObject(LocalizationController, LocalizationController.name);
 				SetLocalizationTags();
-				EditorUtility.SetDirty(LocalizationController);
-				EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);
-				this.Close();
 			}
 			EditorGUI.EndDisabledGroup();
 		}

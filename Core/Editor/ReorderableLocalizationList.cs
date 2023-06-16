@@ -87,7 +87,7 @@ namespace ResourceLocalization
 		private float DrawSearchField(Rect rect, float dX)
 		{
 			var width = fieldWidth - 6f;
-			if (search.SearchFieldChanged(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX)))
+			if (search.IsChanged(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX)))
 			{
 				list = search.GetResult();
 			}
@@ -189,7 +189,7 @@ namespace ResourceLocalization
 		/// <param name="reorderable"></param>
 		private void AddLocalisatrion(ReorderableList reorderable)
 		{
-			LocalizationTagCreateWindow.GetInstance(LocalizationStorage);
+			LocalizationTagCreateWindow.GetInstance(LocalizationStorage.AddLocalizationTag);
 		}
 
 		/// <summary>

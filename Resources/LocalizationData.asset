@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationData
   m_EditorClassIdentifier: 
-  version: 61
+  version: 66
   languages:
   - <Name>k__BackingField: Russian
   - <Name>k__BackingField: English
@@ -92,6 +92,21 @@ MonoBehaviour:
     resources:
     - id: 28
     - id: 29
+  - id: 91455297d5704cfd8d141c320d67f0f9
+    name: Tesst222
+    resources:
+    - id: 30
+    - id: 31
+  - id: 14e56d93949042399e91e07f1e145011
+    name: TTTT
+    resources:
+    - id: 32
+    - id: 33
+  - id: 2bf477fc3904460cb571272180cfe902
+    name: HFFS
+    resources:
+    - id: 34
+    - id: 35
   references:
     version: 1
     00000000:
@@ -214,3 +229,27 @@ MonoBehaviour:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
         data: Test
+    0000001E:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: dsfs
+    0000001F:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: dsfs
+    00000020:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: TTTT
+    00000021:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: TTTT
+    00000022:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: dssdfsdf
+    00000023:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: dssdfsdf
