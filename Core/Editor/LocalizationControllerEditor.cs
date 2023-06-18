@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityExtended;
 
@@ -12,6 +11,7 @@ namespace ResourceLocalization
     public class LocalizationControllerEditor : Editor
     {
         private LocalizationController controller;
+        bool foldout;
 
         private void OnEnable()
         { 
@@ -28,15 +28,19 @@ namespace ResourceLocalization
                 EditorGUILayout.HelpBox($"The {controller.LocalizationStorage} field must not be empty!", MessageType.Error); return;
             }
 
-            EditorGUI.BeginChangeCheck();
-            DrawLocalisationTags();
-            if(EditorGUI.EndChangeCheck())
-            {
-                EditorUtility.SetDirty(controller);
-                EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
-            }
+          //  EditorGUI.BeginChangeCheck();
+          //  DrawLocalisationTags();
+          //  if(EditorGUI.EndChangeCheck())
+          //  {
+          //      EditorUtility.SetDirty(controller);
+          //      EditorSceneManager.MarkSceneDirty(controller.gameObject.scene);
+          //  }
 
             SetLocalizationTagButton();
+
+            serializedObject.Update();
+            DrawPropertyArray(serializedObject.FindProperty("receives"), ref foldout);
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawLocalisationTags()
@@ -70,5 +74,26 @@ namespace ResourceLocalization
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
+
+        private static void DrawPropertyArray(SerializedProperty property, ref bool fold)
+        {
+            if (property == null) { Debug.Log(property); return; }
+            fold = EditorGUILayout.Foldout(fold, new GUIContent(
+                property.displayName,
+                "These are the waypoints that will be used for the moving object's path."), true);
+            if (!fold) return;
+            var arraySizeProp = property.FindPropertyRelative("Array.size");
+            EditorGUILayout.PropertyField(arraySizeProp, true);
+
+            EditorGUI.indentLevel++;
+
+            for (var i = 0; i < arraySizeProp.intValue; i++)
+            {
+                EditorGUILayout.PropertyField(property.GetArrayElementAtIndex(i));
+            }
+
+            EditorGUI.indentLevel--;
+        }
+
     }
 }

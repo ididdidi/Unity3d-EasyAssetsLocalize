@@ -10,7 +10,7 @@ namespace ResourceLocalization
     public class LocalizationTag
     {
         [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");
-        [SerializeField] private string name;
+        [SerializeField] private string name = "None";
         [SerializeReference] private List<IResource> resources = new List<IResource>();
 
         /// <summary>
@@ -21,6 +21,7 @@ namespace ResourceLocalization
         /// Tag name.
         /// </summary>
         public string Name { get => name; set => name = value; }
+        public System.Type Type { get => Resources[0].Data.GetType(); }
         /// <summary>
         /// List of localized resources.
         /// </summary>

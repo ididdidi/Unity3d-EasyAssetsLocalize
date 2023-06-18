@@ -9,8 +9,7 @@ namespace ResourceLocalization
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localizationStorage;
-        [SerializeReference, HideInInspector] private List<LocalizationReceiver> receives = new List<LocalizationReceiver>();
-        private Dictionary<string, Object> dictionary;
+        [SerializeReference, HideInInspector] private List<SpriteReceiver> receives = new List<SpriteReceiver>();
 
         /// <summary>
         /// The current language.
@@ -23,7 +22,7 @@ namespace ResourceLocalization
         /// <summary>
         /// List of localization tags on this scene.
         /// </summary>
-        [SerializeField] public List<LocalizationReceiver> LocalizationReceivers { get => receives; }
+        [SerializeField] public List<SpriteReceiver> LocalizationReceivers { get => receives; }
         /// <summary>
         /// Link to localization repository.
         /// </summary>
@@ -67,7 +66,7 @@ namespace ResourceLocalization
             Language = language;
             for(int i=0; i < LocalizationReceivers.Count; i++)
             {
-                LocalizationReceivers[i].SetLocalizationResource(LocalizationStorage.GetLocalizationResource(LocalizationReceivers[i].ID, Language));
+                LocalizationReceivers[i].SetLocalization(LocalizationStorage.GetLocalizationResource(LocalizationReceivers[i].ID, Language));
             }
         }
 
@@ -111,12 +110,12 @@ namespace ResourceLocalization
             }
         }
 
-        public void AddLocalizationReceiver(LocalizationReceiver receiver)
+        public void AddLocalizationReceiver(SpriteReceiver receiver)
         {
             LocalizationReceivers.Add(receiver);
         }
 
-        public void RemoveLocalizationReceiver(LocalizationReceiver receiver)
+        public void RemoveLocalizationReceiver(SpriteReceiver receiver)
         {
             LocalizationReceivers.Remove(receiver);
         }

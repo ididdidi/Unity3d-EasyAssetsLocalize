@@ -111,7 +111,18 @@ namespace ResourceLocalization
 			Undo.RecordObject(LocalizationController, LocalizationController.name);
 			for (int i = 0; i < selected.Count; i++)
 			{
-				LocalizationController?.AddLocalizationReceiver(selected[i].CreateReceiver());
+				//System.Type arg = selected[i].Resources[0].Data.GetType();
+				//System.Type genericClass = typeof(LocalizationReceiver<>);
+				//System.Type createdClass = genericClass.MakeGenericType(arg);
+				//
+				//// Result is of TypeReporter<T> type. Invoke desired methods.
+				//var result = (LocalizationReceiver)System.Activator.CreateInstance(createdClass, selected[i]);
+				//Debug.Log(result.Name);
+
+				if(selected[i].Resources[0].Data is Sprite)
+				{
+					LocalizationController?.AddLocalizationReceiver(new SpriteReceiver(selected[i]));
+				}
 			}
 			EditorUtility.SetDirty(LocalizationController);
 			EditorSceneManager.MarkSceneDirty(LocalizationController.gameObject.scene);

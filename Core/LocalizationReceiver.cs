@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace ResourceLocalization
 {
@@ -10,7 +12,7 @@ namespace ResourceLocalization
     {
         [SerializeField] private string name;
         [SerializeField] private string id;
-        [SerializeField] private Component[] components;
+
 #if UNITY_EDITOR
         [System.NonSerialized] public bool open;
 #endif
@@ -19,23 +21,44 @@ namespace ResourceLocalization
         /// </summary>
         public string ID { get => id; set => id = value; }
         public string Name { get => name; }
-        public Component[] Components { get => components; set => components = value; }
-        public abstract System.Type[] Types { get; }
         protected LocalizationReceiver(LocalizationTag localizationTag)
         {
-            var resourceType = localizationTag.Resources[0]?.Data.GetType();
-            this.name = $"{localizationTag.Name} ({resourceType.Name})";
+            this.name = localizationTag.Name;
             this.id = localizationTag.ID;
         }
+        public abstract void SetLocalization(object resource);
+    }
 
-        public void SetLocalizationResource(object resource)
+    [System.Serializable]
+    public abstract class LocalizationReceiver<T> : LocalizationReceiver
+    {
+        [System.Serializable] public class Handlers : UnityEvent<T> { }
+        [SerializeField] public Handlers handlers;
+
+        protected LocalizationReceiver(LocalizationTag localizationTag) : base(localizationTag) { }
+
+        public override void SetLocalization(object resource)
         {
-            for (int i = 0; i < components.Length; i++)
-            {
-                SetLocalization(components[i], resource);
-            }
+            handlers?.Invoke((T)resource);
+        }
+    }
+
+#if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(LocalizationReceiver))]
+    public class HumanPropertyDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(rect, label, property);
+            var heandlers = property.FindPropertyRelative("handlers");
+            EditorGUI.PropertyField(rect, heandlers, label, true);
+            EditorGUI.EndProperty();
         }
 
-        protected abstract void SetLocalization(Component receiver, object resource);
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return 150f;
+        }
     }
+#endif
 }

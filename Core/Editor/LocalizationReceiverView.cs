@@ -22,9 +22,9 @@ namespace ResourceLocalization
         {
             EditorGUI.indentLevel++;
             var rect = EditorGUILayout.BeginVertical();
-            receiver.Components = ExtendedEditorGUI.ArrayFields(receiver.Components, "Components", ref receiver.open, true, receiver.Types);
-            EditorGUILayout.EndVertical();
-            ExtendedEditorGUI.ChecDragAndDrops(rect, receiver.Types);
+        //    receiver.Components = ExtendedEditorGUI.ArrayFields(receiver.Components, "Components", ref receiver.open, true, receiver.Types);
+        //    EditorGUILayout.EndVertical();
+        //    ExtendedEditorGUI.ChecDragAndDrops(rect, receiver.Types);
             EditorGUI.indentLevel--;
         }
     }
