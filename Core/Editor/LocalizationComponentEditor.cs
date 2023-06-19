@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace ResourceLocalization
@@ -25,9 +24,10 @@ namespace ResourceLocalization
             var buttonText = string.IsNullOrEmpty(component.Tag.Name)? "None" : component.Tag.Name;
             if (GUILayout.Button(buttonText, EditorStyles.popup))
             {
-                var provider = CreateInstance<LocalizationSearchWindow>();
-                provider.Component = component;
-                SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), provider);
+                // var provider = CreateInstance<LocalizationSearchWindow>();
+                // provider.Component = component;
+
+                ContextWindow.Open(new ContextWindow.Context(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), new TestView());
             }
 
             GUILayout.EndHorizontal();

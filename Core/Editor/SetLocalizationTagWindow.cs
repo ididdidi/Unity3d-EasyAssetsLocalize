@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+
 namespace ResourceLocalization
 {
     public class SetLocalizationTagWindow : EditorWindow
