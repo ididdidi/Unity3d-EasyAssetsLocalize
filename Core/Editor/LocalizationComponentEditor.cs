@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
-using UnityEditor.Test;
 using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
@@ -25,7 +25,8 @@ namespace ResourceLocalization
             var buttonText = string.IsNullOrEmpty(component.Tag.Name)? "None" : component.Tag.Name;
             if (GUILayout.Button(buttonText, EditorStyles.popup))
             {
-                SearchDropDownWindow.Show<SearchDropDownWindow>(GUIUtility.GUIToScreenPoint(Event.current.mousePosition), Vector2.zero, component);
+                var searchView = new SearchTreeView(new LocalizationSearchProvider(component));
+                DropDownWindow.Show(GUIUtility.GUIToScreenPoint(Event.current.mousePosition), Vector2.zero, searchView);
             }
             GUILayout.EndHorizontal();
         }
