@@ -76,7 +76,7 @@ namespace ResourceLocalization
 				{
 					if (foldoutItems[i] = EditorGUILayout.Foldout(foldoutItems[i], localizationTags[i].Name))
 					{
-						LocalizationResourceView.DisplayResources(localizationTags[i], languages);
+					//	LocalizationResourceView.DisplayResources(localizationTags[i], languages);
 					}
 				}
 				EditorGUI.indentLevel--;

@@ -189,7 +189,7 @@ namespace ResourceLocalization
 		/// <param name="reorderable"></param>
 		private void AddLocalisatrion(ReorderableList reorderable)
 		{
-			LocalizationTagCreateWindow.GetInstance(LocalizationStorage.AddLocalizationTag);
+			//LocalizationTagCreateWindow.GetInstance(LocalizationStorage.AddLocalizationTag);
 		}
 
 		/// <summary>

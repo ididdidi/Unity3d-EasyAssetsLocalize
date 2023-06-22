@@ -89,17 +89,17 @@ namespace ResourceLocalization
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        public LocalizationTag GetLocalizationTag(string id)
-        {
-            for(int i=0; i < localizationTags.Count; i++)
-            {
-                if (localizationTags[i].ID.Equals(id))
-                {
-                    return localizationTags[i];
-                } 
-            }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
-        }
+    //    public LocalizationTag GetLocalizationTag(string id)
+    //    {
+    //        for(int i=0; i < localizationTags.Count; i++)
+    //        {
+    //            if (localizationTags[i].ID.Equals(id))
+    //            {
+    //                return localizationTags[i];
+    //            } 
+    //        }
+    //        throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
+    //    }
 
         /// <summary>
         /// Serves to insert localization at the specified index.
@@ -122,16 +122,16 @@ namespace ResourceLocalization
             version++;
         }
 
-        public object GetLocalizationResource(string id, Language language)
-        {
-            for (int i = 0; i < localizationTags.Count; i++)
-            {
-                if (localizationTags[i].ID.Equals(id))
-                {
-                    return localizationTags[i].Resources[languages.IndexOf(language)].Data;
-                }
-            }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
-        }
+    //    public object GetLocalizationResource(string id, Language language)
+    //    {
+    //        for (int i = 0; i < localizationTags.Count; i++)
+    //        {
+    //            if (localizationTags[i].ID.Equals(id))
+    //            {
+    //                return localizationTags[i].Resources[languages.IndexOf(language)].Data;
+    //            }
+    //        }
+    //        throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
+    //    }
     }
 }

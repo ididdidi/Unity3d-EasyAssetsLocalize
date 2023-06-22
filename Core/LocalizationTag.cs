@@ -9,14 +9,14 @@ namespace ResourceLocalization
     [System.Serializable]
     public class LocalizationTag
     {
-        [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");
+    //    [SerializeField] private string id = System.Guid.NewGuid().ToString().Replace("-", "");
         [SerializeField] private string name = "None";
         [SerializeReference] private List<IResource> resources = new List<IResource>();
 
         /// <summary>
         /// Tag ID.
         /// </summary>
-        public string ID { get => id; }
+    //    public string ID { get => id; }
         /// <summary>
         /// Tag name.
         /// </summary>
