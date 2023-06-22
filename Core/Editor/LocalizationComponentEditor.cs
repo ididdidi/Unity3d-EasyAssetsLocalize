@@ -26,7 +26,7 @@ namespace ResourceLocalization
             if (GUILayout.Button(buttonText, EditorStyles.popup))
             {
                 var searchView = new SearchTreeView(new LocalizationSearchProvider(component));
-                DropDownWindow.Show(GUIUtility.GUIToScreenPoint(Event.current.mousePosition), Vector2.zero, searchView);
+                DropDownWindow.Show(searchView, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
             }
             GUILayout.EndHorizontal();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace ResourceLocalization
@@ -9,7 +8,7 @@ namespace ResourceLocalization
         [System.Serializable] public class Handler : UnityEvent<string> { }
         [SerializeField] private Handler handler;
 
-        public override Type Type => typeof(string);
+        public override System.Type Type => typeof(string);
 
         public override void SetLocalization(object data)
         {
