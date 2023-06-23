@@ -5,15 +5,15 @@ using UnityExtended;
 namespace ResourceLocalization
 {
     /// <summary>
-    /// Class for displaying localization controller fields and tags in a reorderable list.
+    /// Class for displaying localization component.
     /// </summary>
-    [CustomEditor(typeof(StringLocalization))]
+    [CustomEditor(typeof(LocalizationComponent))]
     public class LocalizationComponentEditor : Editor
     {
-        StringLocalization component;
+        LocalizationComponent component;
         private void OnEnable()
         {
-            component = target as StringLocalization;
+            component = target as LocalizationComponent;
         }
 
         public override void OnInspectorGUI()
