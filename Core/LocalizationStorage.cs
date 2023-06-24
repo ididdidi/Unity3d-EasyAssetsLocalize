@@ -65,6 +65,8 @@ namespace ResourceLocalization
         /// <returns></returns>
         public bool ConteinsLanguage(Language language) => languages.Contains(language);
 
+        public bool ContainsLocalizationTag(LocalizationTag tag) => localizationTags.Contains(tag);
+
         /// <summary>
         /// Adds a new localization object to the repository.
         /// </summary>
@@ -87,17 +89,17 @@ namespace ResourceLocalization
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-    //    public LocalizationTag GetLocalizationTag(string id)
-    //    {
-    //        for(int i=0; i < localizationTags.Count; i++)
-    //        {
-    //            if (localizationTags[i].ID.Equals(id))
-    //            {
-    //                return localizationTags[i];
-    //            } 
-    //        }
-    //        throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
-    //    }
+        public LocalizationTag GetLocalizationTag(string id)
+        {
+            for(int i=0; i < localizationTags.Count; i++)
+            {
+                if (localizationTags[i].ID.Equals(id))
+                {
+                    return localizationTags[i];
+                } 
+            }
+            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
+        }
 
         /// <summary>
         /// Serves to insert localization at the specified index.

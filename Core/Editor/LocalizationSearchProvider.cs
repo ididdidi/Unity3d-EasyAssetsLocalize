@@ -6,17 +6,24 @@ using UnityExtended;
 
 public class LocalizationSearchProvider : ISearchTreeProvider
 {
-    private LocalizationComponent Component { get; }
+    private LocalizationStorage Storage { get; }
+    private System.Action<LocalizationTag> Action;
+    private System.Type Type { get; }
 
-    public LocalizationSearchProvider(LocalizationComponent component) => Component = component;
+    public LocalizationSearchProvider(LocalizationStorage storage, System.Action<LocalizationTag> action, System.Type type = null)
+    {
+        Storage = storage;
+        Action = action;
+        Type = type;
+    }
 
     public SearchTreeEntry[] CreateSearchTree()
     {
-        if (!Component) { throw new System.ArgumentNullException(nameof(Component)); }
+        if (!Storage) { throw new System.ArgumentNullException(nameof(Component)); }
 
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
         searchList.Add(new SearchTreeGroupEntry(new GUIContent("Localizations")));
-        var tags = new List<LocalizationTag>(Component.Storage.LocalizationTags);
+        var tags = new List<LocalizationTag>(Storage.LocalizationTags);
         tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
         GUIContent content;
@@ -24,7 +31,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
             for (int i = 0; i < tags.Count; i++)
             {
                 var data = tags[i].Resources[0].Data;
-                if (!Component.Type.IsAssignableFrom(tags[i].Type)) { continue; }
+                if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
                 if (tags[i].Type.IsAssignableFrom(typeof(string)))
                 {
                     content = new GUIContent(tags[i].Name, EditorGUIUtility.IconContent("Text Icon").image);
@@ -47,7 +54,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 
     public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry)
     {
-        Component.Tag = SearchTreeEntry.Data as LocalizationTag;
+        Action?.Invoke(SearchTreeEntry.Data as LocalizationTag);
         return true;
     }
 

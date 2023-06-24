@@ -25,10 +25,20 @@ namespace ResourceLocalization
             var buttonText = string.IsNullOrEmpty(component.Tag.Name)? "None" : component.Tag.Name;
             if (GUILayout.Button(buttonText, EditorStyles.popup))
             {
-                var searchView = new SearchTreeView(new LocalizationSearchProvider(component));
+                var searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationManager.LocalizationStorage, SetTag, component.Type));
                 DropDownWindow.Show(searchView, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
             }
             GUILayout.EndHorizontal();
+        }
+
+        private void SetTag(LocalizationTag tag) 
+        {
+            if (!LocalizationManager.LocalizationStorage.ContainsLocalizationTag(tag))
+            {
+                LocalizationManager.LocalizationStorage.AddLocalizationTag(tag);
+            }
+            component.Tag = tag;
+            EditorUtility.SetDirty(component);
         }
     }
 }
