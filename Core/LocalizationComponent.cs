@@ -4,7 +4,7 @@ namespace ResourceLocalization
 {
     public abstract class LocalizationComponent : MonoBehaviour
     {
-        [field: SerializeField] public LocalizationTag Tag { get; set; }
+        [field: SerializeField] public string ID { get; set; }
 
         public LocalizationStorage Storage { get => LocalizationManager.LocalizationStorage; }
 

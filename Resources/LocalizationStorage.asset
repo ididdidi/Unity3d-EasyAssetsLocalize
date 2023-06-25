@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 109
+  version: 110
   languages:
   - <Name>k__BackingField: Russian
   - <Name>k__BackingField: English
@@ -22,13 +22,26 @@ MonoBehaviour:
     resources:
     - id: 0
     - id: 1
+  - id: 3feb87393e89438c831cd1badfbf089d
+    name: New Text
+    resources:
+    - id: 2
+    - id: 3
   references:
     version: 1
     00000000:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
-        data: Text
+        data: Text1
     00000001:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Text1
+    00000002:
+      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
+      data:
+        data: Text
+    00000003:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
         data: Text
