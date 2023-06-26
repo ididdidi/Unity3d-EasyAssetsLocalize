@@ -30,7 +30,7 @@ namespace ResourceLocalization
 			DrawDefaultInspector();
 			UpdateLocalizations();
 			DrowLocalizations();
-			DrowButton();
+			DrawButton();
 		}
 
 		/// <summary>
@@ -50,17 +50,13 @@ namespace ResourceLocalization
 		/// <summary>
 		/// Button to display storage resources in a separate window.
 		/// </summary>
-		private void DrowButton()
+		private void DrawButton()
 		{
-			GUILayout.BeginHorizontal();
-			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Edit in window", GUILayout.Width(240f), GUILayout.Height(24f)))
+			if (UnityExtended.ExtendedEditorGUI.CenterButton("Edit in window"))
 			{
 				LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
 				window.LocalizationStorage = storage;
 			}
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
 		}
 
 		/// <summary>

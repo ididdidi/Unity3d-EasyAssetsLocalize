@@ -122,16 +122,10 @@ namespace ResourceLocalization
             version++;
         }
 
-    //    public object GetLocalizationResource(string id, Language language)
-    //    {
-    //        for (int i = 0; i < localizationTags.Count; i++)
-    //        {
-    //            if (localizationTags[i].ID.Equals(id))
-    //            {
-    //                return localizationTags[i].Resources[languages.IndexOf(language)].Data;
-    //            }
-    //        }
-    //        throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
-    //    }
+        public object GetLocalizationData(string id, Language language)
+        {
+            var localization = GetLocalizationTag(id);
+            return localization.Resources[languages.IndexOf(language)].Data;
+        }
     }
 }

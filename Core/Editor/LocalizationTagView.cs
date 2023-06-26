@@ -16,18 +16,18 @@ namespace ResourceLocalization
 
         public static void DrawResources(LocalizationTag tag)
         {
-            var language = LocalizationManager.Language.Name;
+            var languages = LocalizationManager.LocalizationStorage.Languages;
             var isString = tag.Type.IsAssignableFrom(typeof(string));
             for (int i = 0; i < tag.Resources.Count; i++)
             {
                 if (isString)
                 {
-                    EditorGUILayout.LabelField(language);
+                    EditorGUILayout.LabelField(languages[i].Name);
                     tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, GUILayout.Height(50f));
                 }
                 else
                 {
-                    tag.Resources[i].Data = EditorGUILayout.ObjectField(language, (Object)tag.Resources[i].Data, tag.Type, false);
+                    tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].Name, (Object)tag.Resources[i].Data, tag.Type, false);
                 }
             }
         }

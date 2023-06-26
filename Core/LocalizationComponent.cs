@@ -4,22 +4,22 @@ namespace ResourceLocalization
 {
     public abstract class LocalizationComponent : MonoBehaviour
     {
-        [field: SerializeField] public string ID { get; set; }
+        [field: SerializeField, HideInInspector] public string ID { get; set; }
 
         public LocalizationStorage Storage { get => LocalizationManager.LocalizationStorage; }
 
         public abstract System.Type Type { get; }
 
-        public abstract void SetLocalization(object data);
+        public abstract void SetLocalizationData(object data);
 
         private void Awake()
         {
-            LocalizationManager.AddLocalizationComponent(this);
+            if (!string.IsNullOrEmpty(ID)) { LocalizationManager.AddLocalizationComponent(this); }
         }
 
         private void OnDestroy()
         {
-            LocalizationManager.RemoveLocalizationComponent(this);
+            if (!string.IsNullOrEmpty(ID)) { LocalizationManager.RemoveLocalizationComponent(this); }
         }
     }
 }

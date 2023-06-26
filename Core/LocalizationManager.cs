@@ -36,7 +36,7 @@ namespace ResourceLocalization
         public static void AddLocalizationComponent(LocalizationComponent component)
         {
             if(!components.Contains(component)) { components.Add(component); }
-           // component.SetLocalization(LocalizationStorage.GetLocalizationResource(component.ID, Language));
+            component.SetLocalizationData(LocalizationStorage.GetLocalizationData(component.ID, Language));
         }
 
         public static void RemoveLocalizationComponent(LocalizationComponent component)
@@ -93,7 +93,7 @@ namespace ResourceLocalization
             Language = language;
             for (int i = 0; i < components.Count; i++)
             {
-               // components[i].SetLocalization(LocalizationStorage.GetLocalizationResource(components[i].ID, Language));
+                components[i].SetLocalizationData(LocalizationStorage.GetLocalizationData(components[i].ID, Language));
             }
         }
     }

@@ -6,13 +6,10 @@ namespace ResourceLocalization
     public class SpriteLocalization : LocalizationComponent
     {
         [System.Serializable] public class Handler : UnityEvent<Sprite> { }
-        [SerializeField] private Handler handler;
+        [SerializeField, HideInInspector] private Handler handler;
 
         public override System.Type Type => typeof(Sprite);
 
-        public override void SetLocalization(object data)
-        {
-            handler?.Invoke((Sprite)data);
-        }
+        public override void SetLocalizationData(object data) => handler?.Invoke((Sprite) data);
     }
 }

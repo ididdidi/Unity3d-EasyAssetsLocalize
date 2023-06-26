@@ -12,6 +12,7 @@ namespace ResourceLocalization
     {
         private LocalizationComponent Component { get; set; }
         private LocalizationTag Tag { get; set; }
+
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
@@ -22,6 +23,7 @@ namespace ResourceLocalization
         {
             DrawDefaultInspector();
             DrawLocalization();
+            DrawHandler();
         }
 
         private void SelectTag(LocalizationTag tag) 
@@ -37,29 +39,37 @@ namespace ResourceLocalization
         
         private void SetTag(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                Tag = LocalizationManager.LocalizationStorage.GetLocalizationTag(id);
-            }
+            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.LocalizationStorage.GetLocalizationTag(id); }
         }
 
         private void DrawLocalization()
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Localization Tag");
-            var buttonText = string.IsNullOrEmpty(Tag?.Name) ? "None" : Tag.Name;
-            if (GUILayout.Button(buttonText, EditorStyles.popup))
-            {
-                var searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationManager.LocalizationStorage, SelectTag, Component.Type));
-                DropDownWindow.Show(searchView, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
-            }
-            GUILayout.EndHorizontal();
-
             if (Tag != null)
             {
-                Tag.Name = EditorGUILayout.TextField("Name", Tag.Name);
-                LocalizationTagView.DrawResources(Tag); 
+                Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
+                LocalizationTagView.DrawResources(Tag);
             }
+
+            if (ExtendedEditorGUI.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }
+        }
+
+        private void SetLocalization()
+        {
+            var searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationManager.LocalizationStorage, SelectTag, Component.Type));
+            DropDownWindow.Show(searchView, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
+        }
+
+
+        private SerializedProperty handler;
+        private void DrawHandler()
+        {
+            serializedObject.Update();
+            if (Tag != null)
+            {
+                if (handler == null) { handler = serializedObject.FindProperty("handler"); }
+                if (handler != null) { EditorGUILayout.PropertyField(handler); }
+            }
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }
