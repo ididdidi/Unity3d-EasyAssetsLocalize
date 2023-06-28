@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
@@ -31,6 +32,8 @@ namespace ResourceLocalization
 			UpdateLocalizations();
 			DrowLocalizations();
 			DrawButton();
+
+
 		}
 
 		/// <summary>
@@ -52,10 +55,24 @@ namespace ResourceLocalization
 		/// </summary>
 		private void DrawButton()
 		{
-			if (UnityExtended.ExtendedEditorGUI.CenterButton("Edit in window"))
+			if (ExtendedEditorGUI.CenterButton("Edit in window"))
 			{
-				LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
-				window.LocalizationStorage = storage;
+				//LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
+				//window.LocalizationStorage = storage;
+				//
+
+				SimpleWindow.Show(new TwoPaneView(
+					new SearchTreeView(new LocalizationSearchProvider(storage, null)),
+					new TestView(), 3f, 5f));
+			}
+		}
+
+		class TestView : IEditorView
+		{
+			public void OnGUI(IContext context)
+			{
+				//GUI.Label(context.position, GUIContent.none, "grey_border");
+				EditorGUI.DrawRect(context.position, Color.grey);
 			}
 		}
 

@@ -27,7 +27,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
         GUIContent content;
-        for (int j = 0; j < 1000; j++)
+       // for (int j = 0; j < 1000; j++)
             for (int i = 0; i < tags.Count; i++)
             {
                 var data = tags[i].Resources[0].Data;
