@@ -11,7 +11,7 @@ namespace ResourceLocalization
     {
         private LocalizationStorage storage;
         private int storageVersion;
-        private SearchField searchField = new SearchField();
+     //   private SearchField searchField = new SearchField();
         private string key ="";
 
         public string Key { get => key; set => key = value; }
@@ -29,14 +29,14 @@ namespace ResourceLocalization
         /// Method for rendering the search field.
         /// </summary>
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
-        public bool IsChanged() => IsChanged(searchField.OnGUI(Key));
+    //    public bool IsChanged() => IsChanged(searchField.OnGUI(Key));
 
         /// <summary>
         /// Method for rendering the search field.
         /// </summary>
         /// <param name="rect"><see>Rect</see> of the search field</param>
         /// <returns><see>True</see> if there were changes in the field in the current frame</returns>
-        public bool IsChanged(Rect rect) => IsChanged(searchField.OnGUI(rect, Key));
+    //    public bool IsChanged(Rect rect) => IsChanged(searchField.OnGUI(rect, Key));
 
         /// <summary>
         /// Method for rendering the search field.

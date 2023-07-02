@@ -38,7 +38,7 @@ namespace ResourceLocalization
                 localizationTags[i].Resources.Add(localizationTags[i].Resources[0].Clone());
             }
             languages.Add(language);
-            version++;
+            ChangeVersion();
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ResourceLocalization
                 localizationTags[i].Resources.RemoveAt(index);
             }
             languages.RemoveAt(index);
-            version++;
+            ChangeVersion();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ResourceLocalization
                 tag.Resources.Add(tag.Resources[i - 1].Clone());
             }
             localizationTags.Add(tag);
-            version++;
+            ChangeVersion();
             return;
         }
 
@@ -109,7 +109,7 @@ namespace ResourceLocalization
         public void InsertLocalizationTag(int index, LocalizationTag localizationTag)
         {
             localizationTags.Insert(index, localizationTag);
-            version++;
+            ChangeVersion();
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace ResourceLocalization
         public void RemoveLocalizationTag(int index)
         {
             localizationTags.RemoveAt(index);
-            version++;
+            ChangeVersion();
         }
 
         public object GetLocalizationData(string id, Language language)
@@ -127,5 +127,7 @@ namespace ResourceLocalization
             var localization = GetLocalizationTag(id);
             return localization.Resources[languages.IndexOf(language)].Data;
         }
+
+        public void ChangeVersion() => version++;
     }
 }

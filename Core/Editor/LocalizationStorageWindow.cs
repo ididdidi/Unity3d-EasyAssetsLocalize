@@ -1,43 +1,60 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityExtended;
 
 namespace ResourceLocalization
 {
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.
 	/// </summary>
-	public class LocalizationStorageWindow : EditorWindow
+	public class LocalizationStorageWindow : EditorWindow, IContext
 	{
-		private LocalizationStorage localizationStorage;
-		private ReorderableLocalizationList localizationsList;
-		private Vector2 scrollPosition = Vector2.zero;
+		public const float MIN_WIDTH = 720f;
+		public const float MIN_HIGHT = 320f;
 
-		private Vector2 Size { set => this.minSize = this.maxSize = value; }
+		public Color background = new Color(0.22f, 0.22f, 0.22f);
 
-		public LocalizationStorage LocalizationStorage { get => localizationStorage; set => CreateLocalizationList(localizationStorage = value); }
+		// Data renderer in a editor window
+		public IEditorView View { get; set; }
+		private SearchTreeView searchView;
+		private int storageVersion;
 		
-		private void CreateLocalizationList(LocalizationStorage localizationStorage)
+		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.LocalizationStorage; }
+
+		private void OnEnable()
 		{
-			localizationsList = new ReorderableLocalizationList(localizationStorage);
-			Size = localizationsList.GetSize();
+			var localizationView = new LocalizationView(LocalizationStorage);
+			searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationStorage, (tag) => { localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag));
+			View = new TwoPaneView(searchView, localizationView, 3f, 5f);
 		}
 
-		void OnGUI()
+		/// <summary>
+		/// Creation of initialization and display of a window on the monitor screen.
+		/// </summary>
+		public static LocalizationStorageWindow Show(float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
-			if (localizationsList == null && localizationStorage) {
-				localizationsList = new ReorderableLocalizationList(localizationStorage);
-				Size = localizationsList.GetSize();
-			}
+			var instance = GetWindow<LocalizationStorageWindow>(LocalizationStorage.name);
 
-			scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-			localizationsList?.DoLayoutList();
-			EditorGUILayout.EndScrollView();
+			instance.hideFlags = HideFlags.HideAndDontSave;
+			instance.wantsMouseMove = true;
+			instance.minSize = new Vector2(minWidth, minHight);
 
-			if (GUI.changed)
+			return instance;
+		}
+
+		/// <summary>
+		/// Method for rendering window content
+		/// </summary>
+		internal void OnGUI()
+		{
+			if(searchView != null && storageVersion != LocalizationStorage.Version)
 			{
-				EditorUtility.SetDirty(localizationStorage);
-				Size = localizationsList.GetSize();
+				searchView.IsChanged = true;
+				storageVersion = LocalizationStorage.Version;
 			}
+			View?.OnGUI(this);
 		}
-    }
+
+		public new void Close() { }
+	}
 }

@@ -6,14 +6,20 @@ using UnityExtended;
 
 public class LocalizationSearchProvider : ISearchTreeProvider
 {
+    public delegate bool Handler(LocalizationTag tag);
+    private Handler handler;
+
+    public delegate void OnFocus(LocalizationTag tag);
+    private OnFocus onFocus;
+
     private LocalizationStorage Storage { get; }
-    private System.Action<LocalizationTag> Action;
     private System.Type Type { get; }
 
-    public LocalizationSearchProvider(LocalizationStorage storage, System.Action<LocalizationTag> action, System.Type type = null)
+    public LocalizationSearchProvider(LocalizationStorage storage, Handler handler, OnFocus onFocus = null, System.Type type = null)
     {
         Storage = storage;
-        Action = action;
+        this.handler = handler;
+        this.onFocus = onFocus;
         Type = type;
     }
 
@@ -27,7 +33,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
         GUIContent content;
-       // for (int j = 0; j < 1000; j++)
+        for (int j = 0; j < 10; j++)
             for (int i = 0; i < tags.Count; i++)
             {
                 var data = tags[i].Resources[0].Data;
@@ -52,15 +58,13 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         return searchList.ToArray();
     }
 
-    public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry)
-    {
-        Action?.Invoke(SearchTreeEntry.Data as LocalizationTag);
-        return true;
-    }
+    public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data as LocalizationTag);
+
+    public void OnFocusEntry(SearchTreeEntry entry) => onFocus?.Invoke(entry.Data as LocalizationTag);
 
     private void GetNewItems(List<SearchTreeEntry> searchList)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 1; i++)
         {
             //  if (!Component.Type.IsAssignableFrom(tags[i].Type)) { continue; }
             var content = new GUIContent("New Text", EditorGUIUtility.IconContent("Text Icon").image);

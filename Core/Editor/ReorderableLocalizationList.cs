@@ -87,10 +87,10 @@ namespace ResourceLocalization
 		private float DrawSearchField(Rect rect, float dX)
 		{
 			var width = fieldWidth - 6f;
-			if (search.IsChanged(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX)))
-			{
-				list = search.GetResult();
-			}
+		//	if (search.IsChanged(ExtendedEditorGUI.GetNewRect(rect, new Vector2(width, rect.height), padding, dX)))
+		//	{
+		//		list = search.GetResult();
+		//	}
 			return dX + width;
 		}
 

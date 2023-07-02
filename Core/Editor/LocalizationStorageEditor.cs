@@ -8,15 +8,16 @@ namespace ResourceLocalization
 	/// Responsible for presenting the Localization Storage in the inspector.
 	/// </summary>
 	[CustomEditor(typeof(LocalizationStorage))]
-	public class LocalizationStorageEditor : Editor
+	public partial class LocalizationStorageEditor : Editor
 	{
 		private LocalizationStorage storage;
 		private int storageVersion;
 
 		private bool foldout;
-		private Language[] languages;
+		//private Language[] languages;
 		private LocalizationTag[] localizationTags;
 		private bool[] foldoutItems;
+		private string filter = string.Empty;
 
 		/// <summary>
 		/// Storage link caching.
@@ -33,7 +34,12 @@ namespace ResourceLocalization
 			DrowLocalizations();
 			DrawButton();
 
-
+			EditorGUI.BeginChangeCheck();
+			filter = GUILayout.TextField(filter, 10);
+			if (EditorGUI.EndChangeCheck())
+			{
+				GUIUtility.keyboardControl = 0;
+			}
 		}
 
 		/// <summary>
@@ -43,7 +49,7 @@ namespace ResourceLocalization
 		{
 			if (localizationTags == null || storageVersion != storage.Version)
 			{
-				languages = storage.Languages;
+			//	languages = storage.Languages;
 				localizationTags = storage.LocalizationTags;
 				foldoutItems = new bool[localizationTags.Length];
 				storageVersion = storage.Version;
@@ -57,22 +63,7 @@ namespace ResourceLocalization
 		{
 			if (ExtendedEditorGUI.CenterButton("Edit in window"))
 			{
-				//LocalizationStorageWindow window = (LocalizationStorageWindow)EditorWindow.GetWindow(typeof(LocalizationStorageWindow), false, storage.name);
-				//window.LocalizationStorage = storage;
-				//
-
-				SimpleWindow.Show(new TwoPaneView(
-					new SearchTreeView(new LocalizationSearchProvider(storage, null)),
-					new TestView(), 3f, 5f));
-			}
-		}
-
-		class TestView : IEditorView
-		{
-			public void OnGUI(IContext context)
-			{
-				//GUI.Label(context.position, GUIContent.none, "grey_border");
-				EditorGUI.DrawRect(context.position, Color.grey);
+				LocalizationStorageWindow.Show();
 			}
 		}
 

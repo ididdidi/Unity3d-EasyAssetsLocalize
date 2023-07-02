@@ -16,6 +16,13 @@ namespace ResourceLocalization
 
         public static void DrawResources(LocalizationTag tag)
         {
+            var rect = GUILayoutUtility.GetRect(100f, GetHeight(tag));
+
+            EditorGUI.BeginChangeCheck();
+            tag.Name = EditorGUI.TextField(rect, "Localization name", tag.Name);
+            var controlID = ExtendedEditorGUI.GetLastControlId();
+            controlID.ReleaseOnClick();
+
             var languages = LocalizationManager.LocalizationStorage.Languages;
             var isString = tag.Type.IsAssignableFrom(typeof(string));
             for (int i = 0; i < tag.Resources.Count; i++)
@@ -30,6 +37,19 @@ namespace ResourceLocalization
                     tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].Name, (Object)tag.Resources[i].Data, tag.Type, false);
                 }
             }
+        }
+
+        public static float GetHeight(LocalizationTag tag)
+        {
+            var height = EditorGUIUtility.singleLineHeight;
+
+            var isString = tag.Type.IsAssignableFrom(typeof(string));
+            for (int i = 0; i < tag.Resources.Count; i++)
+            {
+                if (isString) { height += EditorGUIUtility.singleLineHeight; }
+                height += 50f;
+            }
+            return height;
         }
     }
 }
