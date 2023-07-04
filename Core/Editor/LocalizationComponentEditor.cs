@@ -12,6 +12,7 @@ namespace ResourceLocalization
     {
         private LocalizationComponent Component { get; set; }
         private LocalizationTag Tag { get; set; }
+        private LocalizationStorage Storage { get => LocalizationManager.LocalizationStorage; }
 
         private void OnEnable()
         {
@@ -28,9 +29,9 @@ namespace ResourceLocalization
 
         private bool SelectTag(LocalizationTag tag) 
         {
-            if (!LocalizationManager.LocalizationStorage.ContainsLocalizationTag(tag))
+            if (!Storage.ContainsLocalizationTag(tag))
             {
-                LocalizationManager.LocalizationStorage.AddLocalizationTag(tag);
+                Storage.AddLocalizationTag(tag);
             }
             Component.ID = tag.ID;
             SetTag(tag.ID);
@@ -49,11 +50,8 @@ namespace ResourceLocalization
             {
                 EditorGUI.BeginChangeCheck();
                 Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    LocalizationManager.LocalizationStorage?.ChangeVersion();
-                }
                 LocalizationView.DrawResources(Tag, LocalizationManager.LocalizationStorage?.Languages, GUILayout.Height(50f));
+                if (EditorGUI.EndChangeCheck()) { LocalizationManager.LocalizationStorage?.ChangeVersion(); }
             }
 
             if (ExtendedEditorGUI.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }
@@ -61,8 +59,7 @@ namespace ResourceLocalization
 
         private void SetLocalization()
         {
-            var searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationManager.LocalizationStorage, SelectTag, null, Component.Type));
-            DropDownWindow.Show(searchView, GUIUtility.GUIToScreenPoint(Event.current.mousePosition));
+            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SelectTag, null, Component.Type));
         }
 
 

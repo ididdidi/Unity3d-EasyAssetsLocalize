@@ -4,9 +4,9 @@ using UnityExtended;
 
 namespace ResourceLocalization
 {
-	public class LocalizationView : IEditorView
+	public class LocalizationView
 	{
-		private LocalizationTag currentTag;
+		private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
 		private LocalizationStorage LocalizationStorage { get; }
 		public LocalizationTag Tag { get; set; }
 		private Vector2 scrollPosition = Vector2.zero;
@@ -16,43 +16,52 @@ namespace ResourceLocalization
 			LocalizationStorage = storage ?? throw new System.ArgumentNullException(nameof(storage));
 		}
 
-		public void OnGUI(IContext context)
+		public void OnGUI(Rect position)
 		{
-			GUI.Label(context.position, GUIContent.none, "grey_border");
+			EditorGUI.DrawRect(position, background);
+			GUI.Label(position, GUIContent.none, "grey_border");
 
 			if (Tag != null)
 			{
-				if(currentTag != Tag)
+				var changeCheck = LocalizationStorage.ContainsLocalizationTag(Tag);
+				try
 				{
-					currentTag = Tag;
-					context.Repaint();
-				}
+					GUILayout.BeginArea(position);
+					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
+					DrawHeader(Tag);
 
-				EditorGUI.BeginChangeCheck();
-					GUILayout.BeginArea(context.position);
-						GUILayout.Space(2);
-						GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
-							DrawLocalizationName(Tag);
-						GUILayout.EndHorizontal();
-						ExtendedEditorGUI.DrawLine(Color.black);
-						scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
-							GUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-								DrawResources(Tag, LocalizationStorage.Languages);
-							GUILayout.EndVertical();
-						GUILayout.EndScrollView();
+					scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
+					GUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
+					DrawResources(Tag, LocalizationStorage.Languages);
+					GUILayout.EndVertical();
+					GUILayout.EndScrollView();
+
+					if (changeCheck && EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
 					GUILayout.EndArea();
-				if (EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
+				}
+				catch (System.ArgumentException){ }
 			}
 		}
 
-		public static void DrawLocalizationName(LocalizationTag localization)
+		private void DrawHeader(LocalizationTag localization)
 		{
+			GUILayout.Space(2);
+			GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
 			GUILayout.Label("Name");
-				GUILayout.FlexibleSpace();
-					localization.Name = GUILayout.TextField(localization.Name);
-					ExtendedEditorGUI.GetLastControlId().ReleaseOnClick();
-				GUILayout.FlexibleSpace();
-			GUILayout.Button("Delete");
+			GUILayout.FlexibleSpace();
+			localization.Name = GUILayout.TextField(localization.Name);
+			GUILayout.FlexibleSpace();
+
+			if (LocalizationStorage.ContainsLocalizationTag(localization))
+			{
+				if (GUILayout.Button("Delete")) { LocalizationStorage.RemoveLocalizationTag(localization); EditorGUI.FocusTextInControl(null); }
+			}
+			else
+			{
+				if (GUILayout.Button("Add")) { LocalizationStorage.AddLocalizationTag(localization); EditorGUI.FocusTextInControl(null); }
+			}
+			GUILayout.EndHorizontal();
+			ExtendedEditorGUI.DrawLine(Color.black);
 		}
 
 		public static void DrawResources(LocalizationTag tag, Language[] languages, params GUILayoutOption[] options)
@@ -66,7 +75,6 @@ namespace ResourceLocalization
 				{
 					EditorGUILayout.LabelField(languages[i].Name);
 					tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, style, options);
-					ExtendedEditorGUI.GetLastControlId().ReleaseOnClick();
 				}
 				else
 				{

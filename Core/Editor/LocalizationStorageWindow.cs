@@ -7,7 +7,7 @@ namespace ResourceLocalization
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.
 	/// </summary>
-	public class LocalizationStorageWindow : EditorWindow, IContext
+	public class LocalizationStorageWindow : EditorWindow
 	{
 		public const float MIN_WIDTH = 720f;
 		public const float MIN_HIGHT = 320f;
@@ -15,17 +15,17 @@ namespace ResourceLocalization
 		public Color background = new Color(0.22f, 0.22f, 0.22f);
 
 		// Data renderer in a editor window
-		public IEditorView View { get; set; }
 		private SearchTreeView searchView;
+		private LocalizationView localizationView;
 		private int storageVersion;
 		
 		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.LocalizationStorage; }
 
 		private void OnEnable()
 		{
-			var localizationView = new LocalizationView(LocalizationStorage);
-			searchView = new SearchTreeView(new LocalizationSearchProvider(LocalizationStorage, (tag) => { localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag));
-			View = new TwoPaneView(searchView, localizationView, 3f, 5f);
+			localizationView = new LocalizationView(LocalizationStorage);
+			var provider = new LocalizationSearchProvider(LocalizationStorage, (tag) => { localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag);
+			searchView = new SearchTreeView(this, provider);
 		}
 
 		/// <summary>
@@ -52,9 +52,13 @@ namespace ResourceLocalization
 				searchView.IsChanged = true;
 				storageVersion = LocalizationStorage.Version;
 			}
-			View?.OnGUI(this);
-		}
 
-		public new void Close() { }
+			var rect = new Rect(0, 0, 320, position.height);
+			searchView?.OnGUI(rect);
+
+			rect.x = 319;
+			rect.width = position.width - 320;
+			localizationView?.OnGUI(rect);
+		}
 	}
 }
