@@ -23,9 +23,12 @@ namespace ResourceLocalization
 
 		private void OnEnable()
 		{
-			localizationView = new LocalizationView(LocalizationStorage);
+			localizationView = new LocalizationView(this, LocalizationStorage);
 			var provider = new LocalizationSearchProvider(LocalizationStorage, (tag) => { localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag);
 			searchView = new SearchTreeView(this, provider);
+
+			//hideFlags = HideFlags.HideAndDontSave;
+			//wantsMouseMove = true;
 		}
 
 		/// <summary>
@@ -35,8 +38,6 @@ namespace ResourceLocalization
 		{
 			var instance = GetWindow<LocalizationStorageWindow>(LocalizationStorage.name);
 
-			instance.hideFlags = HideFlags.HideAndDontSave;
-			instance.wantsMouseMove = true;
 			instance.minSize = new Vector2(minWidth, minHight);
 
 			return instance;
