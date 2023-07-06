@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityExtended;
 
@@ -12,9 +13,10 @@ namespace ResourceLocalization
 		private Vector2 scrollPosition = Vector2.zero;
 
 		EditorWindow window;
-		GUIContent content;
+		GUIContent noticeContent;
 		long lastTime;
-		float currentAnimation, targetAnimation, wait = 0f;
+		bool notice;
+		float curentNotice;
 
 		public LocalizationView(EditorWindow window, LocalizationStorage storage)
 		{
@@ -45,9 +47,9 @@ namespace ResourceLocalization
 					if (changeCheck && EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
 					GUILayout.EndArea();
 
-					DrawNotice(position);
+					if (notice) { DrawNotice(position); }
 				}
-				catch (System.ArgumentException){ }
+				catch (System.ArgumentException){ } 
 			}
 		}
 
@@ -83,60 +85,57 @@ namespace ResourceLocalization
 			{
 				if (GUILayout.Button("Delete")) { 
 					LocalizationStorage.RemoveLocalizationTag(localization);
-
-					content = new GUIContent($"{Tag.Name} has been deleted");
+					StartNotice(new GUIContent($"{Tag.Name} has been deleted"));
 					EditorGUI.FocusTextInControl(null);
-					targetAnimation = 1f;
-					lastTime = System.DateTime.Now.Ticks;
+
 				}
 			}
 			else
 			{
 				if (GUILayout.Button("Add")) { 
 					LocalizationStorage.AddLocalizationTag(localization);
-
-
-					content = new GUIContent($"{Tag.Name} has been added");
+					StartNotice(new GUIContent($"{Tag.Name} has been added"));
 					EditorGUI.FocusTextInControl(null);
-					targetAnimation = 1f;
-					lastTime = System.DateTime.Now.Ticks;
 				}
 			}
 			GUILayout.EndHorizontal();
 			ExtendedEditorGUI.DrawLine(Color.black);
 		}
 
-		private void DrawNotice(Rect position)
+		private void StartNotice(GUIContent content)
 		{
-			if (targetAnimation != 1f) return;
+			noticeContent = content;
+			notice = true;
+			curentNotice = 0f;
+			lastTime = System.DateTime.Now.Ticks;
+		}
 
+		private async void DrawNotice(Rect position)
+		{
 			long now = System.DateTime.Now.Ticks;
 			float deltaTime = (now - lastTime) / (float)System.TimeSpan.TicksPerSecond;
 			lastTime = now;
 
-			if (currentAnimation != targetAnimation)
+			if (curentNotice != 1f)
 			{
-				currentAnimation = Mathf.MoveTowards(currentAnimation, targetAnimation, deltaTime);
-			}
-			else if (currentAnimation == 1f)
-			{
-				wait = Mathf.MoveTowards(wait, targetAnimation, deltaTime);
-				if(wait == targetAnimation)
-				{
-					currentAnimation = 0f;
-					targetAnimation = 0f;
-					wait = 0f;
-				}
+				curentNotice = Mathf.MoveTowards(curentNotice, 1f, deltaTime * 4);
 			}
 
-			var w = 400f;
-			var x = position.x + (position.width - w) * 0.5f;
-			var y = 128f;
-			var rect = new Rect(x, y * (currentAnimation - 0.8f), w, y);
+			var width = 400f;
+			var x = position.x + (position.width - width) * 0.5f;
+			var height = 128f;
+			var rect = new Rect(x, height * (curentNotice - 0.8f), width, height);
 
 			GUILayout.BeginArea(rect);
-			GUILayout.Label(content, "NotificationBackground");
+			GUILayout.Label(noticeContent, "NotificationBackground");
 			GUILayout.EndArea();
+
+			if (curentNotice == 1f)
+			{
+				await Task.Delay(1000);
+				curentNotice = 0f;
+				notice = false;
+			}
 
 			window.Repaint();
 		}
