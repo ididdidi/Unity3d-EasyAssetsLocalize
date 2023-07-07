@@ -15,8 +15,9 @@ namespace ResourceLocalization
 		EditorWindow window;
 		GUIContent noticeContent;
 		long lastTime;
-		bool notice;
+		bool showNotice;
 		float curentNotice;
+		int taskID;
 
 		public LocalizationView(EditorWindow window, LocalizationStorage storage)
 		{
@@ -47,7 +48,7 @@ namespace ResourceLocalization
 					if (changeCheck && EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
 					GUILayout.EndArea();
 
-					if (notice) { DrawNotice(position); }
+					if (showNotice) { DrawNotice(position); }
 				}
 				catch (System.ArgumentException){ } 
 			}
@@ -104,8 +105,9 @@ namespace ResourceLocalization
 
 		private void StartNotice(GUIContent content)
 		{
-			noticeContent = content;
-			notice = true;
+			noticeContent = content; 
+			taskID++;
+			showNotice = true;
 			curentNotice = 0f;
 			lastTime = System.DateTime.Now.Ticks;
 		}
@@ -132,9 +134,13 @@ namespace ResourceLocalization
 
 			if (curentNotice == 1f)
 			{
+				var waitID = taskID;
 				await Task.Delay(1000);
-				curentNotice = 0f;
-				notice = false;
+				if(waitID == taskID)
+				{
+					curentNotice = 0f;
+					showNotice = false;
+				}
 			}
 
 			window.Repaint();

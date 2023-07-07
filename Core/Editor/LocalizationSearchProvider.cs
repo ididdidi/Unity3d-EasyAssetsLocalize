@@ -6,6 +6,8 @@ using UnityExtended;
 
 public class LocalizationSearchProvider : ISearchTreeProvider
 {
+    private SearchTree searchTree = new SearchTree();
+
     public delegate bool Handler(LocalizationTag tag);
     private Handler handler;
 
@@ -23,7 +25,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         Type = type;
     }
 
-    public SearchTreeEntry[] CreateSearchTree()
+    public SearchTree GetSearchTree()
     {
         if (!Storage) { throw new System.ArgumentNullException(nameof(Component)); }
 
@@ -55,8 +57,9 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1));
 
         GetNewItems(searchList);
+        searchTree.BuildStack(searchList.ToArray());
 
-        return searchList.ToArray();
+        return searchTree;
     }
 
     public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data as LocalizationTag);
