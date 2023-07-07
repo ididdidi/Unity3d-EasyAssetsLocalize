@@ -11,18 +11,12 @@ namespace ResourceLocalization
 		private LocalizationStorage LocalizationStorage { get; }
 		public LocalizationTag Tag { get; set; }
 		private Vector2 scrollPosition = Vector2.zero;
-
-		EditorWindow window;
-		GUIContent noticeContent;
-		long lastTime;
-		bool showNotice;
-		float curentNotice;
-		int taskID;
+		NoticeView noticeView;
 
 		public LocalizationView(EditorWindow window, LocalizationStorage storage)
 		{
 			LocalizationStorage = storage ?? throw new System.ArgumentNullException(nameof(storage));
-			this.window = window;
+			noticeView = new NoticeView(window);
 		}
 
 		public void OnGUI(Rect position)
@@ -37,7 +31,7 @@ namespace ResourceLocalization
 				{
 					GUILayout.BeginArea(position);
 					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
-					DrawHeader(Tag);
+					DrawHeader(position, Tag);
 
 					scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
 					GUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
@@ -48,7 +42,7 @@ namespace ResourceLocalization
 					if (changeCheck && EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
 					GUILayout.EndArea();
 
-					if (showNotice) { DrawNotice(position); }
+					noticeView.OnGUI();
 				}
 				catch (System.ArgumentException){ } 
 			}
@@ -73,7 +67,7 @@ namespace ResourceLocalization
 			}
 		}
 
-		private void DrawHeader(LocalizationTag localization)
+		private void DrawHeader(Rect position, LocalizationTag localization)
 		{
 			GUILayout.Space(2);
 			GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
@@ -82,11 +76,12 @@ namespace ResourceLocalization
 			localization.Name = GUILayout.TextField(localization.Name);
 			GUILayout.FlexibleSpace();
 
+			var rect = new Rect(position);
 			if (LocalizationStorage.ContainsLocalizationTag(localization))
 			{
 				if (GUILayout.Button("Delete")) { 
 					LocalizationStorage.RemoveLocalizationTag(localization);
-					StartNotice(new GUIContent($"{Tag.Name} has been deleted"));
+					noticeView.Show(rect, new GUIContent($"{Tag.Name} has been deleted"));
 					EditorGUI.FocusTextInControl(null);
 
 				}
@@ -95,55 +90,12 @@ namespace ResourceLocalization
 			{
 				if (GUILayout.Button("Add")) { 
 					LocalizationStorage.AddLocalizationTag(localization);
-					StartNotice(new GUIContent($"{Tag.Name} has been added"));
+					noticeView.Show(rect, new GUIContent($"{Tag.Name} has been added"));
 					EditorGUI.FocusTextInControl(null);
 				}
 			}
 			GUILayout.EndHorizontal();
 			ExtendedEditorGUI.DrawLine(Color.black);
-		}
-
-		private void StartNotice(GUIContent content)
-		{
-			noticeContent = content; 
-			taskID++;
-			showNotice = true;
-			curentNotice = 0f;
-			lastTime = System.DateTime.Now.Ticks;
-		}
-
-		private async void DrawNotice(Rect position)
-		{
-			long now = System.DateTime.Now.Ticks;
-			float deltaTime = (now - lastTime) / (float)System.TimeSpan.TicksPerSecond;
-			lastTime = now;
-
-			if (curentNotice != 1f)
-			{
-				curentNotice = Mathf.MoveTowards(curentNotice, 1f, deltaTime * 4);
-			}
-
-			var width = 400f;
-			var x = position.x + (position.width - width) * 0.5f;
-			var height = 128f;
-			var rect = new Rect(x, height * (curentNotice - 0.8f), width, height);
-
-			GUILayout.BeginArea(rect);
-			GUILayout.Label(noticeContent, "NotificationBackground");
-			GUILayout.EndArea();
-
-			if (curentNotice == 1f)
-			{
-				var waitID = taskID;
-				await Task.Delay(1000);
-				if(waitID == taskID)
-				{
-					curentNotice = 0f;
-					showNotice = false;
-				}
-			}
-
-			window.Repaint();
 		}
 	}
 }
