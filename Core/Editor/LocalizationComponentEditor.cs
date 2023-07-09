@@ -54,7 +54,7 @@ namespace ResourceLocalization
                 if (EditorGUI.EndChangeCheck()) { LocalizationManager.LocalizationStorage?.ChangeVersion(); }
             }
 
-            if (ExtendedEditorGUI.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }
+            if (ExtendedEditor.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }
         }
 
         private void SetLocalization()

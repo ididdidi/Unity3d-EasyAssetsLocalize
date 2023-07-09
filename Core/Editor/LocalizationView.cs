@@ -95,7 +95,7 @@ namespace ResourceLocalization
 				}
 			}
 			GUILayout.EndHorizontal();
-			ExtendedEditorGUI.DrawLine(Color.black);
+			ExtendedEditor.DrawLine(Color.black);
 		}
 	}
 }

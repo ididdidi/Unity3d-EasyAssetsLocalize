@@ -61,7 +61,7 @@ namespace ResourceLocalization
 		/// </summary>
 		private void DrawButton()
 		{
-			if (ExtendedEditorGUI.CenterButton("Edit in window"))
+			if (ExtendedEditor.CenterButton("Edit in window"))
 			{
 				LocalizationStorageWindow.Show();
 			}
