@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityExtended;
 
@@ -39,7 +38,10 @@ namespace ResourceLocalization
 					GUILayout.EndVertical();
 					GUILayout.EndScrollView();
 
-					if (changeCheck && EditorGUI.EndChangeCheck()) { LocalizationStorage?.ChangeVersion(); }
+					if (changeCheck && EditorGUI.EndChangeCheck()) { 
+						LocalizationStorage?.ChangeVersion();
+						EditorUtility.SetDirty(LocalizationStorage);
+					}
 					GUILayout.EndArea();
 
 					noticeView.OnGUI();

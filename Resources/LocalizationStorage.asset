@@ -12,62 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 114
+  version: 126
   languages:
   - <Name>k__BackingField: Russian
   - <Name>k__BackingField: English
   localizationTags:
-  - id: ec882416bde2439993f2b54c29e45d54
-    name: eewww
+  - id: 4b32ffed7bca4773bbc07be03d625097
+    name: New Text
     resources:
     - id: 0
     - id: 1
-  - id: 3feb87393e89438c831cd1badfbf089d
-    name: Localizar
-    resources:
-    - id: 2
-    - id: 3
-  - id: 6708380d3d7e4f4e833c38f105e479ae
-    name: ' wefw'
-    resources:
-    - id: 4
-    - id: 5
-  - id: 6a8d175c42ef46b3836ef556329b058b
-    name: 555
-    resources:
-    - id: 6
-    - id: 7
   references:
     version: 1
     00000000:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
-        data: Text1 huuu
+        data: Text
     00000001:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text1
-    00000002:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text
-    00000003:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text
-    00000004:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text
-    00000005:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text
-    00000006:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: Text
-    00000007:
       type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
       data:
         data: Text
