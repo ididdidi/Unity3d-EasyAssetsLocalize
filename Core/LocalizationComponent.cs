@@ -6,8 +6,6 @@ namespace ResourceLocalization
     {
         [field: SerializeField, HideInInspector] public string ID { get; set; }
 
-        public LocalizationStorage Storage { get => LocalizationManager.LocalizationStorage; }
-
         public abstract System.Type Type { get; }
 
         public abstract void SetLocalizationData(object data);
