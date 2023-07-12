@@ -50,7 +50,7 @@ namespace ResourceLocalization
             {
                 EditorGUI.BeginChangeCheck();
                 Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
-                LocalizationView.DrawResources(Tag, LocalizationManager.LocalizationStorage?.Languages, GUILayout.Height(50f));
+                LocalizationView.DrawResources(Tag, LocalizationManager.Languages, GUILayout.Height(50f));
                 if (EditorGUI.EndChangeCheck()) { LocalizationManager.LocalizationStorage?.ChangeVersion(); }
             }
 

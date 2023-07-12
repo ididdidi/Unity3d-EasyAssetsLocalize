@@ -19,7 +19,7 @@ namespace ResourceLocalization
         /// <summary>
         /// List of languages in array format.
         /// </summary>
-        public Language[] Languages => languages.ToArray();
+        public List<Language> Languages => languages;
         /// <summary>
         /// List of localizations in array format.
         /// </summary>
@@ -38,6 +38,20 @@ namespace ResourceLocalization
                 localizationTags[i].Resources.Add(localizationTags[i].Resources[0].Clone());
             }
             languages.Add(language);
+            ChangeVersion();
+        }
+
+        /// <summary>
+        /// Removes the selected localization language from the repository.
+        /// </summary>
+        /// <param name="index">Index in list</param>
+        public void RemoveLanguage(int index)
+        {
+            for (int i = 0; i < localizationTags.Count; i++)
+            {
+                localizationTags[i].Resources.RemoveAt(index);
+            }
+            languages.RemoveAt(index);
             ChangeVersion();
         }
 

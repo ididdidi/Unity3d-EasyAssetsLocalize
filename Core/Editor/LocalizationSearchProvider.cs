@@ -37,7 +37,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         GUIContent content;
         searchList.Add(new SearchTreeGroupEntry(new GUIContent("Text"), 1));
         for (int j = 0; j < 10; j++)
-            for (int i = 0; i < tags.Count; i++)
+            for (int i = 0; LocalizationManager.Languages.Length > 0 && i < tags.Count; i++)
             {
                 var data = tags[i].Resources[0].Data;
                 if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
@@ -49,7 +49,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
                 {
                     content = new GUIContent(tags[i].Name, EditorGUIUtility.ObjectContent((Object)data, data.GetType()).image);
                 }
-
+             
                 var item = new SearchTreeEntry(content, 2, tags[i]);
                 searchList.Add(item);
             }
@@ -73,7 +73,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
             //  if (!Component.Type.IsAssignableFrom(tags[i].Type)) { continue; }
             var content = new GUIContent("New Text", EditorGUIUtility.IconContent("Text Icon").image);
 
-            var resources = new IResource[Storage.Languages.Length];
+            var resources = new IResource[LocalizationManager.Languages.Length];
             for (int i=0; i < resources.Length; i++)
             {
                 resources[i] = new TextResource("Text");

@@ -57,9 +57,9 @@ namespace ResourceLocalization
 			}
 
 			var rect = new Rect(0, 0, 320, position.height);
-			searchView?.OnGUI(rect);
+			if (LocalizationManager.Languages.Length > 0) searchView?.OnGUI(rect);
 
-			if (string.IsNullOrEmpty(searchView.SearchKeyword) && SettingsButton(new Rect(302, 8, 20, 20)))
+			if (string.IsNullOrEmpty(searchView?.SearchKeyword) && SettingsButton(new Rect(302, 8, 20, 20)))
 			{
 				ShowSettings = true;
 			}

@@ -17,6 +17,8 @@ namespace ResourceLocalization
             set => PlayerPrefs.SetString("Language", value.Name);
         }
 
+        public static Language[] Languages => LocalizationStorage.Languages.ToArray();
+
         /// <summary>
         /// Link to localization repository.
         /// </summary>
@@ -36,7 +38,7 @@ namespace ResourceLocalization
         public static void AddLocalizationComponent(LocalizationComponent component)
         {
             if(!components.Contains(component)) { components.Add(component); }
-            component.SetLocalizationData(LocalizationStorage.GetLocalizationData(component.ID, Language));
+       //     component.SetLocalizationData(LocalizationStorage.GetLocalizationData(component.ID, Language));
         }
 
         public static void RemoveLocalizationComponent(LocalizationComponent component)
@@ -67,7 +69,7 @@ namespace ResourceLocalization
         /// <param name="direction">Indicates which language to select: the previous one in the list or the next one</param>
         private static void ChangeLocalzation(Direction direction)
         {
-            var languages = new List<Language>(localizationStorage.Languages);
+            var languages = new List<Language>(LocalizationStorage.Languages);
             if (languages.Count < 2) { return; }
 
             int index = languages.IndexOf(Language);
@@ -93,7 +95,7 @@ namespace ResourceLocalization
             Language = language;
             for (int i = 0; i < components.Count; i++)
             {
-                components[i].SetLocalizationData(LocalizationStorage.GetLocalizationData(components[i].ID, Language));
+            //    components[i].SetLocalizationData(LocalizationStorage.GetLocalizationData(components[i].ID, Language));
             }
         }
     }

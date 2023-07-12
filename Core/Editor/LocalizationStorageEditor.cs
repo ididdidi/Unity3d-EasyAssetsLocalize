@@ -80,7 +80,7 @@ namespace ResourceLocalization
 				{
 					if (foldoutItems[i] = EditorGUILayout.Foldout(foldoutItems[i], localizationTags[i].Name))
 					{
-						LocalizationView.DrawResources(localizationTags[i], storage.Languages, GUILayout.Height(50f));
+						LocalizationView.DrawResources(localizationTags[i], LocalizationManager.Languages, GUILayout.Height(50f));
 					}
 				}
 				EditorGUI.indentLevel--;

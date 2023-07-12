@@ -11,7 +11,6 @@ namespace ResourceLocalization
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            CreateDataAsset<LocalizationConfig>();
             CreateDataAsset<LocalizationStorage>();
             CreateComponent<AudioClip>();
         }
@@ -146,34 +145,6 @@ namespace ResourceLocalization
          //
          //       Selection.activeObject = storage;
          //   }
-        }
-
-        [MenuItem("Assets/Create/LocalizationConfig", false, 1)]
-        public static void CreateLocalizationConfigs()
-        {
-            var selectionPath = AssetDatabase.GetAssetPath(Selection.activeObject);
-
-            if (string.IsNullOrEmpty(selectionPath))
-            {
-                selectionPath = Application.dataPath;
-            }
-
-            var path = EditorUtility.SaveFilePanelInProject(
-                                             "Create Localization config",
-                                             "LocalizationConfig",
-                                             "asset",
-                                             string.Empty,
-                                             selectionPath);
-
-            if (path.Length > 0)
-            {
-                var storage = ScriptableObject.CreateInstance<LocalizationConfig>();
-
-                AssetDatabase.CreateAsset(storage, path);
-                AssetDatabase.SaveAssets();
-
-                Selection.activeObject = storage;
-            }
         }
     }
 }

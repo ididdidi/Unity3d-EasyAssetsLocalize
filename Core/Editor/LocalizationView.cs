@@ -34,7 +34,7 @@ namespace ResourceLocalization
 
 					scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
 					GUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-					DrawResources(Tag, LocalizationStorage.Languages);
+					DrawResources(Tag, LocalizationManager.Languages);
 					GUILayout.EndVertical();
 					GUILayout.EndScrollView();
 
