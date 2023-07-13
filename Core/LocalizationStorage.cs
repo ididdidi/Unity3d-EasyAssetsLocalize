@@ -31,8 +31,6 @@ namespace ResourceLocalization
         /// <param name="language">New localization language</param>
         public void AddLanguage(Language language)
         {
-            if (languages.Contains(language)) { throw new System.ArgumentException($"{GetType()}: There is already a localizations with {language.Name}"); }
-
             for (int i = 0; i < localizationTags.Count; i++)
             {
                 localizationTags[i].Resources.Add(localizationTags[i].Resources[0].Clone());
@@ -61,7 +59,7 @@ namespace ResourceLocalization
         /// <param name="language">LocalizationTaglanguage</param>
         public void RemoveLanguage(Language language)
         {
-            if (!languages.Contains(language)) { throw new System.ArgumentException($"{GetType()}: No resources found for {language.Name}"); }
+            if (!languages.Contains(language)) { throw new System.ArgumentException($"{GetType()}: No resources found for {language.ToString()}"); }
 
             var index = languages.IndexOf(language);
             for (int i=0; i < localizationTags.Count; i++)
@@ -136,6 +134,16 @@ namespace ResourceLocalization
         {
             localizationTags.Remove(localizationTag);
             ChangeVersion();
+        }
+
+        public void ReorderLocalizations(int currentIndex, int nextIndex)
+        {
+            for (int i = 0; i < localizationTags.Count; i++)
+            {
+                var temp = localizationTags[i].Resources[currentIndex];
+                localizationTags[i].Resources.Remove(temp);
+                localizationTags[i].Resources.Insert(nextIndex, temp);
+            }
         }
 
         public object GetLocalizationData(string id, Language language)

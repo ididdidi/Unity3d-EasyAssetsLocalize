@@ -59,12 +59,12 @@ namespace ResourceLocalization
 			{
 				if (isString)
 				{
-					EditorGUILayout.LabelField(languages[i].Name);
+					EditorGUILayout.LabelField(languages[i].ToString());
 					tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, style, options);
 				}
 				else
 				{
-					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].Name, (Object)tag.Resources[i].Data, tag.Type, false, options);
+					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, tag.Type, false, options);
 				}
 			}
 		}

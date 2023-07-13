@@ -13,8 +13,8 @@ namespace ResourceLocalization
         /// </summary>
         public static Language Language
         {
-            get => new Language(PlayerPrefs.HasKey("Language") ? PlayerPrefs.GetString("Language") : Application.systemLanguage.ToString());
-            set => PlayerPrefs.SetString("Language", value.Name);
+            get => new Language(PlayerPrefs.HasKey("Language") ? (SystemLanguage)PlayerPrefs.GetInt("Language") : Application.systemLanguage);
+            set => PlayerPrefs.SetInt("Language", (int)value.SystemLanguage);
         }
 
         public static Language[] Languages => LocalizationStorage.Languages.ToArray();
