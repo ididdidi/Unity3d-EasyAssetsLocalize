@@ -10,6 +10,7 @@ namespace ResourceLocalization
     {
         [SerializeField, HideInInspector] private int version; 
         [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();
+        [SerializeField, HideInInspector] private List<string> types = new List<string>();
         [SerializeField, HideInInspector] private List<LocalizationTag> localizationTags = new List<LocalizationTag>();
 
         /// <summary>
@@ -20,10 +21,12 @@ namespace ResourceLocalization
         /// List of languages in array format.
         /// </summary>
         public List<Language> Languages => languages;
+        public List<string> Types => types;
         /// <summary>
         /// List of localizations in array format.
         /// </summary>
         public LocalizationTag[] LocalizationTags => localizationTags.ToArray();
+
 
         /// <summary>
         /// Adds a new localization language to the repository.

@@ -1,13 +1,20 @@
-﻿using System.Collections;
-using UnityEditorInternal;
+﻿using UnityEditorInternal;
 
 namespace ResourceLocalization
 {
-    public class TypesListView : ReorderableList
+    public partial class TypesListView : ReorderableList
     {
-        public TypesListView(IList list) : base(list, typeof(string), true, true, true, true)
-        {
+        private ITypeLocalizationProvider provider;
 
+        public TypesListView(ITypeLocalizationProvider provider) : base(provider.GetTypes(), typeof(TypeLocalization), true, true, true, true)
+        {
+            this.provider = provider ?? throw new System.ArgumentNullException(nameof(provider));
+            onAddCallback = AddTypeComponent;
+        }
+
+        private void AddTypeComponent(ReorderableList reorderable)
+        {
+            AddTypeLocalizationWindow.Show(() => { });
         }
     }
 }
