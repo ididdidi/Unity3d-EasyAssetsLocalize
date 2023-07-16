@@ -9,26 +9,19 @@ namespace ResourceLocalization
         private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
         private LocalizationStorageWindow window;
         private LanguagesListView languagesList;
-     //   private TypesListView typesList;
+        private TypesListView typesList;
         private Vector2 scrollPosition = default;
 
         public LocalizationSettingsView(LocalizationStorageWindow window)
         {
             this.window = window ?? throw new System.ArgumentNullException(nameof(window));
             languagesList = new LanguagesListView(LocalizationManager.LocalizationStorage);
-        //    typesList = new TypesListView(LocalizationManager.LocalizationStorage);
 
-           var baseType = typeof(LocalizationComponent);
-           Assembly assembly = baseType.Assembly;
-           foreach (string i in new TypeLocalizationProvider().GetList())
+           foreach (TypeMetadata meta in new TypeLocalizationProvider().GetTypesMeta())
            {
-               System.Type type = assembly.GetType($"{baseType.Namespace}.{i}");
-        
-               Debug.Log($"{baseType.Namespace}.{i} - {type}");
-        
-               LocalizationComponent lc = System.Activator.CreateInstance(type) as LocalizationComponent;
-               Debug.Log(lc.Type);
+                Debug.Log($"{meta.Type}");
            }
+
         }
 
         public void OnGUI(Rect position)

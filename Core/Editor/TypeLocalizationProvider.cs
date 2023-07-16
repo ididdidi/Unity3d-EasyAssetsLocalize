@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 using UnityExtended;
 
 namespace ResourceLocalization
@@ -12,9 +14,21 @@ namespace ResourceLocalization
             throw new System.NotImplementedException();
         }
 
+        public IEnumerable GetTypesMeta()
+        {
+            var baseType = typeof(LocalizationComponentEditor);
+            Assembly assembly = baseType.Assembly;
+
+            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("Core", "Components");
+            var types = (from p in Directory.GetFiles(path).Where(n => n.EndsWith(".cs"))
+                         select assembly.GetType($"{baseType.Namespace}.{Path.GetFileNameWithoutExtension(p)}")).ToArray();
+            return (from t in types.Where(n => n.GetCustomAttribute<TypeMetadata>() != null)
+                    select t.GetCustomAttribute<TypeMetadata>()).ToList();
+        }
+
         public IEnumerable GetList()
         {
-            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("/Core/Editor", "/Components");
+            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("Core", "Components");
             return (from a in Directory.GetFiles(path).Where(n => n.EndsWith(".cs")) select Path.GetFileNameWithoutExtension(a)).ToList();
         }
 
@@ -23,7 +37,7 @@ namespace ResourceLocalization
             throw new System.NotImplementedException();
         }
 
-        private void CreateComponent(string typeName)
+        private void CreateComponent(string typeName, string iconName = "cs Script Icon")
         {
             if (string.IsNullOrWhiteSpace(typeName)) { throw new System.ArgumentNullException(nameof(typeName)); }
             var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("/Core/Editor", "/Components");
@@ -33,7 +47,7 @@ namespace ResourceLocalization
             }
 
             ExtendedEditor.CreateClass(typeName + "Localization", path, GetComponentCode(typeName));
-            ExtendedEditor.CreateClass(typeName + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(typeName));
+            ExtendedEditor.CreateClass(typeName + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(typeName, iconName));
         }
 
         private string GetComponentCode(string typeName)
@@ -57,7 +71,7 @@ namespace ResourceLocalization
 }}";
         }
 
-        private string GetComponentEditorCode(string typeName)
+        private string GetComponentEditorCode(string typeName, string iconName)
         {
             return
 $@"
@@ -68,7 +82,7 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({typeName}Localization))]
+    [CustomEditor(typeof({typeName}Localization)), TypeMetadata(typeof({typeName}), {iconName})]
     public class {typeName}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }
