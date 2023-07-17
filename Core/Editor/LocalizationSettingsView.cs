@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace ResourceLocalization
@@ -16,12 +15,7 @@ namespace ResourceLocalization
         {
             this.window = window ?? throw new System.ArgumentNullException(nameof(window));
             languagesList = new LanguagesListView(LocalizationManager.LocalizationStorage);
-
-           foreach (TypeMetadata meta in new TypeLocalizationProvider().GetTypesMeta())
-           {
-                Debug.Log($"{meta.Type}");
-           }
-
+            typesList = new TypesListView(new TypesMetaProvider());
         }
 
         public void OnGUI(Rect position)
@@ -42,7 +36,7 @@ namespace ResourceLocalization
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorDefaultMargins);
             languagesList.DoLayoutList();
             GUILayout.Space(4);
-        //    typesList.DoLayoutList();
+            typesList.DoLayoutList();
             GUILayout.EndScrollView();
             GUILayout.EndArea();
 
@@ -56,7 +50,7 @@ namespace ResourceLocalization
 
         public void Close()
         {
-            languagesList.index = -1; // = typesList.index
+            languagesList.index = typesList.index  = -1;
             window.ShowSettings = false;
             EditorGUI.FocusTextInControl(null);
         }

@@ -1,20 +1,32 @@
-﻿using System.Collections;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEditor;
 using UnityExtended;
 
 namespace ResourceLocalization
 {
-    public class TypeLocalizationProvider : ITypeLocalizationProvider
+    [System.AttributeUsage(System.AttributeTargets.Class)]
+    public class TypeMetadata : System.Attribute
     {
-        public void AddType(TypeLocalization newType)
+        public System.Type Type { get; private set; }
+        public Texture Texture { get; private set; }
+        public TypeMetadata(System.Type type, string ediorIcon)
         {
-            throw new System.NotImplementedException();
+            this.Type = type;
+            this.Texture = EditorGUIUtility.IconContent(ediorIcon).image;
+        }
+    }
+
+    public class TypesMetaProvider
+    {
+        public void AddType(string typeName, string iconName = "cs Script Icon")
+        {
+            CreateComponent(typeName, iconName);
         }
 
-        public IEnumerable GetTypesMeta()
+        public TypeMetadata[] GetTypesMeta()
         {
             var baseType = typeof(LocalizationComponentEditor);
             Assembly assembly = baseType.Assembly;
@@ -22,19 +34,9 @@ namespace ResourceLocalization
             var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("Core", "Components");
             var types = (from p in Directory.GetFiles(path).Where(n => n.EndsWith(".cs"))
                          select assembly.GetType($"{baseType.Namespace}.{Path.GetFileNameWithoutExtension(p)}")).ToArray();
-            return (from t in types.Where(n => n.GetCustomAttribute<TypeMetadata>() != null)
-                    select t.GetCustomAttribute<TypeMetadata>()).ToList();
-        }
 
-        public IEnumerable GetList()
-        {
-            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("Core", "Components");
-            return (from a in Directory.GetFiles(path).Where(n => n.EndsWith(".cs")) select Path.GetFileNameWithoutExtension(a)).ToList();
-        }
-
-        public TypeLocalization[] GetTypes()
-        {
-            throw new System.NotImplementedException();
+            return (from t in types.Where(n => n?.GetCustomAttribute<TypeMetadata>() != null)
+                    select t.GetCustomAttribute<TypeMetadata>()).ToArray();
         }
 
         private void CreateComponent(string typeName, string iconName = "cs Script Icon")
@@ -76,13 +78,14 @@ namespace ResourceLocalization
             return
 $@"
 using UnityEditor;
+using UnityEngine;
 
 namespace ResourceLocalization
 {{
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({typeName}Localization)), TypeMetadata(typeof({typeName}), {iconName})]
+    [CustomEditor(typeof({typeName}Localization)), TypeMetadata(typeof({typeName}), ""{iconName}"")]
     public class {typeName}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }
