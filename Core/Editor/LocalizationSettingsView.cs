@@ -15,7 +15,7 @@ namespace ResourceLocalization
         {
             this.window = window ?? throw new System.ArgumentNullException(nameof(window));
             languagesList = new LanguagesListView(LocalizationManager.LocalizationStorage);
-            typesList = new TypesListView(new TypesMetaProvider());
+            typesList = new TypesListView();
         }
 
         public void OnGUI(Rect position)
@@ -34,9 +34,15 @@ namespace ResourceLocalization
             GUILayout.EndHorizontal();
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorDefaultMargins);
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical();
             languagesList.DoLayoutList();
+            GUILayout.EndVertical();
             GUILayout.Space(4);
+            GUILayout.BeginVertical();
             typesList.DoLayoutList();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
             GUILayout.EndScrollView();
             GUILayout.EndArea();
 

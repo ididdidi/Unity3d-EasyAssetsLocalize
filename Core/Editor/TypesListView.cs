@@ -6,31 +6,35 @@ namespace ResourceLocalization
 {
     public partial class TypesListView : ReorderableList
     {
-        private TypesMetaProvider provider;
-
-        public TypesListView(TypesMetaProvider provider) : base(provider.GetTypesMeta(), typeof(TypeMetadata), false, true, true, true)
+        public TypesListView() : base(TypesMetaProvider.GetTypesMeta(), typeof(TypeMetadata), false, true, true, true)
         {
-            this.provider = provider ?? throw new System.ArgumentNullException(nameof(provider));
+            drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeMeta;
             onAddCallback = AddTypeComponent;
+            onRemoveCallback = RemoveTypeComponent;
         }
 
-        private void DrawTypeMeta(Rect rect, int index, bool isActive, bool isFocused)
+        private void DrawHeader(Rect position)
+        {
+            EditorGUI.LabelField(position, "Types");
+        }
+
+        private void DrawTypeMeta(Rect position, int index, bool isActive, bool isFocused)
         {
             var meta = (TypeMetadata)list[index];
-            EditorGUI.LabelField(rect, new GUIContent(meta.Type.Name, meta.Texture));
+            EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture));
         }
 
         private void AddTypeComponent(ReorderableList reorderable)
         {
-            AddTypeLocalizationWindow.Show((typeName) => {
-                var metadata = provider.GetTypesMeta();
-                reorderable.list = metadata;
-                for(int i=0; i < metadata.Length; i++)
-                {
-                    if (metadata[i].Type.Name.Equals(typeName)) { reorderable.index = i; return; }
-                }
-            });
+            AddTypeLocalizationWindow.Show();
+            AssetDatabase.Refresh();
+        }
+
+        private void RemoveTypeComponent(ReorderableList reorderable)
+        {
+            TypesMetaProvider.PemoveType((TypeMetadata)reorderable.list[reorderable.index]);
+            AssetDatabase.Refresh();
         }
     }
 }

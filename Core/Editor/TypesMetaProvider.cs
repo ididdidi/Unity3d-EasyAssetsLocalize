@@ -14,24 +14,37 @@ namespace ResourceLocalization
         public Texture Texture { get; private set; }
         public TypeMetadata(System.Type type, string ediorIcon)
         {
-            this.Type = type;
-            this.Texture = EditorGUIUtility.IconContent(ediorIcon).image;
+            Type = type;
+            Texture = EditorGUIUtility.IconContent(ediorIcon).image;
         }
     }
 
-    public class TypesMetaProvider
+    public static class TypesMetaProvider
     {
-        public void AddType(string typeName, string iconName = "cs Script Icon")
+        public static void AddType(string typeName, string iconName = "cs Script Icon")
         {
             CreateComponent(typeName, iconName);
         }
 
-        public TypeMetadata[] GetTypesMeta()
+        public static void PemoveType(TypeMetadata metadata)
+        {
+            var fileName = $"{metadata.Type.Name}LocalizationEditor.cs";
+
+            var path = ExtendedEditor.GetDirectory(fileName);
+            if (!string.IsNullOrEmpty(path))
+            {
+                File.Delete($"{path}{fileName}");
+                File.Delete($"{path}{fileName.Replace("Editor.cs", ".cs")}");
+            }
+            else throw new System.ArgumentNullException(fileName);
+        }
+
+        public static TypeMetadata[] GetTypesMeta()
         {
             var baseType = typeof(LocalizationComponentEditor);
             Assembly assembly = baseType.Assembly;
 
-            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("Core", "Components");
+            var path = ExtendedEditor.GetDirectory($"{baseType.Name}.cs").Replace("Core", "Components");
             var types = (from p in Directory.GetFiles(path).Where(n => n.EndsWith(".cs"))
                          select assembly.GetType($"{baseType.Namespace}.{Path.GetFileNameWithoutExtension(p)}")).ToArray();
 
@@ -39,10 +52,10 @@ namespace ResourceLocalization
                     select t.GetCustomAttribute<TypeMetadata>()).ToArray();
         }
 
-        private void CreateComponent(string typeName, string iconName = "cs Script Icon")
+        private static void CreateComponent(string typeName, string iconName = "cs Script Icon")
         {
             if (string.IsNullOrWhiteSpace(typeName)) { throw new System.ArgumentNullException(nameof(typeName)); }
-            var path = ExtendedEditor.GetDirectory($"{this.GetType().Name}.cs").Replace("/Core/Editor", "/Components");
+            var path = ExtendedEditor.GetDirectory($"{typeof(LocalizationComponentEditor).Name}.cs").Replace("/Core/Editor", "/Components");
             if (!Directory.Exists($"{path}Editor/"))
             {
                 Directory.CreateDirectory($"{path}Editor/");
@@ -52,7 +65,7 @@ namespace ResourceLocalization
             ExtendedEditor.CreateClass(typeName + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(typeName, iconName));
         }
 
-        private string GetComponentCode(string typeName)
+        private static string GetComponentCode(string typeName)
         {
             return
 $@"
@@ -73,7 +86,7 @@ namespace ResourceLocalization
 }}";
         }
 
-        private string GetComponentEditorCode(string typeName, string iconName)
+        private static string GetComponentEditorCode(string typeName, string iconName)
         {
             return
 $@"

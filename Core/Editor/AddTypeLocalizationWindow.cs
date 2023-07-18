@@ -8,32 +8,28 @@ namespace ResourceLocalization
 		public static readonly Vector2 SIZE = new Vector2(320f, 240f);
 
 		private string typeName;
-		private string iconName;
-		private System.Action<string> action;
+		private string iconName = "BuildSettings.Editor";
 
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
-		public static AddTypeLocalizationWindow Show(System.Action<string> action)
+		public new static AddTypeLocalizationWindow Show()
 		{
 			var instance = GetWindow<AddTypeLocalizationWindow>(true, "Add new type", true);
 
 			instance.minSize = SIZE;
 			instance.maxSize = SIZE;
-			instance.action = action;
 			return instance;
 		}
 
 		public void OnGUI()
 		{
-			typeName = EditorGUILayout.TextField("", typeName);
-			iconName = EditorGUILayout.TextField("", iconName);
+			typeName = EditorGUILayout.TextField("Name of type", typeName);
+			iconName = EditorGUILayout.TextField("Name of icon", iconName);
 
 			if (GUILayout.Button("Add"))
 			{
-				new TypesMetaProvider().AddType(typeName);
-				
-				//action?.Invoke(typeName);
+				TypesMetaProvider.AddType(typeName);
 				Close();
 			}
 		}
