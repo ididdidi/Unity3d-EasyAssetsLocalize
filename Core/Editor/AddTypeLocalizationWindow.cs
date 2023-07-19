@@ -7,8 +7,8 @@ namespace ResourceLocalization
     {
 		public static readonly Vector2 SIZE = new Vector2(320f, 240f);
 
-		private string typeName;
-		private string iconName = "BuildSettings.Editor";
+		private string iconName = "FilterByType";
+		private Object @object;
 
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
@@ -24,14 +24,17 @@ namespace ResourceLocalization
 
 		public void OnGUI()
 		{
-			typeName = EditorGUILayout.TextField("Name of type", typeName);
+			@object = EditorGUILayout.ObjectField("Object", @object, typeof(object), false );
 			iconName = EditorGUILayout.TextField("Name of icon", iconName);
 
+			EditorGUI.BeginDisabledGroup(!@object);
 			if (GUILayout.Button("Add"))
 			{
-				TypesMetaProvider.AddType(typeName);
+				TypesMetaProvider.AddType(@object.GetType(), iconName);
 				Close();
+				AssetDatabase.Refresh();
 			}
+			EditorGUI.EndDisabledGroup();
 		}
 	}
 }

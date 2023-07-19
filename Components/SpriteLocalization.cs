@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+// Class generated automatically
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace ResourceLocalization
@@ -10,6 +11,6 @@ namespace ResourceLocalization
 
         public override System.Type Type => typeof(Sprite);
 
-        public override void SetLocalizationData(object data) => handler?.Invoke((Sprite) data);
+        public override void SetLocalizationData(object data) => handler?.Invoke((Sprite)data);
     }
 }

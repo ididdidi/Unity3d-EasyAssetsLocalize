@@ -21,12 +21,12 @@ namespace ResourceLocalization
 
     public static class TypesMetaProvider
     {
-        public static void AddType(string typeName, string iconName = "cs Script Icon")
+        public static void AddType(System.Type type, string iconName)
         {
-            CreateComponent(typeName, iconName);
+            CreateComponent(type, iconName);
         }
 
-        public static void PemoveType(TypeMetadata metadata)
+        public static void RemoveType(TypeMetadata metadata)
         {
             var fileName = $"{metadata.Type.Name}LocalizationEditor.cs";
 
@@ -34,7 +34,8 @@ namespace ResourceLocalization
             if (!string.IsNullOrEmpty(path))
             {
                 File.Delete($"{path}{fileName}");
-                File.Delete($"{path}{fileName.Replace("Editor.cs", ".cs")}");
+                File.Delete($"{path.Replace("/Editor", "")}{fileName.Replace("Editor", "")}");
+                AssetDatabase.Refresh();
             }
             else throw new System.ArgumentNullException(fileName);
         }
@@ -52,54 +53,54 @@ namespace ResourceLocalization
                     select t.GetCustomAttribute<TypeMetadata>()).ToArray();
         }
 
-        private static void CreateComponent(string typeName, string iconName = "cs Script Icon")
+        private static void CreateComponent(System.Type type, string iconName)
         {
-            if (string.IsNullOrWhiteSpace(typeName)) { throw new System.ArgumentNullException(nameof(typeName)); }
+            if (type == null) { throw new System.ArgumentNullException(nameof(type)); }
             var path = ExtendedEditor.GetDirectory($"{typeof(LocalizationComponentEditor).Name}.cs").Replace("/Core/Editor", "/Components");
             if (!Directory.Exists($"{path}Editor/"))
             {
                 Directory.CreateDirectory($"{path}Editor/");
             }
 
-            ExtendedEditor.CreateClass(typeName + "Localization", path, GetComponentCode(typeName));
-            ExtendedEditor.CreateClass(typeName + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(typeName, iconName));
+            ExtendedEditor.CreateClass(type.Name + "Localization", path, GetComponentCode(type));
+            ExtendedEditor.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(type, iconName));
         }
 
-        private static string GetComponentCode(string typeName)
+        private static string GetComponentCode(System.Type type)
         {
             return
 $@"
-using UnityEngine;
+using {type.Namespace};
 using UnityEngine.Events;
 
 namespace ResourceLocalization
 {{
-    public class {typeName}Localization : LocalizationComponent
+    public class {type.Name}Localization : LocalizationComponent
     {{
-        [System.Serializable] public class Handler : UnityEvent<{typeName}> {{ }}
+        [System.Serializable] public class Handler : UnityEvent<{type.Name}> {{ }}
         [SerializeField, HideInInspector] private Handler handler;
 
-        public override System.Type Type => typeof({typeName});
+        public override System.Type Type => typeof({type.Name});
 
-        public override void SetLocalizationData(object data) => handler?.Invoke(({typeName})data);
+        public override void SetLocalizationData(object data) => handler?.Invoke(({type.Name})data);
     }}
 }}";
         }
 
-        private static string GetComponentEditorCode(string typeName, string iconName)
+        private static string GetComponentEditorCode(System.Type type, string iconName)
         {
             return
 $@"
+using {type.Namespace};
 using UnityEditor;
-using UnityEngine;
 
 namespace ResourceLocalization
 {{
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({typeName}Localization)), TypeMetadata(typeof({typeName}), ""{iconName}"")]
-    public class {typeName}LocalizationEditor : LocalizationComponentEditor {{ }}
+    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}), ""{iconName}"")]
+    public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }
     }

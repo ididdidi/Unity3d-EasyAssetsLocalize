@@ -22,19 +22,17 @@ namespace ResourceLocalization
         private void DrawTypeMeta(Rect position, int index, bool isActive, bool isFocused)
         {
             var meta = (TypeMetadata)list[index];
-            EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture));
+            EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture, meta.Type.ToString()));
         }
 
         private void AddTypeComponent(ReorderableList reorderable)
         {
             AddTypeLocalizationWindow.Show();
-            AssetDatabase.Refresh();
         }
 
         private void RemoveTypeComponent(ReorderableList reorderable)
         {
-            TypesMetaProvider.PemoveType((TypeMetadata)reorderable.list[reorderable.index]);
-            AssetDatabase.Refresh();
+            TypesMetaProvider.RemoveType((TypeMetadata)reorderable.list[reorderable.index]);
         }
     }
 }
