@@ -5,9 +5,7 @@ namespace ResourceLocalization
 {
     public class AddTypeLocalizationWindow : EditorWindow
     {
-		public static readonly Vector2 SIZE = new Vector2(320f, 240f);
-
-		private string iconName = "FilterByType";
+		public static readonly Vector2 SIZE = new Vector2(320f, 80f);
 		private Object @object;
 
 		/// <summary>
@@ -25,16 +23,23 @@ namespace ResourceLocalization
 		public void OnGUI()
 		{
 			@object = EditorGUILayout.ObjectField("Object", @object, typeof(object), false );
-			iconName = EditorGUILayout.TextField("Name of icon", iconName);
 
+			GUILayout.FlexibleSpace();
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button("Close"))
+			{
+				Close();
+			}
+			GUILayout.FlexibleSpace();
 			EditorGUI.BeginDisabledGroup(!@object);
 			if (GUILayout.Button("Add"))
 			{
-				TypesMetaProvider.AddType(@object.GetType(), iconName);
+				TypesMetaProvider.AddType(@object.GetType());
 				Close();
 				AssetDatabase.Refresh();
 			}
 			EditorGUI.EndDisabledGroup();
+			GUILayout.EndHorizontal();
 		}
 	}
 }

@@ -7,6 +7,6 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof(SpriteLocalization)), TypeMetadata(typeof(Sprite), "Sprite Icon")]
+    [CustomEditor(typeof(SpriteLocalization)), TypeMetadata(typeof(Sprite))]
     public class SpriteLocalizationEditor : LocalizationComponentEditor { }
 }

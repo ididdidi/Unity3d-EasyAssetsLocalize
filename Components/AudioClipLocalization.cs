@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 namespace ResourceLocalization
 {
-    
     public class AudioClipLocalization : LocalizationComponent
     {
         [System.Serializable] public class Handler : UnityEvent<AudioClip> { }

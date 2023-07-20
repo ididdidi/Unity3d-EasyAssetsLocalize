@@ -9,7 +9,7 @@ namespace ResourceLocalization
 
         public object Data { get => data; set => data = (Object)value; }
 
-        public UnityResource(object data) => Data = data ?? throw new System.ArgumentNullException(nameof(data));
+        public UnityResource(object data) => Data = data;// ?? throw new System.ArgumentNullException(nameof(data));
 
         public IResource Clone() => new UnityResource(data);
     }

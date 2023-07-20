@@ -9,7 +9,6 @@ namespace ResourceLocalization
     public class Language
     {
         [field: SerializeField] public SystemLanguage SystemLanguage { get; set; }
-        [field: SerializeField] public string Description { get; set; }
 
         public Language(SystemLanguage language) => SystemLanguage = language;
 

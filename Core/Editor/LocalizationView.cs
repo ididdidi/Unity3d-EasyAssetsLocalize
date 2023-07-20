@@ -54,7 +54,8 @@ namespace ResourceLocalization
 		{
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);
 			style.wordWrap = true;
-			var isString = tag.Type.IsAssignableFrom(typeof(string));
+			var isString = typeof(string).IsAssignableFrom(tag.Type);
+			var isSO = typeof(ScriptableObject).IsAssignableFrom(tag.Type);
 			for (int i = 0; i < tag.Resources.Count; i++)
 			{
 				if (isString)
@@ -64,7 +65,9 @@ namespace ResourceLocalization
 				}
 				else
 				{
-					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, tag.Type, false, options);
+					var type = isSO ? typeof(object) : tag.Type;
+					Debug.Log(type);
+					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, type, false, options);
 				}
 			}
 		}

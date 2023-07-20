@@ -12,18 +12,20 @@ namespace ResourceLocalization
     {
         public System.Type Type { get; private set; }
         public Texture Texture { get; private set; }
-        public TypeMetadata(System.Type type, string ediorIcon)
+        public TypeMetadata(System.Type type)
         {
             Type = type;
-            Texture = EditorGUIUtility.IconContent(ediorIcon).image;
+            if (typeof(string).IsAssignableFrom(type)) { Texture = EditorGUIUtility.IconContent("Text Icon").image; }
+            else if (typeof(ScriptableObject).IsAssignableFrom(type)) { Texture = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
+            else { Texture = EditorGUIUtility.ObjectContent(null, type).image; }
         }
     }
 
     public static class TypesMetaProvider
     {
-        public static void AddType(System.Type type, string iconName)
+        public static void AddType(System.Type type)
         {
-            CreateComponent(type, iconName);
+            CreateComponent(type);
         }
 
         public static void RemoveType(TypeMetadata metadata)
@@ -53,7 +55,7 @@ namespace ResourceLocalization
                     select t.GetCustomAttribute<TypeMetadata>()).ToArray();
         }
 
-        private static void CreateComponent(System.Type type, string iconName)
+        private static void CreateComponent(System.Type type)
         {
             if (type == null) { throw new System.ArgumentNullException(nameof(type)); }
             var path = ExtendedEditor.GetDirectory($"{typeof(LocalizationComponentEditor).Name}.cs").Replace("/Core/Editor", "/Components");
@@ -63,14 +65,13 @@ namespace ResourceLocalization
             }
 
             ExtendedEditor.CreateClass(type.Name + "Localization", path, GetComponentCode(type));
-            ExtendedEditor.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(type, iconName));
+            ExtendedEditor.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(type));
         }
 
         private static string GetComponentCode(System.Type type)
         {
-            return
-$@"
-using {type.Namespace};
+            return (type.Namespace.Equals("UnityEngine") ? "" : $"using {type.Namespace};") + $@"
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace ResourceLocalization
@@ -87,11 +88,10 @@ namespace ResourceLocalization
 }}";
         }
 
-        private static string GetComponentEditorCode(System.Type type, string iconName)
+        private static string GetComponentEditorCode(System.Type type)
         {
-            return
-$@"
-using {type.Namespace};
+            return (type.Namespace.Equals("UnityEngine") ? "" : $"using {type.Namespace};") + $@"
+using UnityEngine;
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -99,7 +99,7 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}), ""{iconName}"")]
+    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}))]
     public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }

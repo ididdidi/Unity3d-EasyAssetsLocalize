@@ -30,25 +30,11 @@ namespace ResourceLocalization
         private void DrawLanguage(Rect position, int index, bool isActive, bool isFocused)
         {
             var rect = new Rect(position);
-            rect.width = 136f;
+            rect.width = 156f;
             rect.x -= 2f;
             rect.y += 1f;
             var language = (Language)list[index];
             language.SystemLanguage = (SystemLanguage)EditorGUI.EnumPopup(rect, language.SystemLanguage);
-            
-            rect.x += rect.width + 2f;
-            rect.width = position.width - rect.width;
-            if (isActive)
-            {
-                rect.y -= 1f;
-                language.Description = EditorGUI.TextField(rect, language.Description);
-            }
-            else
-            {
-                rect.x += 2f;
-                rect.y -= 2f;
-                EditorGUI.LabelField(rect, language.Description);
-            }
 
             if (isFocused || lastIndex != index) { lastIndex = index; }
         }
