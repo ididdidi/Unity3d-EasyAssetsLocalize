@@ -16,6 +16,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 
     private LocalizationStorage Storage { get; }
     private System.Type Type { get; }
+    private Dictionary<System.Type, List<LocalizationTag>> types;
 
     public LocalizationSearchProvider(LocalizationStorage storage, Handler handler, OnFocus onFocus = null, System.Type type = null)
     {
@@ -34,64 +35,102 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         var tags = new List<LocalizationTag>(Storage.LocalizationTags);
         tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
-        GUIContent content;
-        searchList.Add(new SearchTreeGroupEntry(new GUIContent("Text"), 1));
+        var contents = ToContGroupContentsByType(tags);
 
-        for (int i = 0; LocalizationManager.Languages.Length > 0 && i < tags.Count; i++)
+        foreach (var c in contents)
         {
-            var data = tags[i].Resources[0].Data;
+            var level = 1;
+            if (Type == null) { searchList.Add(new SearchTreeGroupEntry(new GUIContent(c.Key.Name), level++)); }
+            searchList.AddRange(BuildSearchTree(c.Value, level));
+        }
+
+        searchList.AddRange(GetNewItems());
+        searchTree.BuildStack(searchList.ToArray());
+
+        return searchTree;
+    }
+
+    private Dictionary<System.Type, List<GUIContent>> ToContGroupContentsByType(List<LocalizationTag> tags)
+    {
+        GUIContent content;
+        Dictionary<System.Type, List<GUIContent>> contents = new Dictionary<System.Type, List<GUIContent>>();
+
+        for (int i = 0; i < tags.Count; i++)
+        {
             if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
+
             if (typeof(string).IsAssignableFrom(tags[i].Type))
             {
                 content = new GUIContent(tags[i].Name, EditorGUIUtility.IconContent("Text Icon").image);
             }
             else
             {
-                content = new GUIContent(tags[i].Name, EditorGUIUtility.ObjectContent((Object)data, data.GetType()).image);
+                content = new GUIContent(tags[i].Name, EditorGUIUtility.ObjectContent(null, tags[i].Type).image);
             }
 
-            var item = new SearchTreeEntry(content, 2, tags[i]);
-            searchList.Add(item);
+            if (!contents.ContainsKey(tags[i].Type)){ contents.Add(tags[i].Type, new List<GUIContent>()); }
+            contents[tags[i].Type].Add(content);
         }
 
-        searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1));
+        return contents;
+    }
 
-        GetNewItems(searchList);
-        searchTree.BuildStack(searchList.ToArray());
+    private List<SearchTreeEntry> BuildSearchTree(List<GUIContent> contents, int level = 1)
+    {
+        List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
 
-        return searchTree;
+        for (int i = 0; i < contents.Count; i++)
+        {
+            searchList.Add(new SearchTreeEntry(contents[i], level));
+        }
+
+        return searchList;
     }
 
     public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data as LocalizationTag);
 
     public void OnFocusEntry(SearchTreeEntry entry) => onFocus?.Invoke(entry.Data as LocalizationTag);
 
-    private void GetNewItems(List<SearchTreeEntry> searchList)
+    private List<SearchTreeEntry> GetNewItems()
     {
-        var metadatas = TypesMetaProvider.GetTypesMeta();
-        foreach (var meta in metadatas)
+        TypeMetadata[] metaData = TypesMetaProvider.GetTypesMeta();
+        List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
+        if (Type != null)
         {
-            //  if (!Component.Type.IsAssignableFrom(tags[i].Type)) { continue; }
-            var content = new GUIContent($"New {meta.Type.Name}", meta.Texture);
-
-            var resources = new IResource[LocalizationManager.Languages.Length];
-            if (typeof(string).IsAssignableFrom(meta.Type))
-            {
-                for (int i = 0; i < resources.Length; i++)
-                {
-                    resources[i] = new TextResource("Text");
-                }
-            }
-            else
-            {
-                for (int i = 0; i < resources.Length; i++)
-                {
-                    resources[i] = new UnityResource(null);
-                }
-            }
-
-            var data = new LocalizationTag(meta.Type, resources);
-            searchList.Add(new SearchTreeEntry(content, 2, data));
+            searchList.Add(NewItem(Type));
         }
+        else
+        {
+            searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1));
+            for (int i=0; i < metaData.Length; i++)
+            {
+                searchList.Add(NewItem(metaData[i].Type, 2));
+            }
+        }
+        return searchList;
+    }
+
+    private SearchTreeEntry NewItem(System.Type type, int level = 1)
+    {
+        Texture icon;
+        var resources = new IResource[LocalizationManager.Languages.Length];
+        if (typeof(string).IsAssignableFrom(type))
+        {
+            icon = EditorGUIUtility.IconContent("Text Icon").image;
+            for (int i = 0; i < resources.Length; i++)
+            {
+                resources[i] = new TextResource("Text");
+            }
+        }
+        else
+        {
+            icon = EditorGUIUtility.ObjectContent(null, type).image;
+            for (int i = 0; i < resources.Length; i++)
+            {
+                resources[i] = new UnityResource(null);
+            }
+        }
+
+        return new SearchTreeEntry(new GUIContent($"New {type.Name}", icon), level, new LocalizationTag(type, resources));
     }
 }
