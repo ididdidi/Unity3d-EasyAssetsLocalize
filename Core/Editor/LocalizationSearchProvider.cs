@@ -35,14 +35,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         var tags = new List<LocalizationTag>(Storage.LocalizationTags);
         tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
-        var contents = ToContGroupContentsByType(tags);
-
-        foreach (var c in contents)
-        {
-            var level = 1;
-            if (Type == null) { searchList.Add(new SearchTreeGroupEntry(new GUIContent(c.Key.Name), level++)); }
-            searchList.AddRange(BuildSearchTree(c.Value, level));
-        }
+        searchList.AddRange(BuildSearchList(tags));
 
         searchList.AddRange(GetNewItems());
         searchTree.BuildStack(searchList.ToArray());
@@ -50,38 +43,37 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         return searchTree;
     }
 
-    private Dictionary<System.Type, List<GUIContent>> ToContGroupContentsByType(List<LocalizationTag> tags)
+    private List<SearchTreeEntry> BuildSearchList(List<LocalizationTag> tags)
     {
-        GUIContent content;
-        Dictionary<System.Type, List<GUIContent>> contents = new Dictionary<System.Type, List<GUIContent>>();
+        // Group by Type
+        Dictionary<System.Type, List<SearchTreeEntry>> entries = new Dictionary<System.Type, List<SearchTreeEntry>>();
 
         for (int i = 0; i < tags.Count; i++)
         {
             if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
 
+            GUIContent content;
             if (typeof(string).IsAssignableFrom(tags[i].Type))
             {
                 content = new GUIContent(tags[i].Name, EditorGUIUtility.IconContent("Text Icon").image);
             }
             else
             {
-                content = new GUIContent(tags[i].Name, EditorGUIUtility.ObjectContent(null, tags[i].Type).image);
+                Texture icon;
+                if (typeof(ScriptableObject).IsAssignableFrom(tags[i].Type)) { icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
+                else { icon = EditorGUIUtility.ObjectContent(null, tags[i].Type).image; }
+                content = new GUIContent(tags[i].Name, icon);
             }
 
-            if (!contents.ContainsKey(tags[i].Type)){ contents.Add(tags[i].Type, new List<GUIContent>()); }
-            contents[tags[i].Type].Add(content);
+            if (!entries.ContainsKey(tags[i].Type)){ entries.Add(tags[i].Type, new List<SearchTreeEntry>()); }
+            entries[tags[i].Type].Add(new SearchTreeEntry(content, Type == null? 2 : 1, tags[i]));
         }
 
-        return contents;
-    }
-
-    private List<SearchTreeEntry> BuildSearchTree(List<GUIContent> contents, int level = 1)
-    {
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
-
-        for (int i = 0; i < contents.Count; i++)
+        foreach (var entry in entries)
         {
-            searchList.Add(new SearchTreeEntry(contents[i], level));
+            if (Type == null) { searchList.Add(new SearchTreeGroupEntry(new GUIContent(entry.Key.Name), 1)); }
+            searchList.AddRange(entry.Value);
         }
 
         return searchList;
@@ -124,13 +116,14 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         }
         else
         {
-            icon = EditorGUIUtility.ObjectContent(null, type).image;
+            if (typeof(ScriptableObject).IsAssignableFrom(type)) { icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
+            else { icon = EditorGUIUtility.ObjectContent(null, type).image; }
             for (int i = 0; i < resources.Length; i++)
             {
                 resources[i] = new UnityResource(null);
             }
         }
 
-        return new SearchTreeEntry(new GUIContent($"New {type.Name}", icon), level, new LocalizationTag(type, resources));
+        return new SearchTreeEntry(new GUIContent($"New {type.Name} Localization", icon), level, new LocalizationTag(type, resources));
     }
 }

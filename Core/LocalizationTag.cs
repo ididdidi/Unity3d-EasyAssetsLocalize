@@ -36,7 +36,7 @@ namespace ResourceLocalization
         /// <param name="resources">List of localized resources</param>
         public LocalizationTag(System.Type type, IEnumerable<IResource> resources)
         {
-            this.name = $"New {type.Name}";
+            this.name = $"{type.Name} Localization";
             this.serializableType = new SerializableType(type);
             this.resources = new List<IResource>(resources);
         }
