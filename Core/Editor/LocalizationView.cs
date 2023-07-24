@@ -12,10 +12,10 @@ namespace ResourceLocalization
 		private Vector2 scrollPosition = Vector2.zero;
 		NoticeView noticeView;
 
-		public LocalizationView(EditorWindow window, LocalizationStorage storage)
+		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
 		{
 			LocalizationStorage = storage ?? throw new System.ArgumentNullException(nameof(storage));
-			noticeView = new NoticeView(window);
+			this.noticeView = noticeView;
 		}
 
 		public void OnGUI(Rect position)
@@ -43,8 +43,6 @@ namespace ResourceLocalization
 						EditorUtility.SetDirty(LocalizationStorage);
 					}
 					GUILayout.EndArea();
-
-					noticeView.OnGUI();
 				}
 				catch (System.ArgumentException){ } 
 			}

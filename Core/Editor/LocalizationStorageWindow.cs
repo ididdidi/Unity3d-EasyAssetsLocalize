@@ -15,17 +15,18 @@ namespace ResourceLocalization
 		private Color background = new Color(0.22f, 0.22f, 0.22f);
 
 		// Data renderer in a editor window
+		private NoticeView noticeView;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationSettingsView settingsView;
 		private int storageVersion;
-		
 		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.LocalizationStorage; }
 		public bool ShowSettings { get; set; }
 
 		private void OnEnable()
 		{
-			localizationView = new LocalizationView(this, LocalizationStorage);
+			noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(LocalizationStorage, noticeView);
 			var provider = new LocalizationSearchProvider(LocalizationStorage, (tag) => { ShowSettings = false; localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag);
 			searchView = new SearchTreeView(this, provider);
 			settingsView = new LocalizationSettingsView(this);
@@ -74,6 +75,8 @@ namespace ResourceLocalization
 			{
 				settingsView?.OnGUI(rect);
 			}
+
+			noticeView.OnGUI();
 		}
 
 		private bool SettingsButton(Rect rect)

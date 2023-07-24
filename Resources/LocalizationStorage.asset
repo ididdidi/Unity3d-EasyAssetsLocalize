@@ -12,26 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 221
+  version: 1
   languages:
   - <SystemLanguage>k__BackingField: 30
-    <Description>k__BackingField: 
-  - <SystemLanguage>k__BackingField: 10
-    <Description>k__BackingField: 
   types: []
-  localizationTags:
-  - id: a59316576b204460866cfdf3d6159d41
-    name: New Text
-    resources:
-    - id: 0
-    - id: 1
+  localizationTags: []
   references:
     version: 1
-    00000000:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: "\u0422\u0435\u043A\u0441\u0442"
-    00000001:
-      type: {class: TextResource, ns: ResourceLocalization, asm: Assembly-CSharp}
-      data:
-        data: "\u0422\u0435\u043A\u0441\u0442"

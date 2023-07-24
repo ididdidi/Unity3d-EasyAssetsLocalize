@@ -135,16 +135,16 @@ namespace ResourceLocalization
 
         //    Debug.Log(Application.dataPath + " ---- " + path);
 
-         //   if (path.Length > 0)
-         //   {
-         //       var storage = ScriptableObject.CreateInstance<LocalizationStorage>();
-         //       storage.AddLanguage(new Language(Application.systemLanguage.ToString()));
-         //
-         //       AssetDatabase.CreateAsset(storage, path);
-         //       AssetDatabase.SaveAssets();
-         //
-         //       Selection.activeObject = storage;
-         //   }
+           if (path.Length > 0)
+           {
+               var storage = ScriptableObject.CreateInstance<LocalizationStorage>();
+               storage.AddLanguage(new Language(Application.systemLanguage));
+        
+               AssetDatabase.CreateAsset(storage, path);
+               AssetDatabase.SaveAssets();
+        
+               Selection.activeObject = storage;
+           }
         }
     }
 }
