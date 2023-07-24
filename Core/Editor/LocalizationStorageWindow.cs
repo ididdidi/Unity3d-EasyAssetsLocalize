@@ -27,11 +27,11 @@ namespace ResourceLocalization
 		{
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(LocalizationStorage, noticeView);
-			var provider = new LocalizationSearchProvider(LocalizationStorage, (tag) => { ShowSettings = false; localizationView.Tag = tag; return false; }, (tag) => localizationView.Tag = tag);
+			var provider = new LocalizationSearchProvider(LocalizationStorage, 
+				(tag) => { ShowSettings = false; localizationView.Data = tag; return false; }, 
+				(tag) => localizationView.Data = tag);
 			searchView = new SearchTreeView(this, provider);
 			settingsView = new LocalizationSettingsView(this);
-			//hideFlags = HideFlags.HideAndDontSave;
-			//wantsMouseMove = true;
 		}
 
 		/// <summary>

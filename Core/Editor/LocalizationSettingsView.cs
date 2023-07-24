@@ -6,6 +6,8 @@ namespace ResourceLocalization
     public class LocalizationSettingsView
     {
         private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
+        private GUIStyle style;
+
         private LocalizationStorageWindow window;
         private LanguagesListView languagesList;
         private TypesListView typesList;
@@ -20,28 +22,44 @@ namespace ResourceLocalization
 
         public void OnGUI(Rect position)
         {
+            if(style == null) { style = new GUIStyle("AM MixerHeader"); }
+
+            var content = GUIContent.none;
             EditorGUI.DrawRect(position, background);
-            GUI.Label(position, GUIContent.none, "grey_border");
+            GUI.Label(position, content, "grey_border");
 
             GUILayout.BeginArea(position);
             GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
-            if (GUILayout.Button(EditorGUIUtility.IconContent("tab_prev@2x"), GUIStyle.none, GUILayout.Height(20f))) {
+
+            content = new GUIContent(EditorGUIUtility.IconContent("tab_prev@2x").image, "Back");
+            if (GUILayout.Button(content, style, GUILayout.Height(20f))) {
                 Close();
             }
+
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Settings", "AM MixerHeader");
+            GUILayout.Label("Propertyes", style);
             GUILayout.FlexibleSpace();
+
+            content = new GUIContent(EditorGUIUtility.IconContent("_Help@2x").image, "Help");
+            if (GUILayout.Button(content, style, GUILayout.Height(20f)))
+            {
+                // Реализовать вывод справки
+            }
             GUILayout.EndHorizontal();
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorDefaultMargins);
             GUILayout.BeginHorizontal();
+
             GUILayout.BeginVertical();
             languagesList.DoLayoutList();
             GUILayout.EndVertical();
+
             GUILayout.Space(4);
+
             GUILayout.BeginVertical();
             typesList.DoLayoutList();
             GUILayout.EndVertical();
+
             GUILayout.EndHorizontal();
             GUILayout.EndScrollView();
             GUILayout.EndArea();

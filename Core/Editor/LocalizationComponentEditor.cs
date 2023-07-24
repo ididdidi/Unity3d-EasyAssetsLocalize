@@ -59,7 +59,8 @@ namespace ResourceLocalization
 
         private void SetLocalization()
         {
-            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SelectTag, null, Component.Type));
+            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, 
+                (data) => { if (data is LocalizationTag tag) return SelectTag(tag); else return false; }, null, Component.Type));
         }
 
 

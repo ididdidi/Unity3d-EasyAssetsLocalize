@@ -37,7 +37,7 @@ namespace ResourceLocalization
         private void NewObjectTypeField(Rect position)
         {
             EditorGUI.BeginChangeCheck();
-            newObject = EditorGUI.ObjectField(position, newObject, typeof(object), false);
+            newObject = EditorGUI.ObjectField(position, newObject, typeof(Object), false);
             if (EditorGUI.EndChangeCheck())
             {
                 TypesMetaProvider.AddType(newObject.GetType());
@@ -47,12 +47,14 @@ namespace ResourceLocalization
 
         private void AddTypeComponent(ReorderableList reorderable)
         {
-            list.Add(null);
+            reorderable.list.Add(null);
+            reorderable.index = list.Count - 1;
         }
 
         private void RemoveTypeComponent(ReorderableList reorderable)
         {
-            TypesMetaProvider.RemoveType((TypeMetadata)reorderable.list[reorderable.index]);
+            if(reorderable.list[reorderable.index] is TypeMetadata metadata) { TypesMetaProvider.RemoveType(metadata); }
+            else { reorderable.list.RemoveAt(reorderable.index); reorderable.index--; }
         }
     }
 }

@@ -8,10 +8,10 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 {
     private SearchTree searchTree = new SearchTree();
 
-    public delegate bool Handler(LocalizationTag tag);
+    public delegate bool Handler(object data);
     private Handler handler;
 
-    public delegate void OnFocus(LocalizationTag tag);
+    public delegate void OnFocus(object data);
     private OnFocus onFocus;
 
     private LocalizationStorage Storage { get; }
@@ -72,16 +72,19 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
         foreach (var entry in entries)
         {
-            if (Type == null) { searchList.Add(new SearchTreeGroupEntry(new GUIContent(entry.Key.Name), 1)); }
+            if (Type == null) {
+                var cover = new GUIContent(entry.Key.Name, entry.Value[0].Content.image);
+                searchList.Add(new SearchTreeGroupEntry(new GUIContent(entry.Key.Name), 1, cover));
+            }
             searchList.AddRange(entry.Value);
         }
 
         return searchList;
     }
 
-    public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data as LocalizationTag);
+    public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data);
 
-    public void OnFocusEntry(SearchTreeEntry entry) => onFocus?.Invoke(entry.Data as LocalizationTag);
+    public void OnFocusEntry(SearchTreeEntry entry) => onFocus?.Invoke(entry.Data);
 
     private List<SearchTreeEntry> GetNewItems()
     {
@@ -93,7 +96,8 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         }
         else
         {
-            searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1));
+            var cover = new GUIContent("Add New", EditorGUIUtility.IconContent("CreateAddNew@2x").image);
+            searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1, cover));
             for (int i=0; i < metaData.Length; i++)
             {
                 searchList.Add(NewItem(metaData[i].Type, 2));

@@ -8,9 +8,10 @@ namespace ResourceLocalization
 	{
 		private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
 		private LocalizationStorage LocalizationStorage { get; }
-		public LocalizationTag Tag { get; set; }
+	//	public LocalizationTag Tag { get; set; }
+		public object Data { get; set; }
 		private Vector2 scrollPosition = Vector2.zero;
-		NoticeView noticeView;
+		private NoticeView noticeView;
 
 		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
 		{
@@ -23,29 +24,44 @@ namespace ResourceLocalization
 			EditorGUI.DrawRect(position, background);
 			GUI.Label(position, GUIContent.none, "grey_border");
 
-			if (Tag != null)
+			if (Data is LocalizationTag tag)
 			{
-				var changeCheck = LocalizationStorage.ContainsLocalizationTag(Tag);
+				var changeCheck = LocalizationStorage.ContainsLocalizationTag(tag);
 				try
 				{
 					GUILayout.BeginArea(position);
 					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
-					DrawHeader(position, Tag);
+					DrawHeader(position, tag);
 
 					scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
 					GUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-					DrawResources(Tag, LocalizationManager.Languages);
+					DrawResources(tag, LocalizationManager.Languages);
 					GUILayout.EndVertical();
 					GUILayout.EndScrollView();
 
-					if (changeCheck && EditorGUI.EndChangeCheck()) { 
+					if (changeCheck && EditorGUI.EndChangeCheck())
+					{
 						LocalizationStorage?.ChangeVersion();
 						EditorUtility.SetDirty(LocalizationStorage);
 					}
 					GUILayout.EndArea();
 				}
-				catch (System.ArgumentException){ } 
+				catch (System.ArgumentException) { }
 			}
+			else if (Data is GUIContent content)
+			{
+				var rect = new Rect(0f, 0f, 128f, 128f);
+				rect.center = position.center;
+				rect.y -= 25f;
+				GUI.DrawTexture(rect, content.image, ScaleMode.ScaleToFit);
+
+				position.y += 55f;
+				var style = new GUIStyle("AM MixerHeader");
+				style.alignment = TextAnchor.MiddleCenter;
+				style.fontSize = 32;
+				GUI.Label(position, content.text, style);
+			}
+			else Debug.Log(Data);
 		}
 
 		public static void DrawResources(LocalizationTag tag, Language[] languages, params GUILayoutOption[] options)
@@ -81,7 +97,7 @@ namespace ResourceLocalization
 			{
 				if (GUILayout.Button("Delete")) { 
 					LocalizationStorage.RemoveLocalizationTag(localization);
-					noticeView.Show(rect, new GUIContent($"{Tag.Name} has been deleted"));
+					noticeView.Show(rect, new GUIContent($"{localization.Name} has been deleted"));
 					EditorGUI.FocusTextInControl(null);
 
 				}
@@ -90,7 +106,7 @@ namespace ResourceLocalization
 			{
 				if (GUILayout.Button("Add")) { 
 					LocalizationStorage.AddLocalizationTag(localization);
-					noticeView.Show(rect, new GUIContent($"{Tag.Name} has been added"));
+					noticeView.Show(rect, new GUIContent($"{localization.Name} has been added"));
 					EditorGUI.FocusTextInControl(null);
 				}
 			}
