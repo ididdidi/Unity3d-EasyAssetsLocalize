@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -6,7 +7,9 @@ namespace ResourceLocalization
 {
     public partial class TypesListView : ReorderableList
     {
-        public TypesListView() : base(TypesMetaProvider.GetTypesMeta(), typeof(TypeMetadata), false, true, true, true)
+        private Object newObject;
+
+        public TypesListView() : base(new List<TypeMetadata>(TypesMetaProvider.GetTypesMeta()), typeof(TypeMetadata), false, true, true, true)
         {
             drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeMeta;
@@ -21,13 +24,30 @@ namespace ResourceLocalization
 
         private void DrawTypeMeta(Rect position, int index, bool isActive, bool isFocused)
         {
-            var meta = (TypeMetadata)list[index];
-            EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture, meta.Type.ToString()));
+            if( list[index] is TypeMetadata meta)
+            {
+                EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture, meta.Type.ToString()));
+            }
+            else
+            {
+                NewObjectTypeField(position);
+            }
+        }
+
+        private void NewObjectTypeField(Rect position)
+        {
+            EditorGUI.BeginChangeCheck();
+            newObject = EditorGUI.ObjectField(position, newObject, typeof(object), false);
+            if (EditorGUI.EndChangeCheck())
+            {
+                TypesMetaProvider.AddType(newObject.GetType());
+                AssetDatabase.Refresh();
+            }
         }
 
         private void AddTypeComponent(ReorderableList reorderable)
         {
-            AddTypeLocalizationWindow.Show();
+            list.Add(null);
         }
 
         private void RemoveTypeComponent(ReorderableList reorderable)

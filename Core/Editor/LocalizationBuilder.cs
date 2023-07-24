@@ -133,8 +133,6 @@ namespace ResourceLocalization
                                              string.Empty,
                                              selectionPath);
 
-        //    Debug.Log(Application.dataPath + " ---- " + path);
-
            if (path.Length > 0)
            {
                var storage = ScriptableObject.CreateInstance<LocalizationStorage>();
