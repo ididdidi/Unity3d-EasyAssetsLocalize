@@ -6,9 +6,7 @@ namespace ResourceLocalization
 {
 	public class LocalizationView
 	{
-		private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
 		private LocalizationStorage LocalizationStorage { get; }
-	//	public LocalizationTag Tag { get; set; }
 		public object Data { get; set; }
 		private Vector2 scrollPosition = Vector2.zero;
 		private NoticeView noticeView;
@@ -21,7 +19,6 @@ namespace ResourceLocalization
 
 		public void OnGUI(Rect position)
 		{
-			EditorGUI.DrawRect(position, background);
 			GUI.Label(position, GUIContent.none, "grey_border");
 
 			if (Data is LocalizationTag tag)

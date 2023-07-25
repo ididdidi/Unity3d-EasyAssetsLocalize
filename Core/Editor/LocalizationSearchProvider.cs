@@ -92,7 +92,9 @@ public class LocalizationSearchProvider : ISearchTreeProvider
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
         if (Type != null)
         {
-            searchList.Add(NewItem(Type));
+            var newItem = NewItem(Type);
+            newItem.Content.image = EditorGUIUtility.IconContent("CreateAddNew").image;
+            searchList.Add(newItem);
         }
         else
         {

@@ -5,7 +5,6 @@ namespace ResourceLocalization
 {
     public class LocalizationSettingsView
     {
-        private readonly Color background = new Color(0.22f, 0.22f, 0.22f);
         private GUIStyle style;
 
         private LocalizationStorageWindow window;
@@ -25,7 +24,6 @@ namespace ResourceLocalization
             if(style == null) { style = new GUIStyle("AM MixerHeader"); }
 
             var content = GUIContent.none;
-            EditorGUI.DrawRect(position, background);
             GUI.Label(position, content, "grey_border");
 
             GUILayout.BeginArea(position);

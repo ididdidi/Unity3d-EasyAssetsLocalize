@@ -12,7 +12,10 @@ namespace ResourceLocalization
 		public const float MIN_WIDTH = 720f;
 		public const float MIN_HIGHT = 320f;
 
-		private Color background = new Color(0.22f, 0.22f, 0.22f);
+		private readonly Color LightSkin = new Color(0.77f, 0.77f, 0.77f);
+		private readonly Color DarkSkin = new Color(0.22f, 0.22f, 0.22f);
+
+		private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
 
 		// Data renderer in a editor window
 		private NoticeView noticeView;
@@ -58,6 +61,7 @@ namespace ResourceLocalization
 			}
 
 			var rect = new Rect(0, 0, 320, position.height);
+			EditorGUI.DrawRect(rect, Background);
 			if (LocalizationManager.Languages.Length > 0) searchView?.OnGUI(rect);
 
 			if (string.IsNullOrEmpty(searchView?.SearchKeyword) && SettingsButton(new Rect(302, 8, 20, 20)))
@@ -67,6 +71,7 @@ namespace ResourceLocalization
 
 			rect.x = 319;
 			rect.width = position.width - 320;
+			EditorGUI.DrawRect(rect, Background);
 			if (!ShowSettings)
 			{
 				localizationView?.OnGUI(rect);
