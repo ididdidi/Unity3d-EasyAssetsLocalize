@@ -88,45 +88,46 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 
     private List<SearchTreeEntry> GetNewItems()
     {
-        TypeMetadata[] metaData = TypesMetaProvider.GetTypesMeta();
+        TypeMetadata[] metaDatas = TypesMetaProvider.GetTypesMeta();
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
-        if (Type != null)
-        {
-            var newItem = NewItem(Type);
-            newItem.Content.image = EditorGUIUtility.IconContent("CreateAddNew").image;
-            searchList.Add(newItem);
-        }
-        else
+
+        if(Type == null)
         {
             var cover = new GUIContent("Add New", EditorGUIUtility.IconContent("CreateAddNew@2x").image);
             searchList.Add(new SearchTreeGroupEntry(new GUIContent("New Localization"), 1, cover));
-            for (int i=0; i < metaData.Length; i++)
+        }
+
+        var icon = EditorGUIUtility.IconContent("CreateAddNew").image;
+        var level = 1;
+        for (int i = 0; i < metaDatas.Length; i++)
+        {
+            if (Type != null)
             {
-                searchList.Add(NewItem(metaData[i].Type, 2));
+                if (!Type.Equals(metaDatas[i].Type)) { continue; }
             }
+            else { 
+                icon = metaDatas[i].Icon; level = 2;
+            }
+            searchList.Add(NewItem(metaDatas[i].Type, metaDatas[i].Default, icon, level));
         }
         return searchList;
     }
 
-    private SearchTreeEntry NewItem(System.Type type, int level = 1)
+    private SearchTreeEntry NewItem(System.Type type, object defValue, Texture icon, int level = 1)
     {
-        Texture icon;
         var resources = new IResource[LocalizationManager.Languages.Length];
         if (typeof(string).IsAssignableFrom(type))
         {
-            icon = EditorGUIUtility.IconContent("Text Icon").image;
             for (int i = 0; i < resources.Length; i++)
             {
-                resources[i] = new TextResource("Text");
+                resources[i] = new TextResource(defValue);
             }
         }
         else
         {
-            if (typeof(ScriptableObject).IsAssignableFrom(type)) { icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
-            else { icon = EditorGUIUtility.ObjectContent(null, type).image; }
             for (int i = 0; i < resources.Length; i++)
             {
-                resources[i] = new UnityResource(null);
+                resources[i] = new UnityResource(defValue);
             }
         }
 

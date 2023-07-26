@@ -7,8 +7,6 @@ namespace ResourceLocalization
 {
     public partial class TypesListView : ReorderableList
     {
-        private Object newObject;
-
         public TypesListView() : base(new List<TypeMetadata>(TypesMetaProvider.GetTypesMeta()), typeof(TypeMetadata), false, true, true, true)
         {
             drawHeaderCallback = DrawHeader;
@@ -26,28 +24,42 @@ namespace ResourceLocalization
         {
             if( list[index] is TypeMetadata meta)
             {
-                EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Texture, meta.Type.ToString()));
-            }
-            else
-            {
-                NewObjectTypeField(position);
+                var width = position.width;
+                position.width = 143;
+                EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Icon, meta.Type.ToString()));
+                
+                position.x += position.width;
+                position.height -= 3;
+                position.width = width - position.width;
+
+                NewValueField(position, meta);
             }
         }
 
-        private void NewObjectTypeField(Rect position)
+        private void NewValueField(Rect position, TypeMetadata metadata)
         {
+            object @object; 
             EditorGUI.BeginChangeCheck();
-            newObject = EditorGUI.ObjectField(position, newObject, typeof(Object), false);
+            if (typeof(string).IsAssignableFrom(metadata.Type))
+            {
+                @object = EditorGUI.TextField(position, (string)metadata.Default);
+            }
+            else
+            {
+                @object = EditorGUI.ObjectField(position, (Object)metadata.Default, metadata.Type, false);
+            }
             if (EditorGUI.EndChangeCheck())
             {
-                TypesMetaProvider.AddType(newObject.GetType());
-                AssetDatabase.Refresh();
+                if (@object != null && !@object.Equals(metadata.Default))
+                {
+                    metadata.Default = @object;
+                }
             }
         }
 
         private void AddTypeComponent(ReorderableList reorderable)
         {
-            reorderable.list.Add(null);
+            reorderable.list.Add(new TypeMetadata(typeof(Object), null));
             reorderable.index = list.Count - 1;
         }
 

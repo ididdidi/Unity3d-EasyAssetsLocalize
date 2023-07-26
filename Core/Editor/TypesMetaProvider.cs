@@ -10,22 +10,38 @@ namespace ResourceLocalization
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TypeMetadata : System.Attribute
     {
+        private object defaultValue;
         public System.Type Type { get; private set; }
-        public Texture Texture { get; private set; }
-        public TypeMetadata(System.Type type)
+        public object Default { 
+            get => defaultValue; 
+            set { 
+                TypesMetaProvider.AddType(value);
+                AssetDatabase.Refresh();
+            }
+        }
+        public Texture Icon { get; private set; }
+        public TypeMetadata(System.Type type, string defaultValue)
         {
             Type = type;
-            if (typeof(string).IsAssignableFrom(type)) { Texture = EditorGUIUtility.IconContent("Text Icon").image; }
-            else if (typeof(ScriptableObject).IsAssignableFrom(type)) { Texture = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
-            else { Texture = EditorGUIUtility.ObjectContent(null, type).image; }
+            if (typeof(string).IsAssignableFrom(type))
+            {
+                Icon = EditorGUIUtility.IconContent("Text Icon").image;
+                this.defaultValue = defaultValue;
+            }
+            else
+            {
+                this.defaultValue = AssetDatabase.LoadAssetAtPath(defaultValue, Type);
+                if (typeof(ScriptableObject).IsAssignableFrom(type)) { Icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
+                else { Icon = EditorGUIUtility.ObjectContent(null, type).image; }
+            }
         }
     }
 
     public static class TypesMetaProvider
     {
-        public static void AddType(System.Type type)
+        public static void AddType(object @object)
         {
-            CreateComponent(type);
+            CreateComponent(@object);
         }
 
         public static void RemoveType(TypeMetadata metadata)
@@ -55,17 +71,18 @@ namespace ResourceLocalization
                     select t.GetCustomAttribute<TypeMetadata>()).ToArray();
         }
 
-        private static void CreateComponent(System.Type type)
+        private static void CreateComponent(object defaultValue)
         {
-            if (type == null) { throw new System.ArgumentNullException(nameof(type)); }
+            if (defaultValue == null) { throw new System.ArgumentNullException(nameof(defaultValue)); }
             var path = ExtendedEditor.GetDirectory($"{typeof(LocalizationComponentEditor).Name}.cs").Replace("/Core/Editor", "/Components");
             if (!Directory.Exists($"{path}Editor/"))
             {
                 Directory.CreateDirectory($"{path}Editor/");
             }
-
+            var type = defaultValue.GetType();
+            string defVal = defaultValue is string ? (string)defaultValue : AssetDatabase.GetAssetPath((Object)defaultValue);
             ExtendedEditor.CreateClass(type.Name + "Localization", path, GetComponentCode(type));
-            ExtendedEditor.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(type));
+            ExtendedEditor.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", GetComponentEditorCode(type, defVal));
         }
 
         private static string GetComponentCode(System.Type type)
@@ -88,7 +105,7 @@ namespace ResourceLocalization
 }}";
         }
 
-        private static string GetComponentEditorCode(System.Type type)
+        private static string GetComponentEditorCode(System.Type type, string defaultValue)
         {
             return (type.Namespace.Equals("UnityEngine") ? "" : $"using {type.Namespace};") + $@"
 using UnityEngine;
@@ -99,7 +116,7 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}))]
+    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}), ""{defaultValue}"")]
     public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }
