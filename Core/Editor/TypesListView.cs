@@ -7,7 +7,7 @@ namespace ResourceLocalization
 {
     public partial class TypesListView : ReorderableList
     {
-        public TypesListView() : base(new List<TypeMetadata>(TypesMetaProvider.GetTypesMeta()), typeof(TypeMetadata), false, true, true, true)
+        public TypesListView() : base(new List<TypeMetadata>(TypeMetadata.GetAllMetadata()), typeof(TypeMetadata), false, true, true, true)
         {
             drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeMeta;
@@ -65,8 +65,10 @@ namespace ResourceLocalization
 
         private void RemoveTypeComponent(ReorderableList reorderable)
         {
-            if(reorderable.list[reorderable.index] is TypeMetadata metadata) { TypesMetaProvider.RemoveType(metadata); }
-            else { reorderable.list.RemoveAt(reorderable.index); reorderable.index--; }
+            if(reorderable.list[reorderable.index] is TypeMetadata metadata) {
+                if (metadata.Default != null) { LocalizationBuilder.Remove(metadata.Type); }
+                else { reorderable.list.RemoveAt(reorderable.index--); }
+            }
         }
     }
 }

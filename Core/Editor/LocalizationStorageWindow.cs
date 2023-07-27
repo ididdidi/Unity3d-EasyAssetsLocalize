@@ -23,7 +23,7 @@ namespace ResourceLocalization
 		private LocalizationView localizationView;
 		private LocalizationSettingsView settingsView;
 		private int storageVersion;
-		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.LocalizationStorage; }
+		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.Storage; }
 		public bool ShowSettings { get; set; }
 
 		private void OnEnable()

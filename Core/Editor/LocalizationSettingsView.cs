@@ -15,7 +15,7 @@ namespace ResourceLocalization
         public LocalizationSettingsView(LocalizationStorageWindow window)
         {
             this.window = window ?? throw new System.ArgumentNullException(nameof(window));
-            languagesList = new LanguagesListView(LocalizationManager.LocalizationStorage);
+            languagesList = new LanguagesListView(LocalizationManager.Storage);
             typesList = new TypesListView();
         }
 

@@ -12,7 +12,7 @@ namespace ResourceLocalization
     {
         private LocalizationComponent Component { get; set; }
         private LocalizationTag Tag { get; set; }
-        private LocalizationStorage Storage { get => LocalizationManager.LocalizationStorage; }
+        private LocalizationStorage Storage { get => LocalizationManager.Storage; }
 
         private void OnEnable()
         {
@@ -41,7 +41,7 @@ namespace ResourceLocalization
         
         private void SetTag(string id)
         {
-            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.LocalizationStorage.GetLocalizationTag(id); }
+            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.Storage.GetLocalizationTag(id); }
         }
 
         private void DrawLocalization()
@@ -51,7 +51,7 @@ namespace ResourceLocalization
                 EditorGUI.BeginChangeCheck();
                 Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
                 LocalizationView.DrawResources(Tag, LocalizationManager.Languages, GUILayout.Height(50f));
-                if (EditorGUI.EndChangeCheck()) { LocalizationManager.LocalizationStorage?.ChangeVersion(); }
+                if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.ChangeVersion(); }
             }
 
             if (ExtendedEditor.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }

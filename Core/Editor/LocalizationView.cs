@@ -13,8 +13,9 @@ namespace ResourceLocalization
 
 		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
 		{
-			LocalizationStorage = storage ?? throw new System.ArgumentNullException(nameof(storage));
+			LocalizationStorage = storage;
 			this.noticeView = noticeView;
+
 		}
 
 		public void OnGUI(Rect position)
@@ -58,7 +59,6 @@ namespace ResourceLocalization
 				style.fontSize = 32;
 				GUI.Label(position, content.text, style);
 			}
-			else Debug.Log(Data);
 		}
 
 		public static void DrawResources(LocalizationTag tag, Language[] languages, params GUILayoutOption[] options)

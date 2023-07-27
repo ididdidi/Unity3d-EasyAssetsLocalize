@@ -88,7 +88,7 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 
     private List<SearchTreeEntry> GetNewItems()
     {
-        TypeMetadata[] metaDatas = TypesMetaProvider.GetTypesMeta();
+        TypeMetadata[] metaDatas = TypeMetadata.GetAllMetadata();
         List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
 
         if(Type == null)

@@ -17,20 +17,18 @@ namespace ResourceLocalization
             set => PlayerPrefs.SetInt("Language", (int)value.SystemLanguage);
         }
 
-        public static Language[] Languages => LocalizationStorage.Languages.ToArray();
+        public static Language[] Languages => Storage.Languages.ToArray();
 
         /// <summary>
         /// Link to localization repository.
         /// </summary>
-        public static LocalizationStorage LocalizationStorage
+        public static LocalizationStorage Storage
         {
             get
             {
-                try
-                {
-                    if (!localizationStorage) { localizationStorage = Resources.Load<LocalizationStorage>(nameof(ResourceLocalization.LocalizationStorage)); }
+                if (!localizationStorage) { 
+                    localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage));
                 }
-                catch (System.Exception exp) { Debug.LogError(exp); }
                 return localizationStorage;
             }
         }
@@ -38,7 +36,7 @@ namespace ResourceLocalization
         public static void AddLocalizationComponent(LocalizationComponent component)
         {
             if(!components.Contains(component)) { components.Add(component); }
-       //     component.SetLocalizationData(LocalizationStorage.GetLocalizationData(component.ID, Language));
+            component.SetLocalizationData(Storage.GetLocalizationData(component.ID, Language));
         }
 
         public static void RemoveLocalizationComponent(LocalizationComponent component)
@@ -69,7 +67,7 @@ namespace ResourceLocalization
         /// <param name="direction">Indicates which language to select: the previous one in the list or the next one</param>
         private static void ChangeLocalzation(Direction direction)
         {
-            var languages = new List<Language>(LocalizationStorage.Languages);
+            var languages = new List<Language>(Storage.Languages);
             if (languages.Count < 2) { return; }
 
             int index = languages.IndexOf(Language);
@@ -95,7 +93,7 @@ namespace ResourceLocalization
             Language = language;
             for (int i = 0; i < components.Count; i++)
             {
-            //    components[i].SetLocalizationData(LocalizationStorage.GetLocalizationData(components[i].ID, Language));
+                components[i].SetLocalizationData(Storage.GetLocalizationData(components[i].ID, Language));
             }
         }
     }
