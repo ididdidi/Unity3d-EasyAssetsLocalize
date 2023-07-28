@@ -1,18 +1,15 @@
-﻿
-public class LocalizationComponentCreator : ClassCreator
+﻿public class LocalizationComponentPrototype
 {
-    private string path;
     private System.Type type;
 
-    public LocalizationComponentCreator(string path, System.Type type)
+    public LocalizationComponentPrototype(System.Type type)
     {
-        this.path = path ?? throw new System.ArgumentNullException(nameof(path)); ;
-        this.type = type ?? throw new System.ArgumentNullException(nameof(type)); ;
+        this.type = type ?? throw new System.ArgumentNullException(nameof(type));
     }
 
-    public override void CreateClass()
+    public string Code
     {
-        var code = $@"
+        get => $@"
 using UnityEngine.Events;
 
 namespace ResourceLocalization
@@ -27,7 +24,5 @@ namespace ResourceLocalization
         public override void SetLocalizationData(object data) => handler?.Invoke(({type.FullName})data);
     }}
 }}";
-
-        CreateClass(type.Name + "Localization", path, code);
     }
 }

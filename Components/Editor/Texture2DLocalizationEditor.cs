@@ -1,5 +1,4 @@
 // Class generated automatically
-using UnityEngine;
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -7,6 +6,6 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof(Texture2DLocalization)), TypeMetadata(typeof(Texture2D), "Assets/Source/Code/Localization/Resources/ava.png")]
+    [CustomEditor(typeof(Texture2DLocalization)), TypeMetadata(typeof(UnityEngine.Texture2D))]
     public class Texture2DLocalizationEditor : LocalizationComponentEditor { }
 }

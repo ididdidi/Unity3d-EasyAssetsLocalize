@@ -40,5 +40,30 @@ namespace ResourceLocalization
             this.serializableType = new SerializableType(type);
             this.resources = new List<IResource>(resources);
         }
+
+        public LocalizationTag(string name, object value, int languages)
+        {
+            if (value == null) { throw new System.ArgumentNullException(nameof(value)); }
+
+            this.name = name;
+            this.serializableType = new SerializableType(value.GetType());
+
+            var resources = new IResource[languages];
+            if (typeof(string).IsAssignableFrom(value.GetType()))
+            {
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    resources[i] = new TextResource(value);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    resources[i] = new UnityResource(value);
+                }
+            }
+            this.resources = new List<IResource>(resources);
+        }
     }
 }

@@ -1,5 +1,4 @@
 // Class generated automatically
-using UnityEngine;
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -7,6 +6,6 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof(StringLocalization)), TypeMetadata(typeof(System.String), "Text")]
+    [CustomEditor(typeof(StringLocalization)), TypeMetadata(typeof(System.String))]
     public class StringLocalizationEditor : LocalizationComponentEditor { }
 }

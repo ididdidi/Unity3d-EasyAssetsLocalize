@@ -108,29 +108,15 @@ public class LocalizationSearchProvider : ISearchTreeProvider
             else { 
                 icon = metaDatas[i].Icon; level = 2;
             }
-            searchList.Add(NewItem(metaDatas[i].Type, metaDatas[i].Default, icon, level));
+            var localization = LocalizationManager.Storage.GetDefaultLocalization(metaDatas[i].Type);
+            searchList.Add(NewItem(localization.Resources[0].Data, icon, level));
         }
         return searchList;
     }
 
-    private SearchTreeEntry NewItem(System.Type type, object defValue, Texture icon, int level = 1)
+    private SearchTreeEntry NewItem(object defValue, Texture icon, int level = 1)
     {
-        var resources = new IResource[LocalizationManager.Languages.Length];
-        if (typeof(string).IsAssignableFrom(type))
-        {
-            for (int i = 0; i < resources.Length; i++)
-            {
-                resources[i] = new TextResource(defValue);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < resources.Length; i++)
-            {
-                resources[i] = new UnityResource(defValue);
-            }
-        }
-
-        return new SearchTreeEntry(new GUIContent($"New {type.Name} Localization", icon), level, new LocalizationTag(type, resources));
+        var localization = new LocalizationTag($"{defValue.GetType().Name} Localization", defValue, LocalizationManager.Languages.Length);
+        return new SearchTreeEntry(new GUIContent($"New {defValue.GetType().Name} Localization", icon), level, localization);
     }
 }

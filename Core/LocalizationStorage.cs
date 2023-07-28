@@ -112,6 +112,18 @@ namespace ResourceLocalization
             throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
         }
 
+        public LocalizationTag GetDefaultLocalization(System.Type type)
+        {
+            for (int i = 0; i < localizationTags.Count; i++)
+            {
+                if (localizationTags[i].Type.Equals(type) && localizationTags[i].Name.StartsWith("Default"))
+                {
+                    return localizationTags[i];
+                }
+            }
+            throw new System.ArgumentException($"{GetType()}: No resources found for {type}");
+        }
+
         /// <summary>
         /// Serves to insert localization at the specified index.
         /// </summary>

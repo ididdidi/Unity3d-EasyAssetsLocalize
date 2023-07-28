@@ -8,11 +8,11 @@ namespace ResourceLocalization
     /// </summary>
     public static class LocalizationBuilder
     {
+
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
             CreateLocalizationStorage();
-            CreateStringLocalizationComponent();
         }
 
         public static void CreateLocalizationStorage()
@@ -25,21 +25,30 @@ namespace ResourceLocalization
 
                 var storage = AssetCreator.Create<LocalizationStorage>(path);
                 storage.AddLanguage(new Language(Application.systemLanguage));
+                CreateComponent(storage, "Text");
             }
         }
 
-        public static void CreateComponent(object defaultValue)
+        public static void CreateComponent(LocalizationStorage storage, object defaultValue)
         {
             if (defaultValue == null) { throw new System.ArgumentNullException(nameof(defaultValue)); }
+
             var path = GetDirectory($"{typeof(LocalizationComponentEditor).Name}.cs").Replace("/Core/Editor", "/Components");
             if (!System.IO.Directory.Exists($"{path}Editor/"))
             {
                 System.IO.Directory.CreateDirectory($"{path}Editor/");
             }
-            new LocalizationComponentCreator(path, defaultValue.GetType()).CreateClass();
-            new LocalizationEditorCreator(path, defaultValue).CreateClass();
+
+            var type = defaultValue.GetType();
+            ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentPrototype(type).Code);
+            ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorPrototype(type).Code);
+
+            var local = new LocalizationTag($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count);
+            storage.AddLocalizationTag(local);
             AssetDatabase.Refresh();
         }
+
+        public static bool Conteins(System.Type type) => string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
 
         public static void Remove(System.Type type)
         {
@@ -65,14 +74,6 @@ namespace ResourceLocalization
             if (res.Length == 0) { return null; }
             string path = res[0].Replace(fileName, "").Replace("\\", "/");
             return path;
-        }
-
-        private static void CreateStringLocalizationComponent()
-        {
-            if (string.IsNullOrEmpty(GetDirectory($"{typeof(string).Name}LocalizationEditor.cs")))
-            {
-                CreateComponent("Text");
-            }
         }
     }
 }

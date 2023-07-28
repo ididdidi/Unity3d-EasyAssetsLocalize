@@ -1,16 +1,15 @@
 // Class generated automatically
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace ResourceLocalization
 {
     public class TextAssetLocalization : LocalizationComponent
     {
-        [System.Serializable] public class Handler : UnityEvent<TextAsset> { }
-        [SerializeField, HideInInspector] private Handler handler;
+        [System.Serializable] public class Handler : UnityEvent<UnityEngine.TextAsset> { }
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector] private Handler handler;
 
-        public override System.Type Type => typeof(TextAsset);
+        public override System.Type Type => typeof(UnityEngine.TextAsset);
 
-        public override void SetLocalizationData(object data) => handler?.Invoke((TextAsset)data);
+        public override void SetLocalizationData(object data) => handler?.Invoke((UnityEngine.TextAsset)data);
     }
 }

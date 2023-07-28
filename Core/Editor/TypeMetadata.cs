@@ -10,24 +10,17 @@ namespace ResourceLocalization
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TypeMetadata : System.Attribute
     {
-        private object defaultValue;
         public System.Type Type { get; private set; }
-        public object Default { 
-            get => defaultValue; 
-            set => LocalizationBuilder.CreateComponent(value);
-        }
         public Texture Icon { get; private set; }
-        public TypeMetadata(System.Type type, string defaultValue)
+        public TypeMetadata(System.Type type)
         {
             Type = type;
             if (typeof(string).IsAssignableFrom(type))
             {
                 Icon = EditorGUIUtility.IconContent("Text Icon").image;
-                this.defaultValue = defaultValue;
             }
             else
             {
-                this.defaultValue = AssetDatabase.LoadAssetAtPath(defaultValue, Type);
                 if (typeof(ScriptableObject).IsAssignableFrom(type)) { Icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
                 else { Icon = EditorGUIUtility.ObjectContent(null, type).image; }
             }

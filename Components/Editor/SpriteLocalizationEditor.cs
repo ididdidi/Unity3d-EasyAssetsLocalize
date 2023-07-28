@@ -6,6 +6,6 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof(SpriteLocalization)), TypeMetadata(typeof(UnityEngine.Sprite), "Assets/Source/Code/Localization/Resources/ava.png")]
+    [CustomEditor(typeof(SpriteLocalization)), TypeMetadata(typeof(UnityEngine.Sprite))]
     public class SpriteLocalizationEditor : LocalizationComponentEditor { }
 }

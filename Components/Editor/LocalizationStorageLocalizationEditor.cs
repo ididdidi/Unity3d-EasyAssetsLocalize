@@ -1,5 +1,4 @@
-// Class generated automaticallyusing ResourceLocalization;
-using UnityEngine;
+// Class generated automatically
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -7,6 +6,6 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof(LocalizationStorageLocalization)), TypeMetadata(typeof(LocalizationStorage), "Assets/Source/Code/Localization/Resources/LocalizationStorage.asset")]
+    [CustomEditor(typeof(LocalizationStorageLocalization)), TypeMetadata(typeof(ResourceLocalization.LocalizationStorage))]
     public class LocalizationStorageLocalizationEditor : LocalizationComponentEditor { }
 }

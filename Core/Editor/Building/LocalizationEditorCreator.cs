@@ -1,24 +1,15 @@
-﻿
-using UnityEditor;
-using UnityEngine;
-
-public class LocalizationEditorCreator : ClassCreator
+﻿public class LocalizationEditorPrototype
 {
-    private string path;
-    private object defaultValue;
+    private System.Type type;
 
-    public LocalizationEditorCreator(string path, object defaultValue)
+    public LocalizationEditorPrototype(System.Type type)
     {
-        this.path = path ?? throw new System.ArgumentNullException(nameof(path));
-        this.defaultValue = defaultValue ?? throw new System.ArgumentNullException(nameof(defaultValue));
+        this.type = type ?? throw new System.ArgumentNullException(nameof(type));
     }
 
-    public override void CreateClass()
+    public string Code
     {
-        var type = defaultValue.GetType();
-        string defVal = defaultValue is string ? (string)defaultValue : AssetDatabase.GetAssetPath((Object)defaultValue);
-
-        var code = $@"
+        get => $@"
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -26,10 +17,8 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.FullName}), ""{defVal}"")]
+    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.FullName}))]
     public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
-
-        CreateClass(type.Name + "LocalizationEditor", path + "Editor/", code);
     }
 }
