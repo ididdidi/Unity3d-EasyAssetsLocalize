@@ -12,20 +12,19 @@ public class LocalizationComponentCreator : ClassCreator
 
     public override void CreateClass()
     {
-        var code = (type.Namespace.Equals("UnityEngine") ? "" : $"using {type.Namespace};") + $@"
-using UnityEngine;
+        var code = $@"
 using UnityEngine.Events;
 
 namespace ResourceLocalization
 {{
     public class {type.Name}Localization : LocalizationComponent
     {{
-        [System.Serializable] public class Handler : UnityEvent<{type.Name}> {{ }}
-        [SerializeField, HideInInspector] private Handler handler;
+        [System.Serializable] public class Handler : UnityEvent<{type.FullName}> {{ }}
+        [UnityEngine.SerializeField, UnityEngine.HideInInspector] private Handler handler;
 
-        public override System.Type Type => typeof({type.Name});
+        public override System.Type Type => typeof({type.FullName});
 
-        public override void SetLocalizationData(object data) => handler?.Invoke(({type.Name})data);
+        public override void SetLocalizationData(object data) => handler?.Invoke(({type.FullName})data);
     }}
 }}";
 

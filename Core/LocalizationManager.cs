@@ -77,6 +77,8 @@ namespace ResourceLocalization
                 if (newIndex >= 0) { index = newIndex; }
                 else { index = languages.Count + newIndex; }
                 SetLanguage(languages[index]);
+
+                Debug.Log($"{languages[index]} has been selected");
             }
             else
             {

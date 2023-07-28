@@ -15,11 +15,10 @@ public class LocalizationEditorCreator : ClassCreator
 
     public override void CreateClass()
     {
-        var type = defaultValue.GetType(); 
+        var type = defaultValue.GetType();
         string defVal = defaultValue is string ? (string)defaultValue : AssetDatabase.GetAssetPath((Object)defaultValue);
 
-        var code = (type.Namespace.Equals("UnityEngine") ? "" : $"using {type.Namespace};") + $@"
-using UnityEngine;
+        var code = $@"
 using UnityEditor;
 
 namespace ResourceLocalization
@@ -27,7 +26,7 @@ namespace ResourceLocalization
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.Name}), ""{defVal}"")]
+    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.FullName}), ""{defVal}"")]
     public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
 

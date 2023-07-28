@@ -1,16 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public class AssetCreator<T> : ClassCreator where T : ScriptableObject
+public static class AssetCreator
 {
-    private string path;
-
-    public AssetCreator(string path)
-    {
-        this.path = path ?? throw new System.ArgumentNullException(nameof(path));
-    }
-
-    public override void CreateClass()
+    public static T Create<T>(string path) where T : ScriptableObject
     {
         var objectName = typeof(T).Name + ".asset";
         if (!System.IO.Directory.Exists(path))
@@ -24,5 +17,6 @@ public class AssetCreator<T> : ClassCreator where T : ScriptableObject
 
         Selection.activeObject = asset;
         Debug.Log($"{objectName} was created at the {path}");
+        return asset;
     }
 }

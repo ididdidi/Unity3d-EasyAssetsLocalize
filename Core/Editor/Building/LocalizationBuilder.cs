@@ -12,6 +12,7 @@ namespace ResourceLocalization
         private static void Initialize()
         {
             CreateLocalizationStorage();
+            CreateStringLocalizationComponent();
         }
 
         public static void CreateLocalizationStorage()
@@ -22,9 +23,7 @@ namespace ResourceLocalization
                     .Replace("/Core", "/Resources")
                     .Replace(Application.dataPath, "Assets");
 
-                new AssetCreator<LocalizationStorage>(path).CreateClass();
-
-                var storage = AssetDatabase.LoadAssetAtPath<LocalizationStorage>($"{path}{nameof(LocalizationStorage)}.asset");
+                var storage = AssetCreator.Create<LocalizationStorage>(path);
                 storage.AddLanguage(new Language(Application.systemLanguage));
             }
         }
@@ -66,6 +65,14 @@ namespace ResourceLocalization
             if (res.Length == 0) { return null; }
             string path = res[0].Replace(fileName, "").Replace("\\", "/");
             return path;
+        }
+
+        private static void CreateStringLocalizationComponent()
+        {
+            if (string.IsNullOrEmpty(GetDirectory($"{typeof(string).Name}LocalizationEditor.cs")))
+            {
+                CreateComponent("Text");
+            }
         }
     }
 }
