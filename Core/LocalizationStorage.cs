@@ -121,7 +121,7 @@ namespace ResourceLocalization
                     return localizationTags[i];
                 }
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {type}");
+            return null;
         }
 
         /// <summary>

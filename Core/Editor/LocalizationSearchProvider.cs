@@ -108,15 +108,9 @@ public class LocalizationSearchProvider : ISearchTreeProvider
             else { 
                 icon = metaDatas[i].Icon; level = 2;
             }
-            var localization = LocalizationManager.Storage.GetDefaultLocalization(metaDatas[i].Type);
-            searchList.Add(NewItem(localization.Resources[0].Data, icon, level));
+            var defValue = LocalizationManager.Storage.GetDefaultLocalization(metaDatas[i].Type);
+            searchList.Add(new SearchTreeEntry(new GUIContent($"New {defValue.Type.Name} Localization", icon), level, defValue.Clone()));
         }
         return searchList;
-    }
-
-    private SearchTreeEntry NewItem(object defValue, Texture icon, int level = 1)
-    {
-        var localization = new LocalizationTag($"{defValue.GetType().Name} Localization", defValue, LocalizationManager.Languages.Length);
-        return new SearchTreeEntry(new GUIContent($"New {defValue.GetType().Name} Localization", icon), level, localization);
     }
 }

@@ -31,8 +31,8 @@ namespace ResourceLocalization
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(LocalizationStorage, noticeView);
 			var provider = new LocalizationSearchProvider(LocalizationStorage, 
-				(tag) => { ShowSettings = false; localizationView.Data = tag; return false; }, 
-				(tag) => localizationView.Data = tag);
+				(data) => { ShowSettings = false; localizationView.Data = data; return false; }, 
+				(data) => localizationView.Data = data);
 			searchView = new SearchTreeView(this, provider);
 			settingsView = new LocalizationSettingsView(this);
 		}

@@ -45,6 +45,8 @@ namespace ResourceLocalization
 
             var local = new LocalizationTag($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count);
             storage.AddLocalizationTag(local);
+
+            EditorUtility.SetDirty(storage);
             AssetDatabase.Refresh();
         }
 

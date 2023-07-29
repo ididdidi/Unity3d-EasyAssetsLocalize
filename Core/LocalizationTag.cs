@@ -14,6 +14,7 @@ namespace ResourceLocalization
         [SerializeField] private string name = "None";
         [SerializeField] private SerializableType serializableType;
         [SerializeReference] private List<IResource> resources = new List<IResource>();
+        [SerializeField] private bool isDefault;
 
         /// <summary>
         /// Tag ID.
@@ -28,6 +29,7 @@ namespace ResourceLocalization
         /// List of localized resources.
         /// </summary>
         public List<IResource> Resources { get => resources; }
+        public bool IsDefault => isDefault;
 
         /// <summary>
         /// Constructor.
@@ -46,6 +48,7 @@ namespace ResourceLocalization
             if (value == null) { throw new System.ArgumentNullException(nameof(value)); }
 
             this.name = name;
+            this.isDefault = true;
             this.serializableType = new SerializableType(value.GetType());
 
             var resources = new IResource[languages];
@@ -64,6 +67,16 @@ namespace ResourceLocalization
                 }
             }
             this.resources = new List<IResource>(resources);
+        }
+
+        public LocalizationTag Clone()
+        {
+            var resources = new IResource[Resources.Count];
+            for (int i = 0; i < resources.Length; i++)
+            {
+                resources[i] = Resources[i].Clone();
+            }
+            return new LocalizationTag(Type, resources);
         }
     }
 }
