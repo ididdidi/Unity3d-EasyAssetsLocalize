@@ -4,7 +4,7 @@ using UnityExtended;
 
 namespace ResourceLocalization
 {
-	public class LocalizationView
+	public class LocalizationView : IView
 	{
 		private object data;
 		private LocalizationStorage storage;
@@ -33,8 +33,6 @@ namespace ResourceLocalization
 
 		public void OnGUI(Rect position)
 		{
-			GUI.Label(position, GUIContent.none, "grey_border");
-
 			if (Data is LocalizationTag tag)
 			{
 				var changeCheck = LocalizationStorage.ContainsLocalizationTag(tag);
@@ -62,20 +60,6 @@ namespace ResourceLocalization
 					GUILayout.EndArea();
 				}
 				catch (System.ArgumentException) { }
-			}
-			else if (Data is GUIContent content)
-			{
-				editable = false;
-				var rect = new Rect(0f, 0f, 128f, 128f);
-				rect.center = position.center;
-				rect.y -= 25f;
-				GUI.DrawTexture(rect, content.image, ScaleMode.ScaleToFit);
-
-				position.y += 55f;
-				var style = new GUIStyle("AM MixerHeader");
-				style.alignment = TextAnchor.MiddleCenter;
-				style.fontSize = 32;
-				GUI.Label(position, content.text, style);
 			}
 		}
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ResourceLocalization
 {
-    public class LocalizationSettingsView
+    public class LocalizationSettingsView : IView
     {
         private GUIStyle style;
 
@@ -21,7 +21,7 @@ namespace ResourceLocalization
 
         public void OnGUI(Rect position)
         {
-            if(style == null) { style = new GUIStyle("AM MixerHeader"); }
+            if (style == null) { style = new GUIStyle("AM MixerHeader"); }
 
             var content = GUIContent.none;
             GUI.Label(position, content, "grey_border");
@@ -73,7 +73,7 @@ namespace ResourceLocalization
         public void Close()
         {
             languagesList.index = typesList.index  = -1;
-            window.ShowSettings = false;
+            //window.ShowSettings = false;
             EditorGUI.FocusTextInControl(null);
         }
     }
