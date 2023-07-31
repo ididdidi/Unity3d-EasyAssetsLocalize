@@ -30,7 +30,7 @@ namespace ResourceLocalization
             GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
 
             content = new GUIContent(EditorGUIUtility.IconContent("tab_prev@2x").image, "Back");
-            if (GUILayout.Button(content, style, GUILayout.Height(20f))) {
+            if (GUILayout.Button(content, style, GUILayout.Width(20f), GUILayout.Height(20f))) {
                 Close();
             }
 
@@ -39,7 +39,7 @@ namespace ResourceLocalization
             GUILayout.FlexibleSpace();
 
             content = new GUIContent(EditorGUIUtility.IconContent("_Help@2x").image, "Help");
-            if (GUILayout.Button(content, style, GUILayout.Height(20f)))
+            if (GUILayout.Button(content, style, GUILayout.Width(20f), GUILayout.Height(20f)))
             {
                 // Реализовать вывод справки
             }

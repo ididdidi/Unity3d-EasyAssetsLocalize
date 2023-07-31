@@ -84,7 +84,11 @@ public class LocalizationSearchProvider : ISearchTreeProvider
 
     public bool OnSelectEntry(SearchTreeEntry entry) => (bool)handler?.Invoke(entry.Data);
 
-    public void OnFocusEntry(SearchTreeEntry entry) => onFocus?.Invoke(entry.Data);
+    public void OnFocusEntry(SearchTreeEntry entry)
+    {
+        var content = new GUIContent("Not found...", EditorGUIUtility.IconContent("Search Icon").image);
+        onFocus?.Invoke(entry?.Data ?? content);
+    }
 
     private List<SearchTreeEntry> GetNewItems()
     {
