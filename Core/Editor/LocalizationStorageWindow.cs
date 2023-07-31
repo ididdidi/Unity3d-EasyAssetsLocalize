@@ -18,7 +18,7 @@ namespace ResourceLocalization
 		private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
 
 		// Data renderer in a editor window
-		private IView curentView;
+		private IView currentView;
 		private NoticeView noticeView;
 		private TypePreview typePreview;
 		private SearchTreeView searchView;
@@ -32,7 +32,7 @@ namespace ResourceLocalization
 			typePreview = new TypePreview();
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(LocalizationStorage, noticeView);
-			settingsView = new LocalizationSettingsView(this);
+			settingsView = new LocalizationSettingsView(CloceSettingsView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);
 		}
@@ -66,7 +66,7 @@ namespace ResourceLocalization
 
 			if (string.IsNullOrEmpty(searchView?.SearchKeyword) && SettingsButton(new Rect(302, 8, 20, 20)))
 			{
-				curentView = settingsView;
+				currentView = settingsView;
 			}
 
 			rect.x = 319;
@@ -74,7 +74,7 @@ namespace ResourceLocalization
 			EditorGUI.DrawRect(rect, Background);
 			GUI.Label(rect, GUIContent.none, "grey_border");
 
-			curentView?.OnGUI(rect);
+			currentView?.OnGUI(rect);
 			noticeView.OnGUI();
 		}
 
@@ -88,7 +88,7 @@ namespace ResourceLocalization
 			if (data is LocalizationTag localization)
 			{
 				localizationView.Data = localization;
-				curentView = localizationView;
+				currentView = localizationView;
 			}
 			return false;
 		}
@@ -98,13 +98,18 @@ namespace ResourceLocalization
 			if (data is GUIContent content)
 			{
 				typePreview.Content = content;
-				curentView = typePreview;
+				currentView = typePreview;
 			}
 			else if (data is LocalizationTag localization)
 			{
 				localizationView.Data = localization;
-				curentView = localizationView;
+				currentView = localizationView;
 			}
+		}
+
+		private void CloceSettingsView()
+		{
+			currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typePreview : localizationView as IView;
 		}
 	}
 }

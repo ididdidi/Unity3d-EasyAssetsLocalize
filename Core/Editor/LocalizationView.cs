@@ -96,14 +96,15 @@ namespace ResourceLocalization
 			var rect = new Rect(position);
 			if (localization.IsDefault)
 			{
-				var content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close@2x").image, "Default");
-				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Height(20));
+				var content = new GUIContent(EditorGUIUtility.IconContent("CustomTool@2x").image, "Edit");
+				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
 
 			}
 			else if (LocalizationStorage.ContainsLocalizationTag(localization))
 			{
 				var content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close@2x").image, "Delete");
-				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Height(20))) { 
+				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
+				{
 					LocalizationStorage.RemoveLocalizationTag(localization);
 					noticeView.Show(rect, new GUIContent($"{localization.Name} has been deleted"));
 					EditorGUI.FocusTextInControl(null);
@@ -112,7 +113,8 @@ namespace ResourceLocalization
 			else
 			{
 				var content = new GUIContent(EditorGUIUtility.IconContent("CreateAddNew@2x").image, "Add");
-				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Height(20))) {
+				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
+				{
 					LocalizationStorage.AddLocalizationTag(localization);
 					noticeView.Show(rect, new GUIContent($"{localization.Name} has been added"));
 					EditorGUI.FocusTextInControl(null);

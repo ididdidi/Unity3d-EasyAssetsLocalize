@@ -49,8 +49,10 @@ namespace ResourceLocalization
             if (Tag != null)
             {
                 EditorGUI.BeginChangeCheck();
+                EditorGUI.BeginDisabledGroup(Tag.IsDefault);
                 Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
                 LocalizationView.DrawResources(Tag, LocalizationManager.Languages, GUILayout.Height(50f));
+                EditorGUI.EndDisabledGroup();
                 if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.ChangeVersion(); }
             }
 

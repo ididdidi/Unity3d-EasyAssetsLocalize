@@ -7,14 +7,14 @@ namespace ResourceLocalization
     {
         private GUIStyle style;
 
-        private LocalizationStorageWindow window;
         private LanguagesListView languagesList;
         private TypesListView typesList;
         private Vector2 scrollPosition = default;
+        private System.Action onCloseButton;
 
-        public LocalizationSettingsView(LocalizationStorageWindow window)
+        public LocalizationSettingsView(System.Action onCloseButton)
         {
-            this.window = window ?? throw new System.ArgumentNullException(nameof(window));
+            this.onCloseButton = onCloseButton ?? throw new System.ArgumentNullException(nameof(onCloseButton));
             languagesList = new LanguagesListView(LocalizationManager.Storage);
             typesList = new TypesListView();
         }
@@ -73,7 +73,7 @@ namespace ResourceLocalization
         public void Close()
         {
             languagesList.index = typesList.index  = -1;
-            //window.ShowSettings = false;
+            onCloseButton();
             EditorGUI.FocusTextInControl(null);
         }
     }
