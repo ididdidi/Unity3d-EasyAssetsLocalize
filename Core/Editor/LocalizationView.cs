@@ -96,7 +96,7 @@ namespace ResourceLocalization
 			var rect = new Rect(position);
 			if (localization.IsDefault)
 			{
-				var content = new GUIContent(EditorGUIUtility.IconContent("CustomTool@2x").image, "Edit");
+				var content = new GUIContent(EditorGUIUtility.IconContent(editable ? "AssemblyLock" : "CustomTool@2x").image, "Edit");
 				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
 
 			}
