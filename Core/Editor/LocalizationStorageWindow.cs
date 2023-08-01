@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityExtended;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.
@@ -20,7 +20,7 @@ namespace ResourceLocalization
 		// Data renderer in a editor window
 		private IView currentView;
 		private NoticeView noticeView;
-		private TypePreview typePreview;
+		private TypeCover typePreview;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationSettingsView settingsView;
@@ -29,7 +29,7 @@ namespace ResourceLocalization
 
 		private void OnEnable()
 		{
-			typePreview = new TypePreview();
+			typePreview = new TypeCover();
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(LocalizationStorage, noticeView);
 			settingsView = new LocalizationSettingsView(CloceSettingsView); ;
@@ -95,6 +95,7 @@ namespace ResourceLocalization
 
 		private void OnFocusEntry(object data)
 		{
+			if(currentView == settingsView) { return; }
 			if (data is GUIContent content)
 			{
 				typePreview.Content = content;

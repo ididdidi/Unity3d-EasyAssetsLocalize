@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     /// <summary>
     /// Creates an instance of a script object of type LocalizationStorage

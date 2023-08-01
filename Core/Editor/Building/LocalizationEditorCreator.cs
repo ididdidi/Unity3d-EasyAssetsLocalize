@@ -12,7 +12,7 @@
         get => $@"
 using UnityEditor;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {{
     /// <summary>
     /// Class for displaying localization fields.

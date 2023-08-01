@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityExtended;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     /// <summary>
     /// Class for displaying localization component.

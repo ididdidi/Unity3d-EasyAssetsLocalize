@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityExtended;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
 	/// <summary>
 	/// Responsible for presenting the Localization Storage in the inspector.

@@ -1,7 +1,7 @@
 // Class generated automatically
 using UnityEngine.Events;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     public class SpriteLocalization : LocalizationComponent
     {

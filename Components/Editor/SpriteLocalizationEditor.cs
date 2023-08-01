@@ -1,7 +1,7 @@
 // Class generated automatically
 using UnityEditor;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     /// <summary>
     /// Class for displaying localization fields.

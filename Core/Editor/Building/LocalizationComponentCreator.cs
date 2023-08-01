@@ -12,7 +12,7 @@
         get => $@"
 using UnityEngine.Events;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {{
     public class {type.Name}Localization : LocalizationComponent
     {{

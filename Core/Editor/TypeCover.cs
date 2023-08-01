@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
-	public class TypePreview : IView
+	public class TypeCover : IView
 	{
 		public GUIContent Content { get; set; }
 

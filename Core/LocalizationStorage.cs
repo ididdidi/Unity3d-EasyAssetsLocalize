@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     /// <summary>
     /// Сlass that encapsulates data from languages and localized resources.
@@ -150,6 +150,17 @@ namespace ResourceLocalization
             localizationTags.Remove(localizationTag);
             ChangeVersion();
         }
+
+        public void RemoveAll(System.Type type)
+        {
+            for(int i=localizationTags.Count-1; i > -1; i--)
+            {
+                if (localizationTags[i].Type.Equals(type))
+                {
+                    localizationTags.Remove(localizationTags[i]);
+                }
+            }
+        } 
 
         public void ReorderLocalizations(int currentIndex, int nextIndex)
         {

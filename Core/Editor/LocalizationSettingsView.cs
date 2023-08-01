@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     public class LocalizationSettingsView : IView
     {

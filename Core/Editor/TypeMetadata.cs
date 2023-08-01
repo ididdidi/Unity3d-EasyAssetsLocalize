@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityExtended;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TypeMetadata : System.Attribute

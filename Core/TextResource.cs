@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     [System.Serializable]
     public class TextResource : IResource

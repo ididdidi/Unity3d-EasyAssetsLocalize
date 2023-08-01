@@ -2,7 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     public class LanguagesListView : ReorderableList
     {

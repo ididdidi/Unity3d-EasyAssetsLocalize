@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     public partial class TypesListView : ReorderableList
     {
@@ -52,7 +52,11 @@ namespace ResourceLocalization
 
         private void RemoveTypeComponent(ReorderableList reorderable)
         {
-            if(reorderable.list[reorderable.index] is TypeMetadata metadata) { LocalizationBuilder.Remove(metadata.Type); }
+            if(reorderable.list[reorderable.index] is TypeMetadata metadata)
+            {
+                LocalizationManager.Storage.RemoveAll(metadata.Type);
+                LocalizationBuilder.Remove(metadata.Type); 
+            }
             else { reorderable.list.RemoveAt(reorderable.index--); }
         }
     }

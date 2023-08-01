@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ResourceLocalization
+namespace SimpleLocalization
 {
     public abstract class LocalizationComponent : MonoBehaviour
     {
