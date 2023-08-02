@@ -14,8 +14,7 @@ namespace SimpleLocalization
 		private int storageVersion;
 
 		private bool foldout;
-		//private Language[] languages;
-		private LocalizationTag[] localizationTags;
+		private Localization[] localizationTags;
 		private bool[] foldoutItems;
 		private string filter = string.Empty;
 
@@ -49,8 +48,7 @@ namespace SimpleLocalization
 		{
 			if (localizationTags == null || storageVersion != storage.Version)
 			{
-			//	languages = storage.Languages;
-				localizationTags = storage.LocalizationTags;
+				localizationTags = storage.Localizations;
 				foldoutItems = new bool[localizationTags.Length];
 				storageVersion = storage.Version;
 			}

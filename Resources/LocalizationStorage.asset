@@ -15,6 +15,6 @@ MonoBehaviour:
   version: 0
   languages: []
   types: []
-  localizationTags: []
+  localizations: []
   references:
     version: 1

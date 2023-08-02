@@ -43,8 +43,8 @@ namespace SimpleLocalization
             ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentPrototype(type).Code);
             ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorPrototype(type).Code);
 
-            var local = new LocalizationTag($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count);
-            storage.AddLocalizationTag(local);
+            var local = new Localization($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count);
+            storage.AddLocalization(local);
 
             EditorUtility.SetDirty(storage);
             AssetDatabase.Refresh();

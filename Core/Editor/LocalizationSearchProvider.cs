@@ -18,7 +18,7 @@ namespace SimpleLocalization
 
         private LocalizationStorage Storage { get; }
         private System.Type Type { get; }
-        private Dictionary<System.Type, List<LocalizationTag>> types;
+        private Dictionary<System.Type, List<Localization>> types;
 
         public LocalizationSearchProvider(LocalizationStorage storage, Handler handler, OnFocus onFocus = null, System.Type type = null)
         {
@@ -34,7 +34,7 @@ namespace SimpleLocalization
 
             List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
             searchList.Add(new SearchTreeGroupEntry(new GUIContent("Localizations")));
-            var tags = new List<LocalizationTag>(Storage.LocalizationTags);
+            var tags = new List<Localization>(Storage.Localizations);
             tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
             searchList.AddRange(BuildSearchList(tags));
@@ -45,7 +45,7 @@ namespace SimpleLocalization
             return searchTree;
         }
 
-        private List<SearchTreeEntry> BuildSearchList(List<LocalizationTag> tags)
+        private List<SearchTreeEntry> BuildSearchList(List<Localization> tags)
         {
             // Group by Type
             Dictionary<System.Type, List<SearchTreeEntry>> entries = new Dictionary<System.Type, List<SearchTreeEntry>>();

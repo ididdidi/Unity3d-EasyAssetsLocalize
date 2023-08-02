@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SimpleLocalization
 {
+    // Class for managing resource localization
     public static class LocalizationManager
     {
         private static LocalizationStorage localizationStorage;
@@ -33,15 +34,23 @@ namespace SimpleLocalization
             }
         }
 
-        public static void AddLocalizationComponent(LocalizationComponent component)
+        /// <summary>
+        /// Subscribe to localization changes.
+        /// </summary>
+        /// <param name="component"><see cref="LocalizationComponent"/></param>
+        public static void Subscribe(this LocalizationComponent component)
         {
-            if(!components.Contains(component)) { components.Add(component); }
+            if(!string.IsNullOrEmpty(component.ID) && !components.Contains(component)) { components.Add(component); }
             component.SetLocalizationData(Storage.GetLocalizationData(component.ID, Language));
         }
 
-        public static void RemoveLocalizationComponent(LocalizationComponent component)
+        /// <summary>
+        /// Unsubscribe to localization changes.
+        /// </summary>
+        /// <param name="component"><see cref="LocalizationComponent"/></param>
+        public static void Unsubscribe(this LocalizationComponent component)
         {
-            if (components.Contains(component)) { components.Remove(component); }
+            if (!string.IsNullOrEmpty(component.ID) && components.Contains(component)) { components.Remove(component); }
         }
 
         /// <summary>
@@ -89,7 +98,7 @@ namespace SimpleLocalization
         /// <summary>
         /// Sets the current language and loads localized resources.
         /// </summary>
-        /// <param name="language">LocalizationTaglanguage</param>
+        /// <param name="language">Language</param>
         private static void SetLanguage(Language language)
         {
             Language = language;

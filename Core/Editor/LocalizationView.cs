@@ -33,9 +33,9 @@ namespace SimpleLocalization
 
 		public void OnGUI(Rect position)
 		{
-			if (Data is LocalizationTag tag)
+			if (Data is Localization tag)
 			{
-				var changeCheck = LocalizationStorage.ContainsLocalizationTag(tag);
+				var changeCheck = LocalizationStorage.ContainsLocalization(tag);
 				try
 				{
 					GUILayout.BeginArea(position);
@@ -63,7 +63,7 @@ namespace SimpleLocalization
 			}
 		}
 
-		public static void DrawResources(LocalizationTag tag, Language[] languages, params GUILayoutOption[] options)
+		public static void DrawResources(Localization tag, Language[] languages, params GUILayoutOption[] options)
 		{
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);
 			style.wordWrap = true;
@@ -82,7 +82,7 @@ namespace SimpleLocalization
 			}
 		}
 
-		private void DrawHeader(Rect position, LocalizationTag localization)
+		private void DrawHeader(Rect position, Localization localization)
 		{
 			GUILayout.Space(2);
 			GUILayout.BeginHorizontal(EditorStyles.inspectorDefaultMargins);
@@ -102,12 +102,12 @@ namespace SimpleLocalization
 				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
 
 			}
-			else if (LocalizationStorage.ContainsLocalizationTag(localization))
+			else if (LocalizationStorage.ContainsLocalization(localization))
 			{
 				var content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close@2x").image, "Delete");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
-					LocalizationStorage.RemoveLocalizationTag(localization);
+					LocalizationStorage.RemoveLocalization(localization);
 					noticeView.Show(rect, new GUIContent($"{localization.Name} has been deleted"));
 					EditorGUI.FocusTextInControl(null);
 				}
@@ -117,7 +117,7 @@ namespace SimpleLocalization
 				var content = new GUIContent(EditorGUIUtility.IconContent("CreateAddNew@2x").image, "Add");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
-					LocalizationStorage.AddLocalizationTag(localization);
+					LocalizationStorage.AddLocalization(localization);
 					noticeView.Show(rect, new GUIContent($"{localization.Name} has been added"));
 					EditorGUI.FocusTextInControl(null);
 				}

@@ -85,7 +85,7 @@ namespace SimpleLocalization
 
 		private bool OnSelectEntry(object data)
 		{
-			if (data is LocalizationTag localization)
+			if (data is Localization localization)
 			{
 				localizationView.Data = localization;
 				currentView = localizationView;
@@ -101,7 +101,7 @@ namespace SimpleLocalization
 				typePreview.Content = content;
 				currentView = typePreview;
 			}
-			else if (data is LocalizationTag localization)
+			else if (data is Localization localization)
 			{
 				localizationView.Data = localization;
 				currentView = localizationView;

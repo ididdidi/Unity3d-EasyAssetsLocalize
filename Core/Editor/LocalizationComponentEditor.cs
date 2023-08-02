@@ -11,7 +11,7 @@ namespace SimpleLocalization
     public class LocalizationComponentEditor : Editor
     {
         private LocalizationComponent Component { get; set; }
-        private LocalizationTag Tag { get; set; }
+        private Localization Tag { get; set; }
         private LocalizationStorage Storage { get => LocalizationManager.Storage; }
 
         private void OnEnable()
@@ -27,11 +27,11 @@ namespace SimpleLocalization
             DrawHandler();
         }
 
-        private bool SelectTag(LocalizationTag tag) 
+        private bool SelectTag(Localization tag) 
         {
-            if (!Storage.ContainsLocalizationTag(tag))
+            if (!Storage.ContainsLocalization(tag))
             {
-                Storage.AddLocalizationTag(tag);
+                Storage.AddLocalization(tag);
             }
             Component.ID = tag.ID;
             SetTag(tag.ID);
@@ -41,7 +41,7 @@ namespace SimpleLocalization
         
         private void SetTag(string id)
         {
-            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.Storage.GetLocalizationTag(id); }
+            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.Storage.GetLocalization(id); }
         }
 
         private void DrawLocalization()
@@ -62,7 +62,7 @@ namespace SimpleLocalization
         private void SetLocalization()
         {
             SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, 
-                (data) => { if (data is LocalizationTag tag) return SelectTag(tag); else return false; }, null, Component.Type));
+                (data) => { if (data is Localization tag) return SelectTag(tag); else return false; }, null, Component.Type));
         }
 
 
