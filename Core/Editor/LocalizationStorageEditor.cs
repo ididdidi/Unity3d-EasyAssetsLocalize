@@ -16,7 +16,6 @@ namespace SimpleLocalization
 		private bool foldout;
 		private Localization[] localizationTags;
 		private bool[] foldoutItems;
-		private string filter = string.Empty;
 
 		/// <summary>
 		/// Storage link caching.
@@ -32,13 +31,6 @@ namespace SimpleLocalization
 			UpdateLocalizations();
 			DrowLocalizations();
 			DrawButton();
-
-			EditorGUI.BeginChangeCheck();
-			filter = GUILayout.TextField(filter, 10);
-			if (EditorGUI.EndChangeCheck())
-			{
-				GUIUtility.keyboardControl = 0;
-			}
 		}
 
 		/// <summary>

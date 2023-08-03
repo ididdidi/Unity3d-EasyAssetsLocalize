@@ -6,12 +6,12 @@
     public interface IResource
     {
         /// <summary>
-        /// Property to get and set data
+        /// Property to get and set data.
         /// </summary>
         object Data { get; set; }
 
         /// <summary>
-        /// Method for making a copy of an object.
+        /// Method for creating new copies of a resource instance.
         /// </summary>
         /// <returns>Object with similar data</returns>
         IResource Clone();

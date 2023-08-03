@@ -29,12 +29,49 @@ namespace SimpleLocalization
         /// List of localized resources.
         /// </summary>
         public List<IResource> Resources { get => resources; }
+
+        /// <summary>
+        /// Whether the instance is standard for the type of resource.
+        /// </summary>
         public bool IsDefault => isDefault;
 
         /// <summary>
-        /// Constructor.
+        /// Constructor to create new instances with example resource object.
+        /// Recommended for creating default localization
         /// </summary>
-        /// <param name="name">Tag name</param>
+        /// <param name="name">Localization name</param>
+        /// <param name="data">Resource data</param>
+        /// <param name="numbLang">Number of languages</param>
+        public Localization(string name, object data, int numbLang, bool isDefault = false)
+        {
+            if (data == null) { throw new System.ArgumentNullException(nameof(data)); }
+
+            this.name = name;
+            this.isDefault = isDefault;
+            this.serializableType = new SerializableType(data.GetType());
+
+            var resources = new IResource[numbLang];
+            if (typeof(string).IsAssignableFrom(data.GetType()))
+            {
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    resources[i] = new TextResource(data);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < resources.Length; i++)
+                {
+                    resources[i] = new UnityResource(data);
+                }
+            }
+            this.resources = new List<IResource>(resources);
+        }
+
+        /// <summary>
+        /// Constructor to create new instances with set of resource objects.
+        /// </summary>
+        /// <param name="type">Type of localized resources</param>
         /// <param name="resources">List of localized resources</param>
         public Localization(System.Type type, IEnumerable<IResource> resources)
         {
@@ -43,32 +80,10 @@ namespace SimpleLocalization
             this.resources = new List<IResource>(resources);
         }
 
-        public Localization(string name, object value, int languages)
-        {
-            if (value == null) { throw new System.ArgumentNullException(nameof(value)); }
-
-            this.name = name;
-            this.isDefault = true;
-            this.serializableType = new SerializableType(value.GetType());
-
-            var resources = new IResource[languages];
-            if (typeof(string).IsAssignableFrom(value.GetType()))
-            {
-                for (int i = 0; i < resources.Length; i++)
-                {
-                    resources[i] = new TextResource(value);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < resources.Length; i++)
-                {
-                    resources[i] = new UnityResource(value);
-                }
-            }
-            this.resources = new List<IResource>(resources);
-        }
-
+        /// <summary>
+        /// Recommended Method for Creating New Localization Instances.
+        /// </summary>
+        /// <returns>Copy of the localization instance</returns>
         public Localization Clone()
         {
             var resources = new IResource[Resources.Count];

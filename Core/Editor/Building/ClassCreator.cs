@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public static class ClassCreator
+﻿public static class ClassCreator
 {
     /// <summary>
     /// Method for creating a class file.

@@ -11,71 +11,97 @@ namespace SimpleLocalization
     public class LocalizationComponentEditor : Editor
     {
         private LocalizationComponent Component { get; set; }
-        private Localization Tag { get; set; }
+        private Localization Localization { get; set; }
         private LocalizationStorage Storage { get => LocalizationManager.Storage; }
 
+        private SerializedProperty handler;
+        /// <summary>
+        /// Method for displaying a list of initialization handlers and changing localization.
+        /// </summary>
+        private void DrawHandler()
+        {
+            serializedObject.Update();
+            if (Localization != null)
+            {
+                if (handler == null) { handler = serializedObject.FindProperty("handler"); }
+                if (handler != null) { EditorGUILayout.PropertyField(handler); }
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// Standard method for initialization
+        /// </summary>
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
-            SetTag(Component.ID);
+            SetLocalization(Component.ID);
         }
 
+        /// <summary>
+        /// Standard Method for displaying fields in an Inspector Window
+        /// </summary>
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
             DrawLocalization();
             DrawHandler();
         }
-
-        private bool SelectTag(Localization tag) 
-        {
-            if (!Storage.ContainsLocalization(tag))
-            {
-                Storage.AddLocalization(tag);
-            }
-            Component.ID = tag.ID;
-            SetTag(tag.ID);
-            EditorUtility.SetDirty(Component);
-            return true;
-        }
         
-        private void SetTag(string id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        private void SetLocalization(string id)
         {
-            if (!string.IsNullOrEmpty(id)) { Tag = LocalizationManager.Storage.GetLocalization(id); }
+            if (!string.IsNullOrEmpty(id)) { Localization = Storage.GetLocalization(id); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void DrawLocalization()
         {
-            if (Tag != null)
+            if (Localization != null)
             {
                 EditorGUI.BeginChangeCheck();
-                EditorGUI.BeginDisabledGroup(Tag.IsDefault);
-                Tag.Name = EditorGUILayout.TextField("Localization name", Tag.Name);
-                LocalizationView.DrawResources(Tag, LocalizationManager.Languages, GUILayout.Height(50f));
+                EditorGUI.BeginDisabledGroup(Localization.IsDefault);
+                Localization.Name = EditorGUILayout.TextField("Localization name", Localization.Name);
+                LocalizationView.DrawResources(Localization, LocalizationManager.Languages, GUILayout.Height(50f));
                 EditorGUI.EndDisabledGroup();
                 if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.ChangeVersion(); }
             }
 
-            if (ExtendedEditor.CenterButton(Tag == null ? "Set Localization" : "Change Localization")) { SetLocalization(); }
+            if (ExtendedEditor.CenterButton(Localization == null ? "Set Localization" : "Change Localization")) { ShowSearchWindow(); }
         }
 
-        private void SetLocalization()
+        /// <summary>
+        /// 
+        /// </summary>
+        private void ShowSearchWindow()
         {
-            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, 
-                (data) => { if (data is Localization tag) return SelectTag(tag); else return false; }, null, Component.Type));
+            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SetLocaloization, null, Component.Type));
         }
 
-
-        private SerializedProperty handler;
-        private void DrawHandler()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data">Localization instance as <see cref="object"/></param>
+        /// <returns></returns>
+        private bool SetLocaloization(object data)
         {
-            serializedObject.Update();
-            if (Tag != null)
+            if (data is Localization localization)
             {
-                if (handler == null) { handler = serializedObject.FindProperty("handler"); }
-                if (handler != null) { EditorGUILayout.PropertyField(handler); }
+                if (!Storage.ContainsLocalization(localization))
+                {
+                    Storage.AddLocalization(localization);
+                }
+                Component.ID = localization.ID;
+                SetLocalization(localization.ID);
+                EditorUtility.SetDirty(Component);
+                return true;
             }
-            serializedObject.ApplyModifiedProperties();
+            else return false;
         }
     }
 }
