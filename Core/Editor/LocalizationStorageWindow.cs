@@ -23,16 +23,17 @@ namespace SimpleLocalization
 		private TypeCover typePreview;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
-		private LocalizationSettingsView settingsView;
+		private LocalizationPropertiesView settingsView;
 		private int storageVersion;
 		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.Storage; }
 
 		private void OnEnable()
 		{
+			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			typePreview = new TypeCover();
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(LocalizationStorage, noticeView);
-			settingsView = new LocalizationSettingsView(CloceSettingsView); ;
+			settingsView = new LocalizationPropertiesView(ClocePropertiesView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);
 		}
@@ -42,7 +43,7 @@ namespace SimpleLocalization
 		/// </summary>
 		public static LocalizationStorageWindow Show(float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
-			var instance = GetWindow<LocalizationStorageWindow>(LocalizationStorage.name);
+			var instance = GetWindow<LocalizationStorageWindow>(LocalizationStorage.name, true);
 
 			instance.minSize = new Vector2(minWidth, minHight);
 
@@ -50,7 +51,7 @@ namespace SimpleLocalization
 		}
 
 		/// <summary>
-		/// Method for rendering window content
+		/// Method for rendering window content.
 		/// </summary>
 		internal void OnGUI()
 		{
@@ -64,10 +65,7 @@ namespace SimpleLocalization
 			EditorGUI.DrawRect(rect, Background);
 			if (LocalizationManager.Languages.Length > 0) searchView?.OnGUI(rect);
 
-			if (string.IsNullOrEmpty(searchView?.SearchKeyword) && SettingsButton(new Rect(302, 8, 20, 20)))
-			{
-				currentView = settingsView;
-			}
+			if (string.IsNullOrEmpty(searchView?.SearchKeyword)) { ShowPropertiesButton(new Rect(302, 8, 20, 20)); }
 
 			rect.x = 319;
 			rect.width = position.width - 320;
@@ -78,9 +76,13 @@ namespace SimpleLocalization
 			noticeView.OnGUI();
 		}
 
-		private bool SettingsButton(Rect rect)
+		/// <summary>
+		/// Button to show properties
+		/// </summary>
+		/// <param name="rect">Position</param>
+		private void ShowPropertiesButton(Rect rect)
 		{
-			return GUI.Button(rect, EditorGUIUtility.IconContent("_Popup"), GUIStyle.none);
+			if (GUI.Button(rect, EditorGUIUtility.IconContent("_Popup"), GUIStyle.none)) { currentView = settingsView; }
 		}
 
 		private bool OnSelectEntry(object data)
@@ -108,7 +110,7 @@ namespace SimpleLocalization
 			}
 		}
 
-		private void CloceSettingsView()
+		private void ClocePropertiesView()
 		{
 			currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typePreview : localizationView as IView;
 		}

@@ -39,7 +39,7 @@ namespace SimpleLocalization
         }
 
         /// <summary>
-        /// Standard Method for displaying fields in an Inspector Window
+        /// Standard Method for displaying fields in an Inspector Window.
         /// </summary>
         public override void OnInspectorGUI()
         {
@@ -47,18 +47,18 @@ namespace SimpleLocalization
             DrawLocalization();
             DrawHandler();
         }
-        
+
         /// <summary>
-        /// 
+        /// Initializes Localization in an editor instance.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Localization identifier</param>
         private void SetLocalization(string id)
         {
             if (!string.IsNullOrEmpty(id)) { Localization = Storage.GetLocalization(id); }
         }
 
         /// <summary>
-        /// 
+        /// Drawing localization fields in the inspector window.
         /// </summary>
         private void DrawLocalization()
         {
@@ -76,7 +76,7 @@ namespace SimpleLocalization
         }
 
         /// <summary>
-        /// 
+        /// Opens a dropdown window with a list of localizations.
         /// </summary>
         private void ShowSearchWindow()
         {
@@ -84,10 +84,10 @@ namespace SimpleLocalization
         }
 
         /// <summary>
-        /// 
+        /// Method for handling localization selection from the list.
         /// </summary>
         /// <param name="data">Localization instance as <see cref="object"/></param>
-        /// <returns></returns>
+        /// <returns>Close window</returns>
         private bool SetLocaloization(object data)
         {
             if (data is Localization localization)
