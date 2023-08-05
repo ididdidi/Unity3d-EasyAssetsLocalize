@@ -16,21 +16,27 @@ namespace SimpleLocalization
 		private bool foldout;
 		private Localization[] localizationTags;
 		private bool[] foldoutItems;
+		private TestSearchEditorView testView;
 
 		/// <summary>
 		/// Storage link caching.
 		/// </summary>
-		public void OnEnable() => storage = this.target as LocalizationStorage;
+		public void OnEnable()
+		{
+			storage = this.target as LocalizationStorage;
+			testView = new TestSearchEditorView(this, new LocalizationSearchProvider(storage, (i) => { Debug.Log(i); return false; }));
+		}
 
 		/// <summary>
 		/// Drawing LocalizationStorage in the inspector window.
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
-			DrawDefaultInspector();
-			UpdateLocalizations();
-			DrowLocalizations();
-			DrawButton();
+			testView.OnGUI();
+		//	DrawDefaultInspector();
+		//	UpdateLocalizations();
+		//	DrowLocalizations();
+		//	DrawButton();
 		}
 
 		/// <summary>
