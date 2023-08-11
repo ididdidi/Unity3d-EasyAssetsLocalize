@@ -10,10 +10,14 @@ namespace SimpleLocalization
 	[CustomEditor(typeof(LocalizationStorage))]
 	public partial class LocalizationStorageEditor : Editor, IDisplay
 	{
+		private NoticeView noticeView;
 		private LocalizationStorage storage;
 		private SearchEditorView searchView;
+		private LocalizationView localizationView;
 		private LocalizationPropertiesView1 propertiesView;
 		private IEditorView currentView;
+
+		private float width;
 
 		/// Animated view change
 		private IEditorView animatedView;
@@ -26,12 +30,15 @@ namespace SimpleLocalization
 		public void OnEnable()
 		{
 			storage = this.target as LocalizationStorage;
-			searchView = new SearchEditorView(this, new LocalizationSearchProvider(storage, (i) => { Debug.Log(i); return false; }), false);
-			searchView.OptionButton = ShowPropertiesButton;
-			currentView = searchView;
+
+			noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(storage, noticeView, () => StartAnimationView(localizationView, 0f, 1f));
 
 			propertiesView = new LocalizationPropertiesView1(() => { StartAnimationView(propertiesView, 0f, 1f); });
-			//currentView = propertiesView;
+
+			searchView = new SearchEditorView(this, new LocalizationSearchProvider(storage, (data) => { localizationView.Data = data;  StartAnimationView(localizationView, 1f, 0f); return false; }), false);
+			searchView.OptionButton = ShowPropertiesButton;
+			currentView = searchView;
 		}
 
 		/// <summary>
@@ -39,13 +46,16 @@ namespace SimpleLocalization
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
-			var width = EditorGUIUtility.currentViewWidth;
 			var height = (animatedView != null)? Mathf.Max(currentView.HeightInGUI, animatedView.HeightInGUI) : currentView.HeightInGUI;
-			GUILayoutUtility.GetRect(width, height);
+			
 
-			var rect = new Rect(0, 0, width, height);
-			currentView.OnGUI(rect);
-			if (animatedView != null) PlayAnimation(rect);
+			var rect = GUILayoutUtility.GetRect(width, height);
+			if(rect.width>1) { width = rect.width + 22; }
+
+			var position = new Rect(0, 0, width, height);
+			currentView.OnGUI(position);
+			if (animatedView != null) PlayAnimation(position);
+			noticeView.OnGUI();
 		}
 
 		/// <summary>

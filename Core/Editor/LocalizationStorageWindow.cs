@@ -7,7 +7,7 @@ namespace SimpleLocalization
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.
 	/// </summary>
-	public class LocalizationStorageWindow : EditorWindow
+	public class LocalizationStorageWindow : EditorWindow, IDisplay
 	{
 		public const float MIN_WIDTH = 720f;
 		public const float MIN_HIGHT = 320f;
@@ -32,7 +32,7 @@ namespace SimpleLocalization
 			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			typePreview = new TypeCover();
 			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(LocalizationStorage, noticeView);
+			localizationView = new LocalizationView(LocalizationStorage, noticeView, ()=> { });
 			settingsView = new LocalizationPropertiesView(ClocePropertiesView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);

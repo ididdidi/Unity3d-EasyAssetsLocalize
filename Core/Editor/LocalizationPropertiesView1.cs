@@ -38,25 +38,24 @@ namespace SimpleLocalization
             GUILayout.Space(2);
             GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
-            // Draw header
-            var content = new GUIContent(EditorGUIUtility.IconContent("_Help@2x").image, "Help");
+            var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev@2x").image, "Back");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
             {
-                Application.OpenURL(helpURL);
+                GoBack();
             }
-
 
             GUILayout.FlexibleSpace();
             GUILayout.Label("Propertyes", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
 
-            content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close@2x").image, "Close");
+            // Draw header
+            content = new GUIContent(EditorGUIUtility.IconContent("_Help@2x").image, "Help");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
             {
-                GoBack();
+                Application.OpenURL(helpURL);
             }
-            GUILayout.EndHorizontal();
 
+            GUILayout.EndHorizontal();
             GUILayout.BeginVertical(EditorStyles.inspectorFullWidthMargins);
 
             // Show Languages ReorderableList
@@ -68,7 +67,6 @@ namespace SimpleLocalization
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }
-
 
         /// <summary>
         /// Method called when the Back button is clicked
