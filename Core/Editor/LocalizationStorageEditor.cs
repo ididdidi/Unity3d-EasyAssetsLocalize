@@ -23,7 +23,6 @@ namespace SimpleLocalization
 		private LocalizationView localizationView;
 		private LocalizationPropertiesView1 propertiesView;
 		private int storageVersion;
-		private float width;
 
 		/// Animated view change
 		private IEditorView animatedView;
@@ -58,11 +57,9 @@ namespace SimpleLocalization
 				storageVersion = storage.Version;
 			}
 
-			var height = (animatedView != null)? Mathf.Max(currentView.HeightInGUI, animatedView.HeightInGUI) : currentView.HeightInGUI;
-
-			var rect = GUILayoutUtility.GetRect(width, height);
-			if(rect.width>1) { width = rect.width + 24; }
-
+			var width = EditorGUIUtility.currentViewWidth;
+			var height = Screen.height * (width / Screen.width) - 160;
+			GUILayoutUtility.GetRect(width, height);
 			var position = new Rect(0, 0, width, height);
 
 			currentView.OnGUI(position);

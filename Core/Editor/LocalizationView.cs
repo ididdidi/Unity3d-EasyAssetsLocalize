@@ -10,6 +10,7 @@ namespace SimpleLocalization
 		private LocalizationStorage storage;
 		private System.Action onBackButton;
 		private Rect resourcesViewRect = Rect.zero;
+		private Vector2 scrollPosition;
 		private bool editable = false;
 
 		private LocalizationStorage LocalizationStorage { get => storage; }
@@ -23,8 +24,6 @@ namespace SimpleLocalization
 				}
 			}
 		}
-
-		public float HeightInGUI => resourcesViewRect.height + 30f;
 
 		public LocalizationView(LocalizationStorage storage, System.Action onBackButton)
 		{
@@ -46,9 +45,11 @@ namespace SimpleLocalization
 					var rect = EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
 					if(!rect.Equals(Rect.zero)) { resourcesViewRect = rect; }
 
+					scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 					EditorGUI.BeginDisabledGroup(tag.IsDefault && !editable);
 					DrawResources(tag, LocalizationManager.Languages);
 					EditorGUI.EndDisabledGroup();
+					GUILayout.EndScrollView();
 
 					EditorGUILayout.EndVertical();
 
@@ -69,7 +70,7 @@ namespace SimpleLocalization
 			GUILayout.Space(2);
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
-			content = new GUIContent(EditorGUIUtility.IconContent("tab_prev@2x").image, "Back");
+			content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
 			if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
 			{
 				GoBack();
@@ -85,14 +86,14 @@ namespace SimpleLocalization
 			if (localization.IsDefault)
 			{
 				content = new GUIContent(
-					EditorGUIUtility.IconContent(editable ? "AssemblyLock" : "CustomTool@2x").image,
+					EditorGUIUtility.IconContent(editable ? "AssemblyLock" : "CustomTool").image,
 					editable ? "Lock" : "Edit");
 				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
 
 			}
 			else if (LocalizationStorage.ContainsLocalization(localization))
 			{
-				content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close@2x").image, "Delete");
+				content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close").image, "Delete");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
 					LocalizationStorage.RemoveLocalization(localization);
@@ -101,7 +102,7 @@ namespace SimpleLocalization
 			}
 			else
 			{
-				content = new GUIContent(EditorGUIUtility.IconContent("CreateAddNew@2x").image, "Add");
+				content = new GUIContent(EditorGUIUtility.IconContent("CreateAddNew").image, "Add");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
 					LocalizationStorage.AddLocalization(localization);
@@ -118,6 +119,7 @@ namespace SimpleLocalization
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);
 			style.wordWrap = true;
 			var isString = typeof(string).IsAssignableFrom(tag.Type);
+
 			for (int i = 0; i < tag.Resources.Count; i++)
 			{
 				if (isString)
@@ -138,6 +140,7 @@ namespace SimpleLocalization
 		public void GoBack()
 		{
 			onBackButton();
+			scrollPosition = Vector2.zero;
 			EditorGUI.FocusTextInControl(null);
 		}
 	}

@@ -10,9 +10,7 @@ namespace SimpleLocalization
         private LanguagesListView languagesList;
         private TypesListView typesList;
         private System.Action onCloseButton;
-
-        public float HeightInGUI => (21 * (languagesList.count + typesList.count)) + 128f;
-
+        private Vector2 scrollPosition;
 
         /// <summary>
         /// Constructor
@@ -32,7 +30,7 @@ namespace SimpleLocalization
             GUILayout.Space(2);
             GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
-            var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev@2x").image, "Back");
+            var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
             {
                 GoBack();
@@ -43,7 +41,7 @@ namespace SimpleLocalization
             GUILayout.FlexibleSpace();
 
             // Draw header
-            content = new GUIContent(EditorGUIUtility.IconContent("_Help@2x").image, "Help");
+            content = new GUIContent(EditorGUIUtility.IconContent("_Help").image, "Help");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
             {
                 Application.OpenURL(helpURL);
@@ -52,11 +50,13 @@ namespace SimpleLocalization
             GUILayout.EndHorizontal();
             GUILayout.BeginVertical(EditorStyles.inspectorFullWidthMargins);
 
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
             // Show Languages ReorderableList
             languagesList.DoLayoutList();
             GUILayout.Space(2);
             // Show supported types list
             typesList.DoLayoutList();
+            GUILayout.EndScrollView();
 
             GUILayout.EndVertical();
             GUILayout.EndArea();
