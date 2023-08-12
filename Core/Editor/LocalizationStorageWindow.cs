@@ -19,7 +19,6 @@ namespace SimpleLocalization
 
 		// Data renderer in a editor window
 		private IView currentView;
-		private NoticeView noticeView;
 		private TypeCover typePreview;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
@@ -31,8 +30,7 @@ namespace SimpleLocalization
 		{
 			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			typePreview = new TypeCover();
-			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(LocalizationStorage, noticeView, ()=> { });
+			localizationView = new LocalizationView(LocalizationStorage, ()=> { });
 			settingsView = new LocalizationPropertiesView(ClocePropertiesView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);
@@ -73,7 +71,6 @@ namespace SimpleLocalization
 			GUI.Label(rect, GUIContent.none, "grey_border");
 
 			currentView?.OnGUI(rect);
-			noticeView.OnGUI();
 		}
 
 		/// <summary>

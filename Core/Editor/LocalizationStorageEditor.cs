@@ -10,13 +10,19 @@ namespace SimpleLocalization
 	[CustomEditor(typeof(LocalizationStorage))]
 	public partial class LocalizationStorageEditor : Editor, IDisplay
 	{
-		private NoticeView noticeView;
+
+		private readonly Color LightSkin = new Color(0.77f, 0.77f, 0.77f);
+		private readonly Color DarkSkin = new Color(0.22f, 0.22f, 0.22f);
+		private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
+
+	//	private NoticeView noticeView;
 		private LocalizationStorage storage;
+		private IEditorView currentView;
+
 		private SearchEditorView searchView;
 		private LocalizationView localizationView;
 		private LocalizationPropertiesView1 propertiesView;
-		private IEditorView currentView;
-
+		private int storageVersion;
 		private float width;
 
 		/// Animated view change
@@ -31,8 +37,8 @@ namespace SimpleLocalization
 		{
 			storage = this.target as LocalizationStorage;
 
-			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(storage, noticeView, () => StartAnimationView(localizationView, 0f, 1f));
+			//noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(storage, () => StartAnimationView(localizationView, 0f, 1f));
 
 			propertiesView = new LocalizationPropertiesView1(() => { StartAnimationView(propertiesView, 0f, 1f); });
 
@@ -46,16 +52,22 @@ namespace SimpleLocalization
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
+			if (searchView != null && storageVersion != storage.Version)
+			{
+				searchView.IsChanged = true;
+				storageVersion = storage.Version;
+			}
+
 			var height = (animatedView != null)? Mathf.Max(currentView.HeightInGUI, animatedView.HeightInGUI) : currentView.HeightInGUI;
-			
 
 			var rect = GUILayoutUtility.GetRect(width, height);
-			if(rect.width>1) { width = rect.width + 22; }
+			if(rect.width>1) { width = rect.width + 24; }
 
 			var position = new Rect(0, 0, width, height);
+
 			currentView.OnGUI(position);
 			if (animatedView != null) PlayAnimation(position);
-			noticeView.OnGUI();
+		//	noticeView.OnGUI();
 		}
 
 		/// <summary>
@@ -87,6 +99,7 @@ namespace SimpleLocalization
 			{
 				currentAnimation = Mathf.MoveTowards(currentAnimation, targetAnimation, deltaTime * 4);
 				rect.x = rect.width * currentAnimation;
+				EditorGUI.DrawRect(rect, Background);
 				animatedView.OnGUI(rect);
 			}
 			else

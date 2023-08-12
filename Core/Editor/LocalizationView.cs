@@ -8,7 +8,6 @@ namespace SimpleLocalization
 	{
 		private object data;
 		private LocalizationStorage storage;
-		private NoticeView noticeView;
 		private System.Action onBackButton;
 		private Rect resourcesViewRect = Rect.zero;
 		private bool editable = false;
@@ -27,10 +26,9 @@ namespace SimpleLocalization
 
 		public float HeightInGUI => resourcesViewRect.height + 30f;
 
-		public LocalizationView(LocalizationStorage storage, NoticeView noticeView, System.Action onBackButton)
+		public LocalizationView(LocalizationStorage storage, System.Action onBackButton)
 		{
 			this.storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
-			this.noticeView = noticeView ?? throw new System.ArgumentNullException(nameof(noticeView));
 			this.onBackButton = onBackButton ?? throw new System.ArgumentNullException(nameof(onBackButton));
 		}
 
@@ -62,25 +60,6 @@ namespace SimpleLocalization
 					GUILayout.EndArea();
 				}
 				catch (System.ArgumentException) { }
-			}
-		}
-
-		public static void DrawResources(Localization tag, Language[] languages, params GUILayoutOption[] options)
-		{
-			GUIStyle style = new GUIStyle(EditorStyles.textArea);
-			style.wordWrap = true;
-			var isString = typeof(string).IsAssignableFrom(tag.Type);
-			for (int i = 0; i < tag.Resources.Count; i++)
-			{
-				if (isString)
-				{
-					EditorGUILayout.LabelField(languages[i].ToString());
-					tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, style, options);
-				}
-				else
-				{
-					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, tag.Type, false, options);
-				}
 			}
 		}
 
@@ -117,7 +96,6 @@ namespace SimpleLocalization
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
 					LocalizationStorage.RemoveLocalization(localization);
-					noticeView.Show(rect, new GUIContent($"{localization.Name} has been deleted"));
 					GoBack();
 				}
 			}
@@ -127,13 +105,31 @@ namespace SimpleLocalization
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
 					LocalizationStorage.AddLocalization(localization);
-					noticeView.Show(rect, new GUIContent($"{localization.Name} has been added"));
 					GoBack();
 				}
 			}
 
 			GUILayout.EndHorizontal();
 			ExtendedEditor.DrawLine(Color.black);
+		}
+
+		public static void DrawResources(Localization tag, Language[] languages, params GUILayoutOption[] options)
+		{
+			GUIStyle style = new GUIStyle(EditorStyles.textArea);
+			style.wordWrap = true;
+			var isString = typeof(string).IsAssignableFrom(tag.Type);
+			for (int i = 0; i < tag.Resources.Count; i++)
+			{
+				if (isString)
+				{
+					EditorGUILayout.LabelField(languages[i].ToString());
+					tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, style, options);
+				}
+				else
+				{
+					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, tag.Type, false, options);
+				}
+			}
 		}
 
 		/// <summary>

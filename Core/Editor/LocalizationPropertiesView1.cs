@@ -10,10 +10,6 @@ namespace SimpleLocalization
         private LanguagesListView languagesList;
         private TypesListView typesList;
         private System.Action onCloseButton;
-        
-        private readonly Color LightSkin = new Color(0.77f, 0.77f, 0.77f);
-        private readonly Color DarkSkin = new Color(0.22f, 0.22f, 0.22f);
-        private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
 
         public float HeightInGUI => (21 * (languagesList.count + typesList.count)) + 128f;
 
@@ -31,8 +27,6 @@ namespace SimpleLocalization
 
         public void OnGUI(Rect position)
         {
-            EditorGUI.DrawRect(position, Background);
-
             GUILayout.BeginArea(position);
 
             GUILayout.Space(2);
