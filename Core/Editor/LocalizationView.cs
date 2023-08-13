@@ -40,7 +40,7 @@ namespace SimpleLocalization
 				{
 					GUILayout.BeginArea(position);
 					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
-					DrawHeader(position, tag);
+					DrawHeader(tag);
 
 					var rect = EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
 					if(!rect.Equals(Rect.zero)) { resourcesViewRect = rect; }
@@ -64,17 +64,18 @@ namespace SimpleLocalization
 			}
 		}
 
-		private void DrawHeader(Rect position, Localization localization)
+		private void DrawHeader(Localization localization)
 		{
-			var content = GUIContent.none;
-			GUILayout.Space(2);
+			GUILayout.Space(4);
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
-			content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
+			ExtendedEditor.BeginIgnoreChanges();
+			var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
 			if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
 			{
 				GoBack();
 			}
+			ExtendedEditor.EndIgnoreChanges();
 
 			GUILayout.FlexibleSpace();
 			EditorGUI.BeginDisabledGroup(localization.IsDefault);
@@ -82,7 +83,6 @@ namespace SimpleLocalization
 			EditorGUI.EndDisabledGroup();
 			GUILayout.FlexibleSpace();
 
-			var rect = new Rect(position);
 			if (localization.IsDefault)
 			{
 				content = new GUIContent(

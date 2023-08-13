@@ -30,7 +30,7 @@ namespace SimpleLocalization
 		{
 			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			typePreview = new TypeCover();
-			localizationView = new LocalizationView(LocalizationStorage, ()=> { });
+			localizationView = new LocalizationView(LocalizationStorage, () => searchView?.GoToParent());
 			settingsView = new LocalizationPropertiesView(ClocePropertiesView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);
@@ -47,6 +47,12 @@ namespace SimpleLocalization
 
 			return instance;
 		}
+
+		/// <summary>
+		/// Creation of initialization and display of a window on the monitor screen.
+		/// </summary>
+		[MenuItem("Tools/My Custom Editor")]
+		public new static LocalizationStorageWindow Show() => Show(MIN_WIDTH, MIN_HIGHT);
 
 		/// <summary>
 		/// Method for rendering window content.
