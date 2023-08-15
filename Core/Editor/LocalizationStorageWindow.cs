@@ -18,8 +18,9 @@ namespace SimpleLocalization
 		private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
 
 		// Data renderer in a editor window
-		private IView currentView;
+		private IEditorView currentView;
 		private TypeCover typePreview;
+		//	private NoticeView noticeView;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationPropertiesView settingsView;
@@ -31,9 +32,10 @@ namespace SimpleLocalization
 			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			typePreview = new TypeCover();
 			localizationView = new LocalizationView(LocalizationStorage, () => searchView?.GoToParent());
-			settingsView = new LocalizationPropertiesView(ClocePropertiesView); ;
+			settingsView = new LocalizationPropertiesView(ClosePropertiesView); ;
 			var provider = new LocalizationSearchProvider(LocalizationStorage, OnSelectEntry, OnFocusEntry);
 			searchView = new SearchTreeView(this, provider);
+			//noticeView = new NoticeView(this);
 		}
 
 		/// <summary>
@@ -77,6 +79,7 @@ namespace SimpleLocalization
 			GUI.Label(rect, GUIContent.none, "grey_border");
 
 			currentView?.OnGUI(rect);
+			//	noticeView.OnGUI();
 		}
 
 		/// <summary>
@@ -113,9 +116,9 @@ namespace SimpleLocalization
 			}
 		}
 
-		private void ClocePropertiesView()
+		private void ClosePropertiesView()
 		{
-			currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typePreview : localizationView as IView;
+			currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typePreview : localizationView as IEditorView;
 		}
 	}
 }

@@ -10,18 +10,16 @@ namespace SimpleLocalization
 	[CustomEditor(typeof(LocalizationStorage))]
 	public partial class LocalizationStorageEditor : Editor, IDisplay
 	{
-
 		private readonly Color LightSkin = new Color(0.77f, 0.77f, 0.77f);
 		private readonly Color DarkSkin = new Color(0.22f, 0.22f, 0.22f);
 		private Color Background => EditorGUIUtility.isProSkin ? DarkSkin : LightSkin;
 
-	//	private NoticeView noticeView;
 		private LocalizationStorage storage;
 		private IEditorView currentView;
 
-		private SearchEditorView searchView;
+		private SearchTreeView searchView;
 		private LocalizationView localizationView;
-		private LocalizationPropertiesView1 propertiesView;
+		private LocalizationPropertiesView propertiesView;
 		private int storageVersion;
 
 		/// Animated view change
@@ -36,12 +34,11 @@ namespace SimpleLocalization
 		{
 			storage = this.target as LocalizationStorage;
 
-			//noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(storage, () => StartAnimationView(localizationView, 0f, 1f));
 
-			propertiesView = new LocalizationPropertiesView1(() => { StartAnimationView(propertiesView, 0f, 1f); });
+			propertiesView = new LocalizationPropertiesView(() => { StartAnimationView(propertiesView, 0f, 1f); });
 
-			searchView = new SearchEditorView(this, new LocalizationSearchProvider(storage, (data) => { localizationView.Data = data;  StartAnimationView(localizationView, 1f, 0f); return false; }), false);
+			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage, (data) => { localizationView.Data = data;  StartAnimationView(localizationView, 1f, 0f); return false; }), false);
 			searchView.OptionButton = ShowPropertiesButton;
 			currentView = searchView;
 		}
@@ -64,7 +61,6 @@ namespace SimpleLocalization
 
 			currentView.OnGUI(position);
 			if (animatedView != null) PlayAnimation(position);
-		//	noticeView.OnGUI();
 		}
 
 		/// <summary>

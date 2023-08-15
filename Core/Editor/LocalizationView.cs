@@ -4,12 +4,11 @@ using UnityExtended;
 
 namespace SimpleLocalization
 {
-	public class LocalizationView : IView, IEditorView
+	public class LocalizationView : IEditorView
 	{
 		private object data;
 		private LocalizationStorage storage;
 		private System.Action onBackButton;
-		private Rect resourcesViewRect = Rect.zero;
 		private Vector2 scrollPosition;
 		private bool editable = false;
 
@@ -42,16 +41,11 @@ namespace SimpleLocalization
 					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
 					DrawHeader(tag);
 
-					var rect = EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-					if(!rect.Equals(Rect.zero)) { resourcesViewRect = rect; }
-
 					scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 					EditorGUI.BeginDisabledGroup(tag.IsDefault && !editable);
 					DrawResources(tag, LocalizationManager.Languages);
 					EditorGUI.EndDisabledGroup();
 					GUILayout.EndScrollView();
-
-					EditorGUILayout.EndVertical();
 
 					if (changeCheck && EditorGUI.EndChangeCheck())
 					{
@@ -59,6 +53,8 @@ namespace SimpleLocalization
 						EditorUtility.SetDirty(LocalizationStorage);
 					}
 					GUILayout.EndArea();
+
+					HandleKeyboard(Event.current);
 				}
 				catch (System.ArgumentException) { }
 			}
@@ -142,6 +138,26 @@ namespace SimpleLocalization
 			onBackButton();
 			scrollPosition = Vector2.zero;
 			EditorGUI.FocusTextInControl(null);
+		}
+
+		/// <summary>
+		/// Handles keystrokes
+		/// </summary>
+		/// <param name="curentEvent"></param>
+		private void HandleKeyboard(Event curentEvent)
+		{
+			if (curentEvent.type == EventType.KeyDown)
+			{
+				switch (curentEvent.keyCode)
+				{
+					case KeyCode.LeftArrow:
+						{
+							GoBack();
+							curentEvent.Use();
+						}
+						return;
+				}
+			}
 		}
 	}
 }

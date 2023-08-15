@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityExtended;
 
 namespace SimpleLocalization
 {
-	public class TypeCover : IView
+	public class TypeCover : IEditorView
 	{
 		public GUIContent Content { get; set; }
 

@@ -13,6 +13,7 @@ namespace SimpleLocalization
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
         private LocalizationStorage Storage { get => LocalizationManager.Storage; }
+        private SearchDropDownWindow dropDownWindow;
 
         private SerializedProperty handler;
         /// <summary>
@@ -80,7 +81,7 @@ namespace SimpleLocalization
         /// </summary>
         private void ShowSearchWindow()
         {
-            SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SetLocaloization, null, Component.Type));
+            dropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SetLocaloization, null, Component.Type));
         }
 
         /// <summary>
@@ -99,6 +100,7 @@ namespace SimpleLocalization
                 Component.ID = localization.ID;
                 SetLocalization(localization.ID);
                 EditorUtility.SetDirty(Component);
+                dropDownWindow?.Close();
                 return true;
             }
             else return false;
