@@ -3,7 +3,7 @@ using UnityExtended;
 
 namespace SimpleLocalization
 {
-	public class TypeCover : IEditorView
+	public class TypeView : IEditorView
 	{
 		public GUIContent Content { get; set; }
 

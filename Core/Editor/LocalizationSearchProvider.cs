@@ -12,12 +12,6 @@ namespace SimpleLocalization
     {
         private SearchTree searchTree = new SearchTree();
 
-        public delegate bool OnSelect(object data);
-        private OnSelect onSelect;
-
-        public delegate void OnFocus(object data);
-        private OnFocus onFocus;
-
         private LocalizationStorage Storage { get; }
         private System.Type Type { get; }
         private Dictionary<System.Type, List<Localization>> types;
@@ -29,11 +23,9 @@ namespace SimpleLocalization
         /// <param name="onSelect">On select Callback</param>
         /// <param name="onFocus">On focus Callback</param>
         /// <param name="type">Target type</param>
-        public LocalizationSearchProvider(LocalizationStorage storage, OnSelect onSelect, OnFocus onFocus = null, System.Type type = null)
+        public LocalizationSearchProvider(LocalizationStorage storage, System.Type type = null)
         {
             Storage = storage;
-            this.onSelect = onSelect;
-            this.onFocus = onFocus;
             Type = type;
         }
 
@@ -108,23 +100,6 @@ namespace SimpleLocalization
             }
 
             return searchList;
-        }
-
-        /// <summary>
-        /// List item selection handler.
-        /// </summary>
-        /// <param name="entry">Selected item</param>
-        /// <returns>Close a window?</returns>
-        public bool OnSelectEntry(SearchTreeEntry entry) => (bool)onSelect?.Invoke(entry.Data);
-
-        /// <summary>
-        /// The handler for the appearance of a list item in focus.
-        /// </summary>
-        /// <param name="entry">Focused item</param>
-        public void OnFocusEntry(SearchTreeEntry entry)
-        {
-            var content = new GUIContent("Not found...", EditorGUIUtility.IconContent("Search Icon").image);
-            onFocus?.Invoke(entry?.Data ?? content);
         }
 
         /// <summary>

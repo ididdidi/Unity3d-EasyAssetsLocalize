@@ -8,7 +8,6 @@ namespace SimpleLocalization
 	{
 		private object data;
 		private LocalizationStorage storage;
-		private System.Action onBackButton;
 		private Vector2 scrollPosition;
 		private bool editable = false;
 
@@ -24,10 +23,11 @@ namespace SimpleLocalization
 			}
 		}
 
-		public LocalizationView(LocalizationStorage storage, System.Action onBackButton)
+		public System.Action OnBackButton { get; set; }
+
+		public LocalizationView(LocalizationStorage storage)
 		{
 			this.storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
-			this.onBackButton = onBackButton ?? throw new System.ArgumentNullException(nameof(onBackButton));
 		}
 
 		public void OnGUI(Rect position)
@@ -135,7 +135,7 @@ namespace SimpleLocalization
 		/// </summary>
 		public void GoBack()
 		{
-			onBackButton();
+			OnBackButton?.Invoke();
 			scrollPosition = Vector2.zero;
 			EditorGUI.FocusTextInControl(null);
 		}

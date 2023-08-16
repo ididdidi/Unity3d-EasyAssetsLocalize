@@ -81,7 +81,7 @@ namespace SimpleLocalization
         /// </summary>
         private void ShowSearchWindow()
         {
-            dropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, SetLocaloization, null, Component.Type));
+            dropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, Component.Type), SetLocaloization);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SimpleLocalization
         /// </summary>
         /// <param name="data">Localization instance as <see cref="object"/></param>
         /// <returns>Close window</returns>
-        private bool SetLocaloization(object data)
+        private void SetLocaloization(object data)
         {
             if (data is Localization localization)
             {
@@ -101,9 +101,7 @@ namespace SimpleLocalization
                 SetLocalization(localization.ID);
                 EditorUtility.SetDirty(Component);
                 dropDownWindow?.Close();
-                return true;
             }
-            else return false;
         }
     }
 }

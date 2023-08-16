@@ -9,16 +9,16 @@ namespace SimpleLocalization
         private static readonly string helpURL = "https://ididdidi.ru/";
         private LanguagesListView languagesList;
         private TypesListView typesList;
-        private System.Action onCloseButton;
         private Vector2 scrollPosition;
+
+        public System.Action OnBackButton;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="onCloseButton">Callback to close view</param>
-        public LocalizationPropertiesView(System.Action onCloseButton)
+        public LocalizationPropertiesView()
         {
-            this.onCloseButton = onCloseButton ?? throw new System.ArgumentNullException(nameof(onCloseButton));
             languagesList = new LanguagesListView(LocalizationManager.Storage);
             typesList = new TypesListView();
         }
@@ -78,7 +78,7 @@ namespace SimpleLocalization
         public void GoBack()
         {
             languagesList.index = typesList.index = -1;
-            onCloseButton();
+            OnBackButton?.Invoke();
             EditorGUI.FocusTextInControl(null);
         }
 
