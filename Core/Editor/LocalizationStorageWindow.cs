@@ -16,8 +16,7 @@ namespace SimpleLocalization
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationPropertiesView propertiesView;
-		private WideLocalizationPresenter widePresentor;
-		private NarrowLocalizationPresenter narrowPresentor;
+		private LocalizationPresenter localizationPresentor;
 		private int storageVersion;
 		private static LocalizationStorage LocalizationStorage { get => LocalizationManager.Storage; }
 
@@ -25,10 +24,8 @@ namespace SimpleLocalization
 		{
 			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			localizationView = new LocalizationView(LocalizationStorage);
-			propertiesView = new LocalizationPropertiesView();
+			propertiesView = new LocalizationPropertiesView(LocalizationStorage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(LocalizationStorage));
-			widePresentor = new WideLocalizationPresenter(this, searchView, localizationView, propertiesView);
-			narrowPresentor = new NarrowLocalizationPresenter(this, searchView, localizationView, propertiesView);
 		}
 
 		/// <summary>
@@ -60,8 +57,22 @@ namespace SimpleLocalization
 				storageVersion = LocalizationStorage.Version;
 			}
 
-			if(position.width > 320) { widePresentor.OnGUI(position); }
-			else { narrowPresentor.OnGUI(position); }
+			if (position.width > 320)
+			{
+				if (!(localizationPresentor is WideLocalizationPresenter))
+				{
+					localizationPresentor = new WideLocalizationPresenter(this, searchView, localizationView, propertiesView);
+				}
+			}
+			else
+			{
+				if (!(localizationPresentor is NarrowLocalizationPresenter))
+				{
+					localizationPresentor = new NarrowLocalizationPresenter(this, searchView, localizationView, propertiesView);
+				}
+			}
+
+			localizationPresentor.OnGUI(new Rect(0, 0, position.width, position.height));
 		}
 	}
 }

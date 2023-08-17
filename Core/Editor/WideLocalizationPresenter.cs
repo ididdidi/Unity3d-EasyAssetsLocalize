@@ -14,7 +14,8 @@ namespace SimpleLocalization
             typeView = new TypeView();
             this.localizationView.OnBackButton = () => searchView?.GoToParent();
             this.propertiesView.OnBackButton = ClosePropertiesView;
-            this.searchView.OnFocusEntry = OnFocusEntry;
+			this.searchView.OptionButton = ShowPropertiesButton;
+			this.searchView.OnFocusEntry = OnFocusEntry;
             this.searchView.OnSelectEntry = OnSelectEntry;
             //noticeView = new NoticeView(parent);
         }
@@ -27,15 +28,12 @@ namespace SimpleLocalization
 			var rect = new Rect(0, 0, 320, position.height);
 			EditorGUI.DrawRect(rect, Background);
 			if (LocalizationManager.Languages.Length > 0) searchView?.OnGUI(rect);
-
-			if (string.IsNullOrEmpty(searchView?.SearchKeyword)) { ShowPropertiesButton(new Rect(302, 8, 20, 20)); }
-
+			
 			rect.x = 319;
 			rect.width = position.width - 320;
 			EditorGUI.DrawRect(rect, Background);
 
 			currentView?.OnGUI(rect);
-
 			rect.width = 1;
 			EditorGUI.DrawRect(rect, Color.black);
 			//	noticeView.OnGUI();

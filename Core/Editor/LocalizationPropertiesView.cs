@@ -17,18 +17,17 @@ namespace SimpleLocalization
         /// Constructor
         /// </summary>
         /// <param name="onCloseButton">Callback to close view</param>
-        public LocalizationPropertiesView()
+        public LocalizationPropertiesView(LocalizationStorage storage)
         {
-            languagesList = new LanguagesListView(LocalizationManager.Storage);
+            languagesList = new LanguagesListView(storage);
             typesList = new TypesListView();
         }
 
         public void OnGUI(Rect position)
         {
             GUILayout.BeginArea(position);
-
-            GUILayout.Space(2);
             GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
+            GUILayout.Space(2);
 
             var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
@@ -66,7 +65,6 @@ namespace SimpleLocalization
 
             if (horizontal) { GUILayout.EndHorizontal(); }
             GUILayout.EndScrollView();
-
             GUILayout.EndArea();
 
             HandleKeyboard(Event.current);

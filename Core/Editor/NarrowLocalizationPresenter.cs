@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityExtended;
 
@@ -26,7 +27,7 @@ namespace SimpleLocalization
 		public override void OnGUI(Rect position)
 		{
 			currentView.OnGUI(position);
-			if (animatedView != null) PlayAnimation(position);
+			if (currentAnimation != targetAnimation) { PlayAnimation(position); }
 		}
 
 		/// <summary>
@@ -54,20 +55,14 @@ namespace SimpleLocalization
 			lastTime = now;
 
 			var rect = new Rect(position);
-			if (currentAnimation != targetAnimation)
+			currentAnimation = Mathf.MoveTowards(currentAnimation, targetAnimation, deltaTime * 4);
+			rect.x = rect.width * currentAnimation;
+			EditorGUI.DrawRect(rect, Background);
+			animatedView.OnGUI(rect);
+
+			if (currentAnimation == targetAnimation && targetAnimation == 0)
 			{
-				currentAnimation = Mathf.MoveTowards(currentAnimation, targetAnimation, deltaTime * 4);
-				rect.x = rect.width * currentAnimation;
-				EditorGUI.DrawRect(rect, Background);
-				animatedView.OnGUI(rect);
-			}
-			else
-			{
-				if (targetAnimation == 0)
-				{
-					currentView = animatedView;
-					currentView.OnGUI(rect);
-				}
+				currentView = animatedView;
 				animatedView = null;
 			}
 			parent.Repaint();

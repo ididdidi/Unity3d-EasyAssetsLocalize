@@ -24,7 +24,7 @@ namespace SimpleLocalization
 		{
 			storage = this.target as LocalizationStorage;
 			localizationView = new LocalizationView(storage);
-			propertiesView = new LocalizationPropertiesView();
+			propertiesView = new LocalizationPropertiesView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
 			localizationPresentor = new NarrowLocalizationPresenter(this, searchView, localizationView, propertiesView);
 		}

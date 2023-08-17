@@ -32,38 +32,35 @@ namespace SimpleLocalization
 
 		public void OnGUI(Rect position)
 		{
-			if (Data is Localization tag)
+			if (Data is Localization localization)
 			{
-				var changeCheck = LocalizationStorage.ContainsLocalization(tag);
-				try
+				var changeCheck = LocalizationStorage.ContainsLocalization(localization);
+
+				GUILayout.BeginArea(position);
+				if (changeCheck) { EditorGUI.BeginChangeCheck(); }
+				DrawHeader(localization);
+				
+				scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+				EditorGUI.BeginDisabledGroup(localization.IsDefault && !editable);
+				DrawResources(localization, LocalizationManager.Languages);
+				EditorGUI.EndDisabledGroup();
+				GUILayout.EndScrollView();
+				
+				if (changeCheck && EditorGUI.EndChangeCheck())
 				{
-					GUILayout.BeginArea(position);
-					if (changeCheck) { EditorGUI.BeginChangeCheck(); }
-					DrawHeader(tag);
-
-					scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-					EditorGUI.BeginDisabledGroup(tag.IsDefault && !editable);
-					DrawResources(tag, LocalizationManager.Languages);
-					EditorGUI.EndDisabledGroup();
-					GUILayout.EndScrollView();
-
-					if (changeCheck && EditorGUI.EndChangeCheck())
-					{
-						LocalizationStorage?.ChangeVersion();
-						EditorUtility.SetDirty(LocalizationStorage);
-					}
-					GUILayout.EndArea();
-
-					HandleKeyboard(Event.current);
+					LocalizationStorage?.ChangeVersion();
+					EditorUtility.SetDirty(LocalizationStorage);
 				}
-				catch (System.ArgumentException) { }
+				GUILayout.EndArea();
+				
+				HandleKeyboard(Event.current);
 			}
 		}
 
 		private void DrawHeader(Localization localization)
 		{
-			GUILayout.Space(4);
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
+			GUILayout.Space(4);
 
 			ExtendedEditor.BeginIgnoreChanges();
 			var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
@@ -72,20 +69,20 @@ namespace SimpleLocalization
 				GoBack();
 			}
 			ExtendedEditor.EndIgnoreChanges();
-
+		
 			GUILayout.FlexibleSpace();
 			EditorGUI.BeginDisabledGroup(localization.IsDefault);
 			localization.Name = GUILayout.TextField(localization.Name);
 			EditorGUI.EndDisabledGroup();
 			GUILayout.FlexibleSpace();
-
+		
 			if (localization.IsDefault)
 			{
 				content = new GUIContent(
 					EditorGUIUtility.IconContent(editable ? "AssemblyLock" : "CustomTool").image,
 					editable ? "Lock" : "Edit");
 				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
-
+		
 			}
 			else if (LocalizationStorage.ContainsLocalization(localization))
 			{
