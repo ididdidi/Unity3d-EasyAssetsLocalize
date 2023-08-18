@@ -37,6 +37,8 @@ namespace SimpleLocalization
 				var changeCheck = LocalizationStorage.ContainsLocalization(localization);
 
 				GUILayout.BeginArea(position);
+				GUILayout.BeginVertical();
+				GUILayout.Space(4);
 				if (changeCheck) { EditorGUI.BeginChangeCheck(); }
 				DrawHeader(localization);
 				
@@ -51,6 +53,7 @@ namespace SimpleLocalization
 					LocalizationStorage?.ChangeVersion();
 					EditorUtility.SetDirty(LocalizationStorage);
 				}
+				GUILayout.EndVertical();
 				GUILayout.EndArea();
 				
 				HandleKeyboard(Event.current);
@@ -60,7 +63,6 @@ namespace SimpleLocalization
 		private void DrawHeader(Localization localization)
 		{
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
-			GUILayout.Space(4);
 
 			ExtendedEditor.BeginIgnoreChanges();
 			var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");

@@ -26,6 +26,7 @@ namespace SimpleLocalization
 			localizationView = new LocalizationView(LocalizationStorage);
 			propertiesView = new LocalizationPropertiesView(LocalizationStorage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(LocalizationStorage));
+			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
 		}
 
 		/// <summary>
@@ -55,21 +56,6 @@ namespace SimpleLocalization
 			{
 				searchView.IsChanged = true;
 				storageVersion = LocalizationStorage.Version;
-			}
-
-			if (position.width > 320)
-			{
-				if (!(localizationPresentor is WideLocalizationPresenter))
-				{
-					localizationPresentor = new WideLocalizationPresenter(this, searchView, localizationView, propertiesView);
-				}
-			}
-			else
-			{
-				if (!(localizationPresentor is NarrowLocalizationPresenter))
-				{
-					localizationPresentor = new NarrowLocalizationPresenter(this, searchView, localizationView, propertiesView);
-				}
 			}
 
 			localizationPresentor.OnGUI(new Rect(0, 0, position.width, position.height));

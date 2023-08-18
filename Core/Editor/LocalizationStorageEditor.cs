@@ -26,7 +26,7 @@ namespace SimpleLocalization
 			localizationView = new LocalizationView(storage);
 			propertiesView = new LocalizationPropertiesView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
-			localizationPresentor = new NarrowLocalizationPresenter(this, searchView, localizationView, propertiesView);
+			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
 		}
 
 		/// <summary>

@@ -26,8 +26,10 @@ namespace SimpleLocalization
         public void OnGUI(Rect position)
         {
             GUILayout.BeginArea(position);
-            GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
+
+            GUILayout.BeginVertical();
             GUILayout.Space(2);
+            GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
             var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
             if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
@@ -47,6 +49,7 @@ namespace SimpleLocalization
             }
 
             GUILayout.EndHorizontal();
+            GUILayout.Space(4);
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorFullWidthMargins);
 
@@ -65,6 +68,7 @@ namespace SimpleLocalization
 
             if (horizontal) { GUILayout.EndHorizontal(); }
             GUILayout.EndScrollView();
+            GUILayout.EndVertical();
             GUILayout.EndArea();
 
             HandleKeyboard(Event.current);
