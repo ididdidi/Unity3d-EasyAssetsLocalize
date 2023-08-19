@@ -10,6 +10,7 @@ namespace SimpleLocalization
 		private LocalizationStorage storage;
 		private Vector2 scrollPosition;
 		private bool editable = false;
+		private NoticeView noticeView;
 
 		private LocalizationStorage LocalizationStorage { get => storage; }
 		public object Data { 
@@ -25,9 +26,10 @@ namespace SimpleLocalization
 
 		public System.Action OnBackButton { get; set; }
 
-		public LocalizationView(LocalizationStorage storage)
+		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
 		{
 			this.storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
+			this.noticeView = noticeView ?? throw new System.ArgumentNullException(nameof(noticeView));
 		}
 
 		public void OnGUI(Rect position)
@@ -40,7 +42,7 @@ namespace SimpleLocalization
 				GUILayout.BeginVertical();
 				GUILayout.Space(4);
 				if (changeCheck) { EditorGUI.BeginChangeCheck(); }
-				DrawHeader(localization);
+				DrawHeader(position, localization);
 				
 				scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 				EditorGUI.BeginDisabledGroup(localization.IsDefault && !editable);
@@ -60,7 +62,7 @@ namespace SimpleLocalization
 			}
 		}
 
-		private void DrawHeader(Localization localization)
+		private void DrawHeader(Rect position, Localization localization)
 		{
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
@@ -89,9 +91,10 @@ namespace SimpleLocalization
 			else if (LocalizationStorage.ContainsLocalization(localization))
 			{
 				content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close").image, "Delete");
-				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
+				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)) && ExtendedEditor.DeleteConfirmation(localization.Name))
 				{
 					LocalizationStorage.RemoveLocalization(localization);
+					noticeView.Show(position, new GUIContent($"{localization.Name} has been deleted"));
 					GoBack();
 				}
 			}
@@ -101,6 +104,7 @@ namespace SimpleLocalization
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
 					LocalizationStorage.AddLocalization(localization);
+					noticeView.Show(position, new GUIContent($"{localization.Name} has been added"));
 					GoBack();
 				}
 			}

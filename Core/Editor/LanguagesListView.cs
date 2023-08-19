@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityExtended;
 
 namespace SimpleLocalization
 {
@@ -74,9 +75,13 @@ namespace SimpleLocalization
         /// <param name="list">This <see cref="ReorderableList"/></param>
         private void RemoveLanguage(ReorderableList list)
         {
-            storage.RemoveLanguage(list.index--);
-            EditorGUI.FocusTextInControl(null);
-            EditorUtility.SetDirty(storage);
+            var language = list.list[list.index] as Language;
+            if (ExtendedEditor.DeleteConfirmation(language.SystemLanguage.ToString()))
+            {
+                storage.RemoveLanguage(list.index--);
+                EditorGUI.FocusTextInControl(null);
+                EditorUtility.SetDirty(storage);
+            }
         }
 
         /// <summary>

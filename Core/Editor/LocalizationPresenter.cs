@@ -21,7 +21,6 @@ namespace SimpleLocalization
 		protected LocalizationPropertiesView propertiesView;
 
 		private TypeView typeView;
-		//	private NoticeView noticeView;
 
 		/// Animated view change
 		private IEditorView animatedView;
@@ -41,7 +40,6 @@ namespace SimpleLocalization
 			this.searchView.OnSelectEntry = OnSelectEntry;
 			this.localizationView.OnBackButton = CloseLocalizationView;
 			this.propertiesView.OnBackButton = ClosePropertiesView;
-			//noticeView = new NoticeView(parent);
 		}
 
 		/// <summary>
@@ -71,7 +69,6 @@ namespace SimpleLocalization
 				
 				rect.width = 1;
 				EditorGUI.DrawRect(rect, Color.black);
-				//	noticeView.OnGUI();
 			}
 			else
 			{ 

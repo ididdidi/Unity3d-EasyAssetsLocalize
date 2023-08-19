@@ -13,6 +13,7 @@ namespace SimpleLocalization
 		public const float MIN_HIGHT = 320f;
 
 		// Data renderer in a editor window
+		private NoticeView noticeView;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationPropertiesView propertiesView;
@@ -22,8 +23,8 @@ namespace SimpleLocalization
 
 		private void OnEnable()
 		{
-			titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
-			localizationView = new LocalizationView(LocalizationStorage);
+			noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(LocalizationStorage, noticeView);
 			propertiesView = new LocalizationPropertiesView(LocalizationStorage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(LocalizationStorage));
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
@@ -34,8 +35,8 @@ namespace SimpleLocalization
 		/// </summary>
 		public static LocalizationStorageWindow Show(float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
-			var instance = GetWindow<LocalizationStorageWindow>(LocalizationStorage.name, true);
-
+			var instance = GetWindow<LocalizationStorageWindow>();
+			instance.titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			instance.minSize = new Vector2(minWidth, minHight);
 
 			return instance;
@@ -59,6 +60,8 @@ namespace SimpleLocalization
 			}
 
 			localizationPresentor.OnGUI(new Rect(0, 0, position.width, position.height));
+
+			noticeView.OnGUI();
 		}
 	}
 }

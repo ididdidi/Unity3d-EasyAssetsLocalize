@@ -10,6 +10,7 @@ namespace SimpleLocalization
 	[CustomEditor(typeof(LocalizationStorage))]
 	public partial class LocalizationStorageEditor : Editor, IDisplay
 	{
+		private NoticeView noticeView;
 		private LocalizationStorage storage;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
@@ -23,7 +24,8 @@ namespace SimpleLocalization
 		public void OnEnable()
 		{
 			storage = this.target as LocalizationStorage;
-			localizationView = new LocalizationView(storage);
+			noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(storage, noticeView);
 			propertiesView = new LocalizationPropertiesView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
@@ -46,6 +48,7 @@ namespace SimpleLocalization
 			var position = new Rect(0, 0, width, height);
 
 			localizationPresentor.OnGUI(position);
+			noticeView.OnGUI();
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityExtended;
 
 namespace SimpleLocalization
 {
@@ -54,8 +55,11 @@ namespace SimpleLocalization
         {
             if(reorderable.list[reorderable.index] is TypeMetadata metadata)
             {
-                LocalizationManager.Storage.RemoveAll(metadata.Type);
-                LocalizationBuilder.Remove(metadata.Type); 
+                if (ExtendedEditor.DeleteConfirmation(metadata.Type.Name))
+                {
+                    LocalizationManager.Storage.RemoveAll(metadata.Type);
+                    LocalizationBuilder.Remove(metadata.Type);
+                }
             }
             else { reorderable.list.RemoveAt(reorderable.index--); }
         }
