@@ -112,7 +112,7 @@ namespace SimpleLocalization
                     return localizations[i];
                 } 
             }
-            throw new System.ArgumentException($"{GetType()}: No resources found for {id}");
+            throw new System.ArgumentException($"{GetType()}: Not found resources for localization {id}");
         }
 
         /// <summary>
@@ -192,18 +192,6 @@ namespace SimpleLocalization
                 localizations[i].Resources.Remove(temp);
                 localizations[i].Resources.Insert(nextIndex, temp);
             }
-        }
-
-        /// <summary>
-        /// Method for get localization resource data depending on the current language.
-        /// </summary>
-        /// <param name="id">Localization ID in storage</param>
-        /// <param name="language">Currend <see cref="Language"/></param>
-        /// <returns>Resource data</returns>
-        public object GetLocalizationData(string id, Language language)
-        {
-            var localization = GetLocalization(id);
-            return localization.Resources[languages.IndexOf(language)].Data;
         }
 
         public void ChangeVersion() => version++;

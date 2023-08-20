@@ -34,6 +34,30 @@ namespace SimpleLocalization
             }
         }
 
+        public static Localization GetLocalization(this LocalizationComponent component)
+        {
+            try
+            {
+                return Storage.GetLocalization(component.ID);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError(e.Message.Replace(component.ID, component.name));
+                return Storage.GetDefaultLocalization(component.Type);
+            }
+        }
+
+        /// <summary>
+        /// Method for get localization resource data depending on the current language.
+        /// </summary>
+        /// <param name="component"><see cref="LocalizationComponent"/></param>
+        /// <returns>Resource data</returns>
+        public static object GetLocalizationData(LocalizationComponent component)
+        {
+            var localization = GetLocalization(component);
+            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
+        }
+
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
@@ -41,7 +65,8 @@ namespace SimpleLocalization
         public static void Subscribe(this LocalizationComponent component)
         {
             if(!string.IsNullOrEmpty(component.ID) && !components.Contains(component)) { components.Add(component); }
-            component.SetLocalizationData(Storage.GetLocalizationData(component.ID, Language));
+
+            component.SetData(GetLocalizationData(component));
         }
 
         /// <summary>
@@ -104,7 +129,7 @@ namespace SimpleLocalization
             Language = language;
             for (int i = 0; i < components.Count; i++)
             {
-                components[i].SetLocalizationData(Storage.GetLocalizationData(components[i].ID, Language));
+                components[i].SetData(GetLocalizationData(components[i]));
             }
         }
     }

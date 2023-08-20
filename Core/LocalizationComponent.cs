@@ -21,7 +21,7 @@ namespace SimpleLocalization
         /// Method for initializing objects in the scene when the application starts and the localization localization changes.
         /// </summary>
         /// <param name="data">Resource data for localization</param>
-        public abstract void SetLocalizationData(object data);
+        public abstract void SetData(object data);
 
         /// <summary>
         /// Subscribe to localization changes.

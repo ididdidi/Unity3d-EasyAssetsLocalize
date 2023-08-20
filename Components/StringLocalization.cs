@@ -10,6 +10,6 @@ namespace SimpleLocalization
 
         public override System.Type Type => typeof(System.String);
 
-        public override void SetLocalizationData(object data) => handler?.Invoke((System.String)data);
+        public override void SetData(object data) => handler?.Invoke((System.String)data);
     }
 }

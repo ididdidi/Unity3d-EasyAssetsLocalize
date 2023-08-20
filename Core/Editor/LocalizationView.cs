@@ -149,17 +149,10 @@ namespace SimpleLocalization
 		/// <param name="curentEvent"></param>
 		private void HandleKeyboard(Event curentEvent)
 		{
-			if (curentEvent.type == EventType.KeyDown)
+			if (curentEvent.type == EventType.KeyDown && curentEvent.keyCode == KeyCode.LeftArrow)
 			{
-				switch (curentEvent.keyCode)
-				{
-					case KeyCode.LeftArrow:
-						{
-							GoBack();
-							curentEvent.Use();
-						}
-						return;
-				}
+				GoBack();
+				curentEvent.Use();
 			}
 		}
 	}

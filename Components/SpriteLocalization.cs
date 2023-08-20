@@ -10,6 +10,6 @@ namespace SimpleLocalization
 
         public override System.Type Type => typeof(UnityEngine.Sprite);
 
-        public override void SetLocalizationData(object data) => handler?.Invoke((UnityEngine.Sprite)data);
+        public override void SetData(object data) => handler?.Invoke((UnityEngine.Sprite)data);
     }
 }

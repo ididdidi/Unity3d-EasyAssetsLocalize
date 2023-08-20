@@ -10,6 +10,6 @@ namespace SimpleLocalization
 
         public override System.Type Type => typeof(UnityEngine.TextAsset);
 
-        public override void SetLocalizationData(object data) => handler?.Invoke((UnityEngine.TextAsset)data);
+        public override void SetData(object data) => handler?.Invoke((UnityEngine.TextAsset)data);
     }
 }

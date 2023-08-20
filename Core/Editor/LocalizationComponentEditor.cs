@@ -13,7 +13,8 @@ namespace SimpleLocalization
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
         private LocalizationStorage Storage { get => LocalizationManager.Storage; }
-        private SearchDropDownWindow dropDownWindow;
+        private int StorageVersion { get; set; }
+        private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;
         /// <summary>
@@ -36,7 +37,13 @@ namespace SimpleLocalization
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
-            SetLocalization(Component.ID);
+            /// When adding a component to the scene
+            if (string.IsNullOrEmpty(Component.ID)) { 
+                var defaultLocal = Storage.GetDefaultLocalization(Component.Type);
+                Localization = defaultLocal;
+                Component.ID = defaultLocal.ID;
+                return;
+            }
         }
 
         /// <summary>
@@ -44,18 +51,15 @@ namespace SimpleLocalization
         /// </summary>
         public override void OnInspectorGUI()
         {
+            if (StorageVersion != Storage.Version || StorageVersion == 0)
+            {
+                Localization = Component.GetLocalization();
+                StorageVersion = Storage.Version;
+            }
+
             DrawDefaultInspector();
             DrawLocalization();
             DrawHandler();
-        }
-
-        /// <summary>
-        /// Initializes Localization in an editor instance.
-        /// </summary>
-        /// <param name="id">Localization identifier</param>
-        private void SetLocalization(string id)
-        {
-            if (!string.IsNullOrEmpty(id)) { Localization = Storage.GetLocalization(id); }
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace SimpleLocalization
         /// </summary>
         private void ShowSearchWindow()
         {
-            dropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, Component.Type), SetLocaloization);
+            DropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, Component.Type), SetLocaloization);
         }
 
         /// <summary>
@@ -98,9 +102,9 @@ namespace SimpleLocalization
                     Storage.AddLocalization(localization);
                 }
                 Component.ID = localization.ID;
-                SetLocalization(localization.ID);
+                Localization = Component.GetLocalization();
                 EditorUtility.SetDirty(Component);
-                dropDownWindow?.Close();
+                DropDownWindow?.Close();
             }
         }
     }

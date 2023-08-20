@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ba349dbabd5f4a8750178b1c9ed93, type: 3}
   m_Name: LocalizationStorage
   m_EditorClassIdentifier: 
-  version: 767
+  version: 825
   languages:
   - <SystemLanguage>k__BackingField: 10
   - <SystemLanguage>k__BackingField: 30
