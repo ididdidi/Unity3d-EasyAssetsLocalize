@@ -72,7 +72,7 @@ namespace SimpleLocalization
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.BeginDisabledGroup(Localization.IsDefault);
                 Localization.Name = EditorGUILayout.TextField("Localization name", Localization.Name);
-                LocalizationView.DrawResources(Localization, LocalizationManager.Languages, GUILayout.Height(50f));
+                LocalizationView.DrawResources(Storage, Localization, LocalizationManager.Languages, GUILayout.Height(50f));
                 EditorGUI.EndDisabledGroup();
                 if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.ChangeVersion(); }
             }

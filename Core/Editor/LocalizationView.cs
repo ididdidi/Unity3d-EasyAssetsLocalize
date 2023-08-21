@@ -12,7 +12,7 @@ namespace SimpleLocalization
 		private bool editable = false;
 		private NoticeView noticeView;
 
-		private LocalizationStorage LocalizationStorage { get => storage; }
+		private LocalizationStorage Storage { get => storage; }
 		public object Data { 
 			get => data;
 			set {
@@ -36,7 +36,7 @@ namespace SimpleLocalization
 		{
 			if (Data is Localization localization)
 			{
-				var changeCheck = LocalizationStorage.ContainsLocalization(localization);
+				var changeCheck = Storage.ContainsLocalization(localization);
 
 				GUILayout.BeginArea(position);
 				GUILayout.BeginVertical();
@@ -46,14 +46,14 @@ namespace SimpleLocalization
 				
 				scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 				EditorGUI.BeginDisabledGroup(localization.IsDefault && !editable);
-				DrawResources(localization, LocalizationManager.Languages);
+				DrawResources(Storage, localization, LocalizationManager.Languages);
 				EditorGUI.EndDisabledGroup();
 				GUILayout.EndScrollView();
 				
 				if (changeCheck && EditorGUI.EndChangeCheck())
 				{
-					LocalizationStorage?.ChangeVersion();
-					EditorUtility.SetDirty(LocalizationStorage);
+					Storage.ChangeVersion();
+					EditorUtility.SetDirty(Storage);
 				}
 				GUILayout.EndVertical();
 				GUILayout.EndArea();
@@ -75,9 +75,17 @@ namespace SimpleLocalization
 			ExtendedEditor.EndIgnoreChanges();
 		
 			GUILayout.FlexibleSpace();
+
 			EditorGUI.BeginDisabledGroup(localization.IsDefault);
-			localization.Name = GUILayout.TextField(localization.Name);
+			EditorGUI.BeginChangeCheck();
+			var name = GUILayout.TextField(localization.Name);
+			if (EditorGUI.EndChangeCheck())
+			{
+				Undo.RecordObject(Storage, $"Changed name from {localization.Name} to {name}");
+				localization.Name = name;
+			}
 			EditorGUI.EndDisabledGroup();
+
 			GUILayout.FlexibleSpace();
 		
 			if (localization.IsDefault)
@@ -88,12 +96,12 @@ namespace SimpleLocalization
 				editable = GUILayout.Toggle(editable, content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20));
 		
 			}
-			else if (LocalizationStorage.ContainsLocalization(localization))
+			else if (Storage.ContainsLocalization(localization))
 			{
 				content = new GUIContent(EditorGUIUtility.IconContent("winbtn_win_close").image, "Delete");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)) && ExtendedEditor.DeleteConfirmation(localization.Name))
 				{
-					LocalizationStorage.RemoveLocalization(localization);
+					Storage.RemoveLocalization(localization);
 					noticeView.Show(position, new GUIContent($"{localization.Name} has been deleted"));
 					GoBack();
 				}
@@ -103,7 +111,7 @@ namespace SimpleLocalization
 				content = new GUIContent(EditorGUIUtility.IconContent("CreateAddNew").image, "Add");
 				if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(20)))
 				{
-					LocalizationStorage.AddLocalization(localization);
+					Storage.AddLocalization(localization);
 					noticeView.Show(position, new GUIContent($"{localization.Name} has been added"));
 					GoBack();
 				}
@@ -113,22 +121,31 @@ namespace SimpleLocalization
 			ExtendedEditor.DrawLine(Color.black);
 		}
 
-		public static void DrawResources(Localization tag, Language[] languages, params GUILayoutOption[] options)
+		public static void DrawResources(LocalizationStorage storage, Localization localization, Language[] languages, params GUILayoutOption[] options)
 		{
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);
 			style.wordWrap = true;
-			var isString = typeof(string).IsAssignableFrom(tag.Type);
+			var isString = typeof(string).IsAssignableFrom(localization.Type);
 
-			for (int i = 0; i < tag.Resources.Count; i++)
+			for (int i = 0; i < localization.Resources.Count; i++)
 			{
+				object tmpData = localization.Resources[i].Data;
+				EditorGUI.BeginChangeCheck();
+
 				if (isString)
 				{
 					EditorGUILayout.LabelField(languages[i].ToString());
-					tag.Resources[i].Data = EditorGUILayout.TextArea((string)tag.Resources[i].Data, style, options);
+					tmpData = EditorGUILayout.TextArea((string)tmpData, style, options);
 				}
 				else
 				{
-					tag.Resources[i].Data = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tag.Resources[i].Data, tag.Type, false, options);
+					tmpData = EditorGUILayout.ObjectField(languages[i].ToString(), (Object)tmpData, localization.Type, false, options);
+				}
+
+				if (EditorGUI.EndChangeCheck())
+				{
+					Undo.RecordObject(storage, $"Changed data for {localization.Name}");
+					localization.Resources[i].Data = tmpData;
 				}
 			}
 		}

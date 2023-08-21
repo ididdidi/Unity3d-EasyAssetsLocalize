@@ -20,6 +20,7 @@ namespace SimpleLocalization
         public LocalizationPropertiesView(LocalizationStorage storage)
         {
             languagesList = new LanguagesListView(storage);
+
             typesList = new TypesListView();
         }
 

@@ -53,8 +53,15 @@ namespace SimpleLocalization
             rect.x -= 2f;
             rect.y += 1f;
             var language = (Language)list[index];
-            language.SystemLanguage = (SystemLanguage)EditorGUI.EnumPopup(rect, language.SystemLanguage);
-
+            
+            EditorGUI.BeginChangeCheck();
+            var systemLanguage = EditorGUI.EnumPopup(rect, language.SystemLanguage);
+            if (EditorGUI.EndChangeCheck()) 
+            {
+                Undo.RecordObject(storage, $"Rename {language.SystemLanguage} to {systemLanguage}");
+                language.SystemLanguage = (SystemLanguage)systemLanguage;
+            }
+            
             if (isFocused || lastIndex != index) { lastIndex = index; }
         }
 
@@ -64,6 +71,7 @@ namespace SimpleLocalization
         /// <param name="list">This <see cref="ReorderableList"/></param>
         private void AddLanguage(ReorderableList list)
         {
+            Undo.RecordObject(storage, "Add new language");
             storage.AddLanguage(new Language(SystemLanguage.Unknown));
             list.index = list.count - 1;
             EditorUtility.SetDirty(storage);
@@ -78,6 +86,7 @@ namespace SimpleLocalization
             var language = list.list[list.index] as Language;
             if (ExtendedEditor.DeleteConfirmation(language.SystemLanguage.ToString()))
             {
+                Undo.RecordObject(storage, $"Remove {language.SystemLanguage}");
                 storage.RemoveLanguage(list.index--);
                 EditorGUI.FocusTextInControl(null);
                 EditorUtility.SetDirty(storage);
@@ -90,6 +99,7 @@ namespace SimpleLocalization
         /// <param name="list">This <see cref="ReorderableList"/></param>
         private void ReorderLanguages(ReorderableList list)
         {
+            Undo.RecordObject(storage, "Reorder languages");
             storage.ReorderLocalizations(lastIndex, list.index);
             EditorUtility.SetDirty(storage);
         }
