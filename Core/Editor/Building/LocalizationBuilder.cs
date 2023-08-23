@@ -1,14 +1,13 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     /// <summary>
     /// Creates an instance of a script object of type LocalizationStorage
     /// </summary>
     public static class LocalizationBuilder
     {
-
         [InitializeOnLoadMethod]
         private static void Initialize()
         {

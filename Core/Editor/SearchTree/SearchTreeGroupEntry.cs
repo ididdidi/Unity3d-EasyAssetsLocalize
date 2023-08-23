@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for representing branches of a search tree

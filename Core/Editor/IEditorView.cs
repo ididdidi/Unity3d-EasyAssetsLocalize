@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     public interface IEditorView
     {

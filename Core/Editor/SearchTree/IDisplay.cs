@@ -1,4 +1,4 @@
-﻿namespace UnityExtended
+﻿namespace EasyLocalization
 {
     public interface IDisplay
     {

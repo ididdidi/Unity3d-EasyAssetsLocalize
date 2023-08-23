@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for extending the capabilities of the Unity3d editor

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityExtended;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     /// <summary>
     /// Search Localization Data Provider.
@@ -11,7 +10,6 @@ namespace SimpleLocalization
     public class LocalizationSearchProvider : ISearchTreeProvider
     {
         private SearchTree searchTree = new SearchTree();
-
         private LocalizationStorage Storage { get; }
         private System.Type Type { get; }
         private Dictionary<System.Type, List<Localization>> types;

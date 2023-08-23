@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     public class SearchTreeView : IEditorView
     {

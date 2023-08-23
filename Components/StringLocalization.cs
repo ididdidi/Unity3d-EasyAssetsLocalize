@@ -1,7 +1,7 @@
 // Class generated automatically
 using UnityEngine.Events;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     public class StringLocalization : LocalizationComponent
     {

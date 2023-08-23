@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityExtended;
+using EasyLocalization;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for visualizing the list of used languages.

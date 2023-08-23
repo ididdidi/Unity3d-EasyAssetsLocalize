@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityExtended;
+using EasyLocalization;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.

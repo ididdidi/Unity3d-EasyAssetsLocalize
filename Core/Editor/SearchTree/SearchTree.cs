@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Encapsulates the current search tree.

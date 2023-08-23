@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityExtended;
+using EasyLocalization;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     public partial class TypesListView : ReorderableList
     {

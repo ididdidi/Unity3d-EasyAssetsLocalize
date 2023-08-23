@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
-using UnityExtended;
+using EasyLocalization;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TypeMetadata : System.Attribute

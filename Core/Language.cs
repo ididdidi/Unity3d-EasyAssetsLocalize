@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for storing language information.

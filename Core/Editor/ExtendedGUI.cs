@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Class that complements the capabilities of the editor GUI
@@ -10,22 +10,8 @@ namespace UnityExtended
     public partial class ExtendedEditor
     {
         /// <summary>
-        /// Provides a new rect on top of the existing one.
-        /// </summary>
-		/// <param name="rect">Base <see cref="Rect"/></param>
-        /// <param name="size">Dimensions of the new rectangle</param>
-        /// <param name="dX">X offset</param>
-        /// <param name="dY">Y offset</param>
-        /// <returns></returns>
-        public static Rect GetNewRect(Rect rect, Vector2 size, Vector2 padding, float dX = 0f, float dY = 0f)
-        {
-            return new Rect(new Vector2(rect.x + dX + padding.x, rect.y + dY + padding.y), new Vector2(size.x - padding.x * 2f, size.y - padding.y * 2f));
-        }
-
-        /// <summary>
         /// Field to store GUI.changed parameter
         /// </summary>
-        //private static bool isGUIChanged;
         private static System.Collections.Generic.Stack<bool> isGUIChanged = new System.Collections.Generic.Stack<bool>();
 
         /// <summary>
@@ -152,31 +138,6 @@ namespace UnityExtended
             if (getLastControlId != null)
                 return (int)getLastControlId.GetValue(null);
             return 0;
-        }
-
-        /// <summary>
-        /// Static method to display message in Unity3d inspector
-        /// </summary>
-        /// <param name="message">Message text as <see cref="string"/></param>
-        /// <param name="messageType">Message type determines the icon before the message(None, Information, Warning, Error)</param>
-        public static void DisplayMessage(string message, MessageType messageType = MessageType.None)
-        {
-            // Create content from the icon and text of the message
-            GUIContent label = new GUIContent(message);
-            switch (messageType)
-            {
-                case MessageType.Info: { label.image = EditorGUIUtility.Load("icons/console.infoicon.png") as Texture2D; break; }
-                case MessageType.Warning: { label.image = EditorGUIUtility.Load("icons/console.warnicon.png") as Texture2D; break; }
-                case MessageType.Error: { label.image = EditorGUIUtility.Load("icons/console.erroricon.png") as Texture2D; break; }
-            }
-
-            // Define the message display style
-            var style = new GUIStyle();
-            style.wordWrap = true;
-            style.normal.textColor = GUI.skin.label.normal.textColor;
-
-            // Display message
-            EditorGUILayout.LabelField(label, style);
         }
 
         /// <summary>

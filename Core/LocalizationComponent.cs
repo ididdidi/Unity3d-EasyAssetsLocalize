@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
     /// <summary>
     /// Provides a soft link between the scene object and resource localization.

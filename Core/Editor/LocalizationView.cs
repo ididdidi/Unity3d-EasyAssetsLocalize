@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityExtended;
+using EasyLocalization;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {
 	public class LocalizationView : IEditorView
 	{

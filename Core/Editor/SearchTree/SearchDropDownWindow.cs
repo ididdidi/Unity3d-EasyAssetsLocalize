@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for creating and displaying a drop-down editor window.

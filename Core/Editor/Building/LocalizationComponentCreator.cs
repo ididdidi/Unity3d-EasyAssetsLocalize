@@ -12,7 +12,7 @@
         get => $@"
 using UnityEngine.Events;
 
-namespace SimpleLocalization
+namespace EasyLocalization
 {{
     public class {type.Name}Localization : LocalizationComponent
     {{
@@ -21,7 +21,7 @@ namespace SimpleLocalization
 
         public override System.Type Type => typeof({type.FullName});
 
-        public override void SetLocalizationData(object data) => handler?.Invoke(({type.FullName})data);
+        public override void SetData(object data) => handler?.Invoke(({type.FullName})data);
     }}
 }}";
     }

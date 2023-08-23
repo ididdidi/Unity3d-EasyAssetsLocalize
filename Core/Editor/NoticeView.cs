@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
 	/// <summary>
 	/// Class for displaying a notification in the editor window.

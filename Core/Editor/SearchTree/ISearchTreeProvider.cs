@@ -1,4 +1,4 @@
-﻿namespace UnityExtended
+﻿namespace EasyLocalization
 {
     /// <summary>
     /// An interface that defines the methods needed to provide data for searching 

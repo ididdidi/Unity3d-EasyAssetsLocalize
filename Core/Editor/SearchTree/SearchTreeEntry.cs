@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityExtended
+namespace EasyLocalization
 {
     /// <summary>
     /// Class for creating a search tree in the Unity editor.
