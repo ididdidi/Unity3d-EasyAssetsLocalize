@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace EasyLocalization
+namespace EasyAssetsLocalize
 {
     /// <summary>
     /// Сlass that encapsulates data from languages and localized resources.

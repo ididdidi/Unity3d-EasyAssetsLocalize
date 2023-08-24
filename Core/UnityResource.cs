@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace EasyLocalization
+namespace EasyAssetsLocalize
 {    /// <summary>
      /// Encapsulates object resource data.
      /// </summary>

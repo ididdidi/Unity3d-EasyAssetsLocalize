@@ -1,0 +1,22 @@
+{
+  "name": "ru.ididdidi.easy-assets-localize",
+  "version": "0.0.2",
+  "displayName": "Easy assets localize",
+  "description": "Easy localization string and assets for Unity",
+  "unity": "2019.4",
+  "unityRelease": "28f1",
+  "documentationUrl": "https://ididdidi.ru/",
+  "changelogUrl": "https://github.com/ididdidi/Unity3d-Localization/blob/main/changelog.md",
+  "licensesUrl": "https://github.com/ididdidi/Unity3d-Localization/blob/main/LICENSE",
+  "dependencies": { },
+ "keywords": [
+    "localization",
+    "language",
+    "translation"
+  ],
+  "author": {
+    "name": "ididdidi",
+    "email": "ididdidi.dev@gmail.com",
+    "url": "https://ididdidi.ru/"
+  }
+}

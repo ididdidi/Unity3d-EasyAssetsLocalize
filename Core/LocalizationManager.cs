@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace EasyLocalization
+namespace EasyAssetsLocalize
 {
     // Class for managing resource localization
     public static class LocalizationManager

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityExtended;
 
-namespace EasyLocalization
+namespace EasyAssetsLocalize
 {
     /// <summary>
     /// The class contains the localization resources of the corresponding tag.

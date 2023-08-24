@@ -1,4 +1,4 @@
-﻿namespace EasyLocalization
+﻿namespace EasyAssetsLocalize
 {
     /// <summary>
     /// Interface for interacting with resources.
