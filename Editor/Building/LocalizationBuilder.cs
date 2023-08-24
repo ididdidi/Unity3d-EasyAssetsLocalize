@@ -14,16 +14,13 @@ namespace EasyAssetsLocalize
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            CreateLocalizationStorage();
-        }
-
-        private static void CreateLocalizationStorage()
-        {
+            // Create LocalizationStorage
             if (!Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)))
             {
                 var storage = AssetCreator.Create<LocalizationStorage>($"Assets{localPath}/Resources/");
                 storage.AddLanguage(new Language(Application.systemLanguage));
                 CreateComponent(storage, "Text");
+                LocalizationStorageWindow.Show();
             }
         }
 
