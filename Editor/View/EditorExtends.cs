@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Class that complements the capabilities of the editor GUI
     /// </summary>
-    public partial class EditorExtends
+    public static class EditorExtends
     {
         /// <summary>
         /// Field to store GUI.changed parameter
@@ -60,6 +60,23 @@ namespace EasyAssetsLocalize
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             return result;
+        }
+
+        public static GUIContent GetContent(this System.Type type)
+        {
+            GUIContent content;
+            if (typeof(string).IsAssignableFrom(type))
+            {
+                content = new GUIContent(type.Name, EditorGUIUtility.IconContent("Text Icon").image, type.ToString());
+            }
+            else
+            {
+                Texture icon;
+                if (typeof(ScriptableObject).IsAssignableFrom(type)) { icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
+                else { icon = EditorGUIUtility.ObjectContent(null, type).image; }
+                content = new GUIContent(type.Name, icon, type.ToString());
+            }
+            return content;
         }
 
         /// <summary>

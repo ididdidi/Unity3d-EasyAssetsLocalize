@@ -19,7 +19,7 @@ namespace {GetType().Namespace}
     /// <summary>
     /// Class for displaying localization fields.
     /// </summary>
-    [CustomEditor(typeof({type.Name}Localization)), TypeMetadata(typeof({type.FullName}))]
+    [CustomEditor(typeof({type.Name}Localization))]
     public class {type.Name}LocalizationEditor : LocalizationComponentEditor {{ }}
 }}";
         }

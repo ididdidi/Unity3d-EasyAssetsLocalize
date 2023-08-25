@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -63,24 +64,10 @@ namespace EasyAssetsLocalize
                 // If the target type is specified and does not match the type for item, then skip this iteration.
                 if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
 
-                // Creating Content to show on the List
-                GUIContent content;
-                if (typeof(string).IsAssignableFrom(tags[i].Type))
-                {
-                    content = new GUIContent(tags[i].Name, EditorGUIUtility.IconContent("Text Icon").image);
-                }
-                else
-                {
-                    Texture icon;
-                    if (typeof(ScriptableObject).IsAssignableFrom(tags[i].Type)) { icon = EditorGUIUtility.IconContent("ScriptableObject Icon").image; }
-                    else { icon = EditorGUIUtility.ObjectContent(null, tags[i].Type).image; }
-                    content = new GUIContent(tags[i].Name, icon);
-                }
-
                 // If the list for this type has not yet been added to the dictionary, then we create it and add.
                 if (!entries.ContainsKey(tags[i].Type)) { entries.Add(tags[i].Type, new List<SearchTreeEntry>()); }
                 // Adding the created item to the dictionary
-                entries[tags[i].Type].Add(new SearchTreeEntry(content, Type == null ? 2 : 1, tags[i]));
+                entries[tags[i].Type].Add(new SearchTreeEntry(tags[i].Type.GetContent(), Type == null ? 2 : 1, tags[i]));
             }
 
             // Create a list with tree leaves
@@ -106,7 +93,7 @@ namespace EasyAssetsLocalize
         /// <returns>List of new localizations as SearchTreeEntry</returns>
         private List<SearchTreeEntry> GetNewItems()
         {
-            TypeMetadata[] metaDatas = TypeMetadata.GetAllMetadata();
+           // TypeMetadata[] metaDatas = TypeMetadata.GetAllMetadata();
             List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
 
             // If the target type is not initialized, then create a group for new localizations.
@@ -120,22 +107,16 @@ namespace EasyAssetsLocalize
             var level = 1;
 
             // Loop through all types of resources for localization.
-            for (int i = 0; i < metaDatas.Length; i++)
+            //var types = (from l in Storage.Localizations.Where(i => i.IsDefault) select l.Type).ToArray();
+            var defaults = (from l in Storage.Localizations.Where(i => i.IsDefault) select l).ToArray();
+            for (int i = 0; i < defaults.Length; i++)
             {
                 // If the target type is defined.
-                if (Type != null)
-                {
-                    // But this type does not correspond to it - we skip the iteration.
-                    if (!Type.Equals(metaDatas[i].Type)) { continue; }
-                }
-                else
-                {
-                    // Initialize the icon according to the resource type and specify the level as 2.
-                    icon = metaDatas[i].Icon; level = 2;
-                }
+                if (Type != null) { if (!Type.Equals(defaults[i].Type)) { continue; } } // But this type does not correspond to it - we skip the iteration.
+                else { icon = defaults[i].Type.GetContent().image; level = 2; } // Initialize the icon according to the resource type and specify the level as 2.
 
                 // Find the default value for this type, create a new element and add it to the list of localizations.
-                var defValue = LocalizationManager.Storage.GetDefaultLocalization(metaDatas[i].Type);
+                var defValue = LocalizationManager.Storage.GetDefaultLocalization(defaults[i].Type);
                 searchList.Add(new SearchTreeEntry(new GUIContent($"New {defValue.Type.Name} Localization", icon), level, defValue.Clone()));
             }
             return searchList;

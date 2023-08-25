@@ -20,8 +20,7 @@ namespace EasyAssetsLocalize
         public LocalizationPropertiesView(LocalizationStorage storage)
         {
             languagesList = new LanguagesListView(storage);
-
-            typesList = new TypesListView();
+            typesList = new TypesListView(storage);
         }
 
         public void OnGUI(Rect position)

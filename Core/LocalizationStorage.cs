@@ -26,8 +26,7 @@ namespace EasyAssetsLocalize
         /// List of localizations in array format.
         /// </summary>
         public Localization[] Localizations => localizations.ToArray();
-
-
+               
         /// <summary>
         /// Adds a new localization language to the repository.
         /// </summary>
@@ -124,7 +123,7 @@ namespace EasyAssetsLocalize
         {
             for (int i = 0; i < localizations.Count; i++)
             {
-                if (localizations[i].Type.Equals(type) && localizations[i].Name.StartsWith("Default"))
+                if (localizations[i].IsDefault && localizations[i].Type.Equals(type))
                 {
                     return localizations[i];
                 }

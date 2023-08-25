@@ -8,7 +8,7 @@ namespace EasyAssetsLocalize
     /// </summary>
     public static class LocalizationBuilder
     {
-
+        private static int count;
         public static readonly string localPath = "/Addons/EasyAssetsLocalize";
 
         [InitializeOnLoadMethod]
@@ -20,6 +20,8 @@ namespace EasyAssetsLocalize
                 var storage = AssetCreator.Create<LocalizationStorage>($"Assets{localPath}/Resources/");
                 storage.AddLanguage(new Language(Application.systemLanguage));
                 CreateComponent(storage, "Text");
+                Debug.Log("To get started with asset localization go to Window -> Localization Storage -> Propertyes(Gear) " +
+                    "and add the default assets to the list of types.");
             }
         }
 

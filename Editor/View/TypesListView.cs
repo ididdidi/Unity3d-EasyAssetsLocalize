@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using EasyAssetsLocalize;
 
 namespace EasyAssetsLocalize
 {
-    public partial class TypesListView : ReorderableList
+    public class TypesListView : ReorderableList
     {
-        public TypesListView() : base(new List<object>(TypeMetadata.GetAllMetadata()), typeof(TypeMetadata), false, true, true, true)
+        public TypesListView(LocalizationStorage storage) : base(null, typeof(System.Type), false, true, true, true)
         {
+            list = new List<object>(from l in storage.Localizations.Where(i => i.IsDefault) select l.Type);
             drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeMeta;
             onAddCallback = AddTypeComponent;
@@ -23,9 +24,9 @@ namespace EasyAssetsLocalize
 
         private void DrawTypeMeta(Rect position, int index, bool isActive, bool isFocused)
         {
-            if(list[index] is TypeMetadata meta)
+            if(list[index] is System.Type type)
             {
-                EditorGUI.LabelField(position, new GUIContent(meta.Type.Name, meta.Icon, meta.Type.ToString()));
+                EditorGUI.LabelField(position, type.GetContent());
             }
             else
             {
@@ -53,12 +54,12 @@ namespace EasyAssetsLocalize
 
         private void RemoveTypeComponent(ReorderableList reorderable)
         {
-            if(reorderable.list[reorderable.index] is TypeMetadata metadata)
+            if(reorderable.list[reorderable.index] is System.Type type)
             {
-                if (EditorExtends.DeleteConfirmation(metadata.Type.Name))
+                if (EditorExtends.DeleteConfirmation(type.Name))
                 {
-                    LocalizationManager.Storage.RemoveAll(metadata.Type);
-                    LocalizationBuilder.Remove(metadata.Type);
+                    LocalizationManager.Storage.RemoveAll(type);
+                    LocalizationBuilder.Remove(type);
                 }
             }
             else { reorderable.list.RemoveAt(reorderable.index--); }
