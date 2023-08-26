@@ -60,6 +60,7 @@ namespace EasyAssetsLocalize
             {
                 Undo.RecordObject(storage, $"Rename {language.SystemLanguage} to {systemLanguage}");
                 language.SystemLanguage = (SystemLanguage)systemLanguage;
+                storage.SaveChanges();
             }
             
             if (isFocused || lastIndex != index) { lastIndex = index; }
@@ -74,7 +75,6 @@ namespace EasyAssetsLocalize
             Undo.RecordObject(storage, "Add new language");
             storage.AddLanguage(new Language(SystemLanguage.Unknown));
             list.index = list.count - 1;
-            EditorUtility.SetDirty(storage);
         }
 
         /// <summary>
@@ -89,7 +89,6 @@ namespace EasyAssetsLocalize
                 Undo.RecordObject(storage, $"Remove {language.SystemLanguage}");
                 storage.RemoveLanguage(list.index--);
                 EditorGUI.FocusTextInControl(null);
-                EditorUtility.SetDirty(storage);
             }
         }
 
@@ -101,7 +100,6 @@ namespace EasyAssetsLocalize
         {
             Undo.RecordObject(storage, "Reorder languages");
             storage.ReorderLocalizations(lastIndex, list.index);
-            EditorUtility.SetDirty(storage);
         }
     }
 }

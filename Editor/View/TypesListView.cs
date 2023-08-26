@@ -59,7 +59,7 @@ namespace EasyAssetsLocalize
                 if (EditorExtends.DeleteConfirmation(type.Name))
                 {
                     LocalizationManager.Storage.RemoveAll(type);
-                    LocalizationBuilder.Remove(type);
+                    LocalizationBuilder.RemoveComponent(type);
                 }
             }
             else { reorderable.list.RemoveAt(reorderable.index--); }

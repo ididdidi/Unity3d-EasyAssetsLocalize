@@ -29,6 +29,7 @@ namespace EasyAssetsLocalize
 			propertiesView = new LocalizationPropertiesView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
+			storage.OnChange += OnChangeStorage;
 		}
 
 		/// <summary>
@@ -36,12 +37,6 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
-			if (searchView != null && storageVersion != storage.Version)
-			{
-				searchView.IsChanged = true;
-				storageVersion = storage.Version;
-			}
-
 			var width = EditorGUIUtility.currentViewWidth;
 			var height = Screen.height * (width / Screen.width) - 160;
 			GUILayoutUtility.GetRect(width, height);
@@ -50,5 +45,8 @@ namespace EasyAssetsLocalize
 			localizationPresentor.OnGUI(position);
 			noticeView.OnGUI();
 		}
+
+		private void OnChangeStorage() => searchView.IsChanged = true;
+		private void OnDisable() => storage.OnChange -= OnChangeStorage;
 	}
 }

@@ -19,7 +19,6 @@ namespace EasyAssetsLocalize
 		private LocalizationPropertiesView propertiesView;
 		private LocalizationPresenter localizationPresentor;
 		private LocalizationStorage storage;
-		private int storageVersion;
 		private LocalizationStorage Storage { get => storage ?? LocalizationManager.Storage; }
 
 		private void OnEnable()
@@ -29,6 +28,7 @@ namespace EasyAssetsLocalize
 			propertiesView = new LocalizationPropertiesView(Storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(Storage));
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
+			Storage.OnChange += OnChangeStorage;
 		}
 
 		/// <summary>
@@ -40,7 +40,6 @@ namespace EasyAssetsLocalize
 			instance.titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			instance.minSize = new Vector2(minWidth, minHight);
 			instance.storage = storage;
-
 			return instance;
 		}
 
@@ -55,15 +54,12 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		internal void OnGUI()
 		{
-			if(searchView != null && storageVersion != Storage.Version)
-			{
-				searchView.IsChanged = true;
-				storageVersion = Storage.Version;
-			}
-
 			localizationPresentor.OnGUI(new Rect(0, 0, position.width, position.height));
-
 			noticeView.OnGUI();
 		}
+
+		private void OnChangeStorage() => searchView.IsChanged = true;
+
+		private void OnDisable() => Storage.OnChange -= OnChangeStorage;
 	}
 }

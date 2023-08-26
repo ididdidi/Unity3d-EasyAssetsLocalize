@@ -41,14 +41,12 @@ namespace EasyAssetsLocalize
 
             var local = new Localization($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count, true);
             storage.AddLocalization(local);
-
-            EditorUtility.SetDirty(storage);
             AssetDatabase.Refresh();
         }
 
         public static bool Conteins(System.Type type) => string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
 
-        public static void Remove(System.Type type)
+        public static void RemoveComponent(System.Type type)
         {
             var fileName = $"{type.Name}LocalizationEditor.cs";
             var path = GetDirectory(fileName);

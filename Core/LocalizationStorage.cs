@@ -6,27 +6,22 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Сlass that encapsulates data from languages and localized resources.
     /// </summary>
-    public class LocalizationStorage : ScriptableObject
+    public class LocalizationStorage : ScriptableObject, IStorage
     {
-        [SerializeField, HideInInspector] private int version; 
         [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();
-        [SerializeField, HideInInspector] private List<string> types = new List<string>();
         [SerializeField, HideInInspector] private List<Localization> localizations = new List<Localization>();
 
-        /// <summary>
-        /// localization version. Depends on adding / removing languages and tags.
-        /// </summary>
-        public int Version { get => version; }
         /// <summary>
         /// List of languages in array format.
         /// </summary>
         public List<Language> Languages => languages;
-        public List<string> Types => types;
         /// <summary>
         /// List of localizations in array format.
         /// </summary>
         public Localization[] Localizations => localizations.ToArray();
-               
+
+        public System.Action OnChange { get; set; }
+
         /// <summary>
         /// Adds a new localization language to the repository.
         /// </summary>
@@ -38,7 +33,7 @@ namespace EasyAssetsLocalize
                 localizations[i].Resources.Add(localizations[i].Resources[0].Clone());
             }
             languages.Add(language);
-            ChangeVersion();
+            SaveChanges();
         }
 
         /// <summary>
@@ -52,32 +47,8 @@ namespace EasyAssetsLocalize
                 localizations[i].Resources.RemoveAt(index);
             }
             languages.RemoveAt(index);
-            ChangeVersion();
+            SaveChanges();
         }
-
-        /// <summary>
-        /// Removes the selected localization language from the repository.
-        /// </summary>
-        /// <param name="language">Localization language</param>
-        public void RemoveLanguage(Language language)
-        {
-            if (!languages.Contains(language)) { throw new System.ArgumentException($"{GetType()}: No resources found for {language.ToString()}"); }
-
-            var index = languages.IndexOf(language);
-            for (int i=0; i < localizations.Count; i++)
-            {
-                localizations[i].Resources.RemoveAt(index);
-            }
-            languages.RemoveAt(index);
-            ChangeVersion();
-        }
-
-        /// <summary>
-        /// Checks if the language is in the repository
-        /// </summary>
-        /// <param name="language">Localization language</param>
-        /// <returns></returns>
-        public bool ConteinsLanguage(Language language) => languages.Contains(language);
 
         /// <summary>
         /// Does the repository contain this localization.
@@ -93,7 +64,7 @@ namespace EasyAssetsLocalize
         public void AddLocalization(Localization localization)
         {
             localizations.Add(localization);
-            ChangeVersion();
+            SaveChanges();
             return;
         }
 
@@ -132,34 +103,13 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
-        /// Serves to insert localization at the specified index.
-        /// </summary>
-        /// <param name="index">Place on the list to insert</param>
-        /// <param name="localization">Localization to insert</param>
-        public void InsertLocalization(int index, Localization localization)
-        {
-            localizations.Insert(index, localization);
-            ChangeVersion();
-        }
-
-        /// <summary>
-        /// Removes localization data by index in the list of localizations.
-        /// </summary>
-        /// <param name="index">Index in the list of localizations</param>
-        public void RemoveLocalization(int index)
-        {
-            localizations.RemoveAt(index);
-            ChangeVersion();
-        }
-
-        /// <summary>
         /// Removes localization in the list of localizations.
         /// </summary>
         /// <param name="localization"><see cref="Localization"/></param>
         public void RemoveLocalization(Localization localization)
         {
             localizations.Remove(localization);
-            ChangeVersion();
+            SaveChanges();
         }
 
         /// <summary>
@@ -175,7 +125,7 @@ namespace EasyAssetsLocalize
                     localizations.Remove(localizations[i]);
                 }
             }
-            ChangeVersion();
+            SaveChanges();
         }
 
         /// <summary>
@@ -191,8 +141,15 @@ namespace EasyAssetsLocalize
                 localizations[i].Resources.Remove(temp);
                 localizations[i].Resources.Insert(nextIndex, temp);
             }
+            SaveChanges();
         }
 
-        public void ChangeVersion() => version++;
+#if UNITY_EDITOR
+        public void SaveChanges()
+        {
+            OnChange?.Invoke();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

@@ -13,7 +13,6 @@ namespace EasyAssetsLocalize
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
         private LocalizationStorage Storage { get => LocalizationManager.Storage; }
-        private int StorageVersion { get; set; }
         private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;
@@ -37,13 +36,16 @@ namespace EasyAssetsLocalize
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
+            Storage.OnChange += OnChangeStorage;
+
             /// When adding a component to the scene
             if (string.IsNullOrEmpty(Component.ID)) { 
                 var defaultLocal = Storage.GetDefaultLocalization(Component.Type);
                 Localization = defaultLocal;
                 Component.ID = defaultLocal.ID;
-                return;
             }
+
+            Localization = Component.GetLocalization();
         }
 
         /// <summary>
@@ -51,12 +53,6 @@ namespace EasyAssetsLocalize
         /// </summary>
         public override void OnInspectorGUI()
         {
-            if (StorageVersion != Storage.Version || StorageVersion == 0)
-            {
-                Localization = Component.GetLocalization();
-                StorageVersion = Storage.Version;
-            }
-
             DrawDefaultInspector();
             DrawLocalization();
             DrawHandler();
@@ -74,10 +70,10 @@ namespace EasyAssetsLocalize
                 Localization.Name = EditorGUILayout.TextField("Localization name", Localization.Name);
                 LocalizationView.DrawResources(Storage, Localization, LocalizationManager.Languages, GUILayout.Height(50f));
                 EditorGUI.EndDisabledGroup();
-                if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.ChangeVersion(); }
+                if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.SaveChanges(); }
             }
 
-            if (EditorExtends.CenterButton(Localization == null ? "Set Localization" : "Change Localization")) { ShowSearchWindow(); }
+            if (EditorExtends.CenterButton("Change Localization")) { ShowSearchWindow(); }
         }
 
         /// <summary>
@@ -107,5 +103,13 @@ namespace EasyAssetsLocalize
                 DropDownWindow?.Close();
             }
         }
+
+        private void OnChangeStorage()
+        {
+            Localization = Component.GetLocalization();
+            Repaint();
+        }
+
+        private void OnDisable() => Storage.OnChange -= OnChangeStorage;
     }
 }

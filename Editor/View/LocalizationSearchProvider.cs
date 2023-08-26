@@ -54,20 +54,22 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="tags"></param>
         /// <returns>List of localizations as SearchTreeEntry</returns>
-        private List<SearchTreeEntry> Adapt(List<Localization> tags)
+        private List<SearchTreeEntry> Adapt(List<Localization> locals)
         {
             // Group by Type
             Dictionary<System.Type, List<SearchTreeEntry>> entries = new Dictionary<System.Type, List<SearchTreeEntry>>();
 
-            for (int i = 0; i < tags.Count; i++)
+            for (int i = 0; i < locals.Count; i++)
             {
                 // If the target type is specified and does not match the type for item, then skip this iteration.
-                if (Type != null && !Type.IsAssignableFrom(tags[i].Type)) { continue; }
+                if (Type != null && !Type.IsAssignableFrom(locals[i].Type)) { continue; }
 
                 // If the list for this type has not yet been added to the dictionary, then we create it and add.
-                if (!entries.ContainsKey(tags[i].Type)) { entries.Add(tags[i].Type, new List<SearchTreeEntry>()); }
+                if (!entries.ContainsKey(locals[i].Type)) { entries.Add(locals[i].Type, new List<SearchTreeEntry>()); }
                 // Adding the created item to the dictionary
-                entries[tags[i].Type].Add(new SearchTreeEntry(tags[i].Type.GetContent(), Type == null ? 2 : 1, tags[i]));
+                var content = new GUIContent(locals[i].Type.GetContent());
+                content.text = locals[i].Name;
+                entries[locals[i].Type].Add(new SearchTreeEntry(content, Type == null ? 2 : 1, locals[i]));
             }
 
             // Create a list with tree leaves

@@ -1,18 +1,16 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using EasyAssetsLocalize;
 
 namespace EasyAssetsLocalize
 {
 	public class LocalizationView : IEditorView
 	{
 		private object data;
-		private LocalizationStorage storage;
 		private Vector2 scrollPosition;
 		private bool editable = false;
 		private NoticeView noticeView;
 
-		private LocalizationStorage Storage { get => storage; }
+		private LocalizationStorage Storage { get; }
 		public object Data { 
 			get => data;
 			set {
@@ -28,7 +26,7 @@ namespace EasyAssetsLocalize
 
 		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
 		{
-			this.storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
+			this.Storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
 			this.noticeView = noticeView ?? throw new System.ArgumentNullException(nameof(noticeView));
 		}
 
@@ -50,11 +48,7 @@ namespace EasyAssetsLocalize
 				EditorGUI.EndDisabledGroup();
 				GUILayout.EndScrollView();
 				
-				if (changeCheck && EditorGUI.EndChangeCheck())
-				{
-					Storage.ChangeVersion();
-					EditorUtility.SetDirty(Storage);
-				}
+				if (changeCheck && EditorGUI.EndChangeCheck()) { Storage.SaveChanges(); }
 				GUILayout.EndVertical();
 				GUILayout.EndArea();
 				
