@@ -4,17 +4,20 @@ using UnityEngine;
 namespace EasyAssetsLocalize
 {
     /// <summary>
-    /// Creates an instance of a script object of type LocalizationStorage
+    /// Creates an instance of a script object of type LocalizationStorage.
     /// </summary>
     public static class LocalizationBuilder
     {
         private static int count;
         public static readonly string localPath = "/Addons/EasyAssetsLocalize";
 
+        /// <summary>
+        /// Method for initializing storage and components required for localization.
+        /// </summary>
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            // Create LocalizationStorage
+            // Create repository if it doesn't exist
             if (!Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)))
             {
                 var storage = AssetCreator.Create<LocalizationStorage>($"Assets{localPath}/Resources/");
@@ -25,7 +28,12 @@ namespace EasyAssetsLocalize
             }
         }
 
-        public static void CreateComponent(LocalizationStorage storage, object defaultValue)
+        /// <summary>
+        /// Method for generating localization component code for a specific data type.
+        /// </summary>
+        /// <param name="storage"><see cref="Localization"/> data storage</param>
+        /// <param name="defaultValue">Default localization data</param>
+        public static void CreateComponent(IStorage storage, object defaultValue)
         {
             if (defaultValue == null) { throw new System.ArgumentNullException(nameof(defaultValue)); }
 
@@ -36,16 +44,25 @@ namespace EasyAssetsLocalize
             }
 
             var type = defaultValue.GetType();
-            ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentPrototype(type).Code);
-            ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorPrototype(type).Code);
+            ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentTemplate(type).Code);
+            ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorTemplate(type).Code);
 
             var local = new Localization($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count, true);
             storage.AddLocalization(local);
             AssetDatabase.Refresh();
         }
 
+        /// <summary>
+        /// Checks for the presence of a localization component for the specified resource type.
+        /// </summary>
+        /// <param name="type">resource type</param>
+        /// <returns>Is there a component for this resource type</returns>
         public static bool Conteins(System.Type type) => string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
 
+        /// <summary>
+        /// Delete localization component code for the specified resource type.
+        /// </summary>
+        /// <param name="type">resource type</param>
         public static void RemoveComponent(System.Type type)
         {
             var fileName = $"{type.Name}LocalizationEditor.cs";

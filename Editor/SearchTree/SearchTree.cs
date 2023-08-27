@@ -15,7 +15,13 @@ namespace EasyAssetsLocalize
         public SearchTreeEntry[] searchResultTree;
         public List<SearchTreeGroupEntry> selectionStack = new List<SearchTreeGroupEntry>();
 
+        /// <summary>
+        /// Is the input field empty.
+        /// </summary>
         public bool SearchKeyIsEmpty { get { return string.IsNullOrEmpty(keyword); } }
+        /// <summary>
+        /// Current search tree
+        /// </summary>
         public SearchTreeEntry[] ActiveTree { get => (!SearchKeyIsEmpty) ? searchResultTree : entries; }
 
         /// <summary>

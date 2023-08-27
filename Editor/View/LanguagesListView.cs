@@ -10,14 +10,14 @@ namespace EasyAssetsLocalize
     /// </summary>
     public class LanguagesListView : ReorderableList
     {
-        private LocalizationStorage storage;
+        private IStorage storage;
         private int lastIndex =-1;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="storage">Localization store instance</param>
-        public LanguagesListView(LocalizationStorage storage) : base(storage.Languages, typeof(Language), true, true, true, true)
+        public LanguagesListView(IStorage storage) : base(storage.Languages, typeof(Language), true, true, true, true)
         {
             this.storage = storage;
             drawHeaderCallback = DrawHeader;
@@ -40,9 +40,9 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
-        /// Draws <see cref="Language"/> properties from a list
+        /// Draws <see cref="Language"/> settings from a list
         /// </summary>
-        /// <param name="position"><see cref="Rect"/>provided for rendering the language properties</param>
+        /// <param name="position"><see cref="Rect"/>provided for rendering the language settings</param>
         /// <param name="index"><see cref="Language"/> index in the list</param>
         /// <param name="isActive">Is the list item active?</param>
         /// <param name="isFocused">Is the list item on focused?</param>
@@ -58,7 +58,7 @@ namespace EasyAssetsLocalize
             var systemLanguage = EditorGUI.EnumPopup(rect, language.SystemLanguage);
             if (EditorGUI.EndChangeCheck()) 
             {
-                Undo.RecordObject(storage, $"Rename {language.SystemLanguage} to {systemLanguage}");
+                Undo.RecordObject((Object)storage, $"Rename {language.SystemLanguage} to {systemLanguage}");
                 language.SystemLanguage = (SystemLanguage)systemLanguage;
                 storage.SaveChanges();
             }
@@ -72,7 +72,7 @@ namespace EasyAssetsLocalize
         /// <param name="list">This <see cref="ReorderableList"/></param>
         private void AddLanguage(ReorderableList list)
         {
-            Undo.RecordObject(storage, "Add new language");
+            Undo.RecordObject((Object)storage, "Add new language");
             storage.AddLanguage(new Language(SystemLanguage.Unknown));
             list.index = list.count - 1;
         }
@@ -86,7 +86,7 @@ namespace EasyAssetsLocalize
             var language = list.list[list.index] as Language;
             if (EditorExtends.DeleteConfirmation(language.SystemLanguage.ToString()))
             {
-                Undo.RecordObject(storage, $"Remove {language.SystemLanguage}");
+                Undo.RecordObject((Object)storage, $"Remove {language.SystemLanguage}");
                 storage.RemoveLanguage(list.index--);
                 EditorGUI.FocusTextInControl(null);
             }
@@ -98,7 +98,7 @@ namespace EasyAssetsLocalize
         /// <param name="list">This <see cref="ReorderableList"/></param>
         private void ReorderLanguages(ReorderableList list)
         {
-            Undo.RecordObject(storage, "Reorder languages");
+            Undo.RecordObject((Object)storage, "Reorder languages");
             storage.ReorderLocalizations(lastIndex, list.index);
         }
     }

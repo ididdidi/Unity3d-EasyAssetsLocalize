@@ -144,12 +144,15 @@ namespace EasyAssetsLocalize
             SaveChanges();
         }
 
-#if UNITY_EDITOR
+        /// <summary>
+        /// Saves vault data changes in the editor.
+        /// </summary>
         public void SaveChanges()
         {
             OnChange?.Invoke();
+#if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
-        }
 #endif
+        }
     }
 }

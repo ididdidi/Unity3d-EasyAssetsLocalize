@@ -10,7 +10,7 @@ namespace EasyAssetsLocalize
 		private bool editable = false;
 		private NoticeView noticeView;
 
-		private LocalizationStorage Storage { get; }
+		private IStorage Storage { get; }
 		public object Data { 
 			get => data;
 			set {
@@ -24,7 +24,7 @@ namespace EasyAssetsLocalize
 
 		public System.Action OnBackButton { get; set; }
 
-		public LocalizationView(LocalizationStorage storage, NoticeView noticeView)
+		public LocalizationView(IStorage storage, NoticeView noticeView)
 		{
 			this.Storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
 			this.noticeView = noticeView ?? throw new System.ArgumentNullException(nameof(noticeView));
@@ -75,7 +75,7 @@ namespace EasyAssetsLocalize
 			var name = GUILayout.TextField(localization.Name);
 			if (EditorGUI.EndChangeCheck())
 			{
-				Undo.RecordObject(Storage, $"Changed name from {localization.Name} to {name}");
+				Undo.RecordObject((Object)Storage, $"Changed name from {localization.Name} to {name}");
 				localization.Name = name;
 			}
 			EditorGUI.EndDisabledGroup();
@@ -115,7 +115,7 @@ namespace EasyAssetsLocalize
 			EditorExtends.DrawLine(Color.black);
 		}
 
-		public static void DrawResources(LocalizationStorage storage, Localization localization, Language[] languages, params GUILayoutOption[] options)
+		public static void DrawResources(IStorage storage, Localization localization, Language[] languages, params GUILayoutOption[] options)
 		{
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);
 			style.wordWrap = true;
@@ -138,7 +138,7 @@ namespace EasyAssetsLocalize
 
 				if (EditorGUI.EndChangeCheck())
 				{
-					Undo.RecordObject(storage, $"Changed data for {localization.Name}");
+					Undo.RecordObject((Object)storage, $"Changed data for {localization.Name}");
 					localization.Resources[i].Data = tmpData;
 				}
 			}

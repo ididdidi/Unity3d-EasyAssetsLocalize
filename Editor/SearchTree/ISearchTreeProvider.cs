@@ -6,6 +6,10 @@
     /// </summary>
     public interface ISearchTreeProvider
     {
+        /// <summary>
+        /// Method for obtaining initial data for search
+        /// </summary>
+        /// <returns><see cref="SearchTree"/></returns>
         SearchTree GetSearchTree();
     }
 }

@@ -1,14 +1,24 @@
 ﻿namespace EasyAssetsLocalize
 {
-    public class LocalizationEditorPrototype
+    /// <summary>
+    /// A class that contains a code template for creating an Editor for component.
+    /// </summary>
+    public class LocalizationEditorTemplate
     {
         private System.Type type;
 
-        public LocalizationEditorPrototype(System.Type type)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="type">resource type</param>
+        public LocalizationEditorTemplate(System.Type type)
         {
             this.type = type ?? throw new System.ArgumentNullException(nameof(type));
         }
 
+        /// <summary>
+        /// Code to create class file.
+        /// </summary>
         public string Code
         {
             get => $@"

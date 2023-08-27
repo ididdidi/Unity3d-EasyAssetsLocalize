@@ -14,7 +14,7 @@ namespace EasyAssetsLocalize
 		private LocalizationStorage storage;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
-		private LocalizationPropertiesView propertiesView;
+		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
 		private int storageVersion;
 
@@ -26,9 +26,9 @@ namespace EasyAssetsLocalize
 			storage = this.target as LocalizationStorage;
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(storage, noticeView);
-			propertiesView = new LocalizationPropertiesView(storage);
+			settingsView = new LocalizationSettingsView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
-			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
+			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
 			storage.OnChange += OnChangeStorage;
 		}
 

@@ -45,7 +45,7 @@ namespace EasyAssetsLocalize
             IsChanged = true;
         }
 
-        #region Properties
+        #region Settings
         public bool IsChanged { get; set; }
         public string SearchKeyword => searchTree.keyword;
         public SearchTreeEntry CurrentEntry { get; private set; }
@@ -171,11 +171,10 @@ namespace EasyAssetsLocalize
                 return (int)getLastControlId.GetValue(null);
             return 0;
         }
-
         /// <summary>
         /// Method to display search field and tree.
         /// </summary>
-        /// <param name="context">Object for interacting with an object in which data is displayed</param>
+        /// <param name="position">Coordinates and dimensions of the rect to display in the GUI</param>
         public void OnGUI(Rect position)
         {
             if (IsChanged)
@@ -258,7 +257,7 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Method for animated displaying search list.
         /// </summary>
-        /// <param name="context">Object for interacting with an object in which data is displayed</param>
+        /// <param name="position">Coordinates and dimensions of the rect to display in the GUI</param>
         /// <param name="tree">Search tree</param>
         /// <param name="animationValue">Animation value at the moment</param>
         /// <param name="parent">The parent entry of the search tree</param>
@@ -308,7 +307,6 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Method directly to display the search list
         /// </summary>
-        /// <param name="context">Object for interacting with an object in which data is displayed</param>
         /// <param name="tree">Search tree</param>
         /// <param name="parent">The parent entry of the search tree</param>
         private void ListGUI(SearchTreeEntry[] tree, SearchTreeGroupEntry parent)

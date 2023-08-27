@@ -16,25 +16,25 @@ namespace EasyAssetsLocalize
 		private NoticeView noticeView;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
-		private LocalizationPropertiesView propertiesView;
+		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
-		private LocalizationStorage storage;
-		private LocalizationStorage Storage { get => storage ?? LocalizationManager.Storage; }
+		private IStorage storage;
+		private IStorage Storage { get => storage ?? LocalizationManager.Storage; }
 
 		private void OnEnable()
 		{
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(Storage, noticeView);
-			propertiesView = new LocalizationPropertiesView(Storage);
+			settingsView = new LocalizationSettingsView(Storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(Storage));
-			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, propertiesView);
+			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
 			Storage.OnChange += OnChangeStorage;
 		}
 
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
-		public static LocalizationStorageWindow Show(LocalizationStorage storage, float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
+		public static LocalizationStorageWindow Show(IStorage storage, float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
 			var instance = GetWindow<LocalizationStorageWindow>();
 			instance.titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);

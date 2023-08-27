@@ -4,7 +4,7 @@ using EasyAssetsLocalize;
 
 namespace EasyAssetsLocalize
 {
-    public class LocalizationPropertiesView : IEditorView
+    public class LocalizationSettingsView : IEditorView
     {
         private static readonly string helpURL = "https://ididdidi.ru/";
         private LanguagesListView languagesList;
@@ -17,7 +17,7 @@ namespace EasyAssetsLocalize
         /// Constructor
         /// </summary>
         /// <param name="onCloseButton">Callback to close view</param>
-        public LocalizationPropertiesView(LocalizationStorage storage)
+        public LocalizationSettingsView(IStorage storage)
         {
             languagesList = new LanguagesListView(storage);
             typesList = new TypesListView(storage);

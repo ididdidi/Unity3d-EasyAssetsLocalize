@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using EasyAssetsLocalize;
 
 namespace EasyAssetsLocalize
 {
@@ -12,7 +11,7 @@ namespace EasyAssetsLocalize
     {
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
-        private LocalizationStorage Storage { get => LocalizationManager.Storage; }
+        private IStorage Storage { get => LocalizationManager.Storage; }
         private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;

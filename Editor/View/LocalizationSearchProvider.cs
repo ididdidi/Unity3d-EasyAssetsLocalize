@@ -11,7 +11,7 @@ namespace EasyAssetsLocalize
     public class LocalizationSearchProvider : ISearchTreeProvider
     {
         private SearchTree searchTree = new SearchTree();
-        private LocalizationStorage Storage { get; }
+        private IStorage Storage { get; }
         private System.Type Type { get; }
         private Dictionary<System.Type, List<Localization>> types;
 
@@ -22,7 +22,7 @@ namespace EasyAssetsLocalize
         /// <param name="onSelect">On select Callback</param>
         /// <param name="onFocus">On focus Callback</param>
         /// <param name="type">Target type</param>
-        public LocalizationSearchProvider(LocalizationStorage storage, System.Type type = null)
+        public LocalizationSearchProvider(IStorage storage, System.Type type = null)
         {
             Storage = storage;
             Type = type;
@@ -34,7 +34,7 @@ namespace EasyAssetsLocalize
         /// <returns><see cref="SearchTree"/> as a list of localizations</returns>
         public SearchTree GetSearchTree()
         {
-            if (!Storage) { throw new System.ArgumentNullException(nameof(Component)); }
+            if (Storage == null) { throw new System.ArgumentNullException(nameof(Component)); }
 
             List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
             searchList.Add(new SearchTreeGroupEntry(new GUIContent("Localizations")));

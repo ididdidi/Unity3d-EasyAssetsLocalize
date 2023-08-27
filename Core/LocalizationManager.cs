@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     // Class for managing resource localization
     public static class LocalizationManager
     {
-        private static LocalizationStorage localizationStorage;
+        private static IStorage localizationStorage;
         private static List<LocalizationComponent> components = new List<LocalizationComponent>();
 
         /// <summary>
@@ -23,17 +23,22 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Link to localization repository.
         /// </summary>
-        public static LocalizationStorage Storage
+        public static IStorage Storage
         {
             get
             {
-                if (!localizationStorage) { 
+                if (localizationStorage == null) { 
                     localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage));
                 }
                 return localizationStorage;
             }
         }
 
+        /// <summary>
+        /// Method for getting component localization.
+        /// </summary>
+        /// <param name="component"><see cref="LocalizationComponent"/></param>
+        /// <returns><see cref="Localization"/> for a given component</returns>
         public static Localization GetLocalization(this LocalizationComponent component)
         {
             try

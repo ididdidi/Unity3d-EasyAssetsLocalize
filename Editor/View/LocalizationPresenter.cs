@@ -18,7 +18,7 @@ namespace EasyAssetsLocalize
 
 		protected SearchTreeView searchView;
 		protected LocalizationView localizationView;
-		protected LocalizationPropertiesView propertiesView;
+		protected LocalizationSettingsView settingsView;
 
 		private TypeView typeView;
 
@@ -27,19 +27,19 @@ namespace EasyAssetsLocalize
 		private long lastTime;
 		private float currentAnimation, targetAnimation = 0f;
 
-		public LocalizationPresenter(IDisplay parent, SearchTreeView searchView, LocalizationView localizationView, LocalizationPropertiesView propertiesView)
+		public LocalizationPresenter(IDisplay parent, SearchTreeView searchView, LocalizationView localizationView, LocalizationSettingsView settingsView)
 		{
 			this.parent = parent ?? throw new System.ArgumentNullException(nameof(parent));
 			this.searchView = searchView ?? throw new System.ArgumentNullException(nameof(searchView));
 			this.localizationView = localizationView ?? throw new System.ArgumentNullException(nameof(localizationView));
-			this.propertiesView = propertiesView ?? throw new System.ArgumentNullException(nameof(propertiesView));
+			this.settingsView = settingsView ?? throw new System.ArgumentNullException(nameof(settingsView));
 
 			this.typeView = new TypeView();
-			this.searchView.OptionButton = ShowPropertiesButton;
+			this.searchView.OptionButton = ShowSettingsButton;
 			this.searchView.OnFocusEntry = OnFocusEntry;
 			this.searchView.OnSelectEntry = OnSelectEntry;
 			this.localizationView.OnBackButton = CloseLocalizationView;
-			this.propertiesView.OnBackButton = ClosePropertiesView;
+			this.settingsView.OnBackButton = CloseSettingsView;
 		}
 
 		/// <summary>
@@ -87,21 +87,21 @@ namespace EasyAssetsLocalize
 		}
 
 		/// <summary>
-		/// Button to show properties
+		/// Button to show settings
 		/// </summary>
 		/// <param name="rect">Position</param>
-		private void ShowPropertiesButton(Rect rect)
+		private void ShowSettingsButton(Rect rect)
 		{
-			if (GUI.Button(rect, EditorGUIUtility.IconContent("_Popup"), GUIStyle.none))
+			if (GUI.Button(rect, new GUIContent(EditorGUIUtility.IconContent("_Popup").image, "Settings"), GUIStyle.none))
 			{
-				if (isWideView) { currentView = propertiesView; }
-				else { StartChangeView(propertiesView, 1f, 0f); }
+				if (isWideView) { currentView = settingsView; }
+				else { StartChangeView(settingsView, 1f, 0f); }
 			}
 		}
 
 		private void OnFocusEntry(object data)
 		{
-			if (!isWideView || currentView == propertiesView) { return; }
+			if (!isWideView || currentView == settingsView) { return; }
 			if (data is GUIContent content)
 			{
 				typeView.Content = content;
@@ -133,10 +133,10 @@ namespace EasyAssetsLocalize
 			else { StartChangeView(localizationView, 0f, 1f); }
 		}
 
-		private void ClosePropertiesView()
+		private void CloseSettingsView()
 		{
 			if (isWideView) { currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typeView : localizationView as IEditorView; }
-			else { StartChangeView(propertiesView, 0f, 1f); }
+			else { StartChangeView(settingsView, 0f, 1f); }
 		}
 
 		private void StartChangeView(IEditorView view, float currentAnimation, float targetAnimation)

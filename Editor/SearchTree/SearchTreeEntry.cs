@@ -8,9 +8,21 @@ namespace EasyAssetsLocalize
     [System.Serializable]
     public class SearchTreeEntry : System.IComparable<SearchTreeEntry>
     {
+        /// <summary>
+        /// Content to display in the GUI.
+        /// </summary>
         public GUIContent Content { get; }
+        /// <summary>
+        /// Entry name for find.
+        /// </summary>
         public string Name => Content.text;
+        /// <summary>
+        /// Search tree entry level.
+        /// </summary>
         public int Level { get; }
+        /// <summary>
+        /// Data associated with this entry.
+        /// </summary>
         public object Data { get; }
 
         /// <summary>
@@ -27,7 +39,7 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
-        /// Method for comparing two objects
+        /// Method for comparing two objects.
         /// </summary>
         /// <param name="entry">Base tree element</param>
         /// <returns></returns>

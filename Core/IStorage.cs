@@ -2,6 +2,9 @@
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// Interface for interacting with the localization storage
+    /// </summary>
     public interface IStorage
     {
         List<Language> Languages { get; }
@@ -10,6 +13,9 @@ namespace EasyAssetsLocalize
         /// </summary>
         Localization[] Localizations { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         System.Action OnChange { get; set; }
 
         /// <summary>
@@ -69,5 +75,10 @@ namespace EasyAssetsLocalize
         /// <param name="currentIndex"></param>
         /// <param name="nextIndex"></param>
         void ReorderLocalizations(int currentIndex, int nextIndex);
+
+        /// <summary>
+        /// Saves vault data changes in the editor.
+        /// </summary>
+        void SaveChanges();
     }
 }

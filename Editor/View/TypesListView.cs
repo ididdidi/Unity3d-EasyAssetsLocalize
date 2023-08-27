@@ -8,7 +8,7 @@ namespace EasyAssetsLocalize
 {
     public class TypesListView : ReorderableList
     {
-        public TypesListView(LocalizationStorage storage) : base(null, typeof(System.Type), false, true, true, true)
+        public TypesListView(IStorage storage) : base(null, typeof(System.Type), false, true, true, true)
         {
             list = new List<object>(from l in storage.Localizations.Where(i => i.IsDefault) select l.Type);
             drawHeaderCallback = DrawHeader;
