@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using EasyAssetsLocalize;
 
 namespace EasyAssetsLocalize
 {
@@ -37,7 +36,7 @@ namespace EasyAssetsLocalize
 		public static LocalizationStorageWindow Show(IStorage storage, float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
 			var instance = GetWindow<LocalizationStorageWindow>();
-			instance.titleContent = new GUIContent("Simple Localization", EditorGUIUtility.IconContent("FilterByType@2x").image);
+			instance.titleContent = new GUIContent("Easy Assets Localize", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			instance.minSize = new Vector2(minWidth, minHight);
 			instance.storage = storage;
 			return instance;
