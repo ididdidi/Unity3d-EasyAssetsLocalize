@@ -21,15 +21,23 @@ namespace EasyAssetsLocalize
 				}
 			}
 		}
-
 		public System.Action OnBackButton { get; set; }
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="storage"><see cref="Localization"/> repository</param>
+		/// <param name="noticeView">View to display notifications</param>
 		public LocalizationView(IStorage storage, NoticeView noticeView)
 		{
 			this.Storage = storage ?? throw new System.ArgumentNullException(nameof(storage));
 			this.noticeView = noticeView ?? throw new System.ArgumentNullException(nameof(noticeView));
 		}
 
+		/// <summary>
+		/// Method to display in an inspector or editor window.
+		/// </summary>
+		/// <param name="position"><see cref="Rect"/></param>
 		public void OnGUI(Rect position)
 		{
 			if (Data is Localization localization)
@@ -56,6 +64,11 @@ namespace EasyAssetsLocalize
 			}
 		}
 
+		/// <summary>
+		/// Header render method.
+		/// </summary>
+		/// <param name="position"><see cref="Rect"/></param>
+		/// <param name="localization"><see cref="Localization"/></param>
 		private void DrawHeader(Rect position, Localization localization)
 		{
 			GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
@@ -115,6 +128,13 @@ namespace EasyAssetsLocalize
 			EditorExtends.DrawLine(Color.black);
 		}
 
+		/// <summary>
+		/// The method displays localization data.
+		/// </summary>
+		/// <param name="storage"><see cref="Localization"/> repository</param>
+		/// <param name="localization"><see cref="Localization"/> data</param>
+		/// <param name="languages"><see cref="Language"/> data</param>
+		/// <param name="options">Options for displaying fields</param>
 		public static void DrawResources(IStorage storage, Localization localization, Language[] languages, params GUILayoutOption[] options)
 		{
 			GUIStyle style = new GUIStyle(EditorStyles.textArea);

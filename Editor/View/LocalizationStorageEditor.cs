@@ -15,7 +15,6 @@ namespace EasyAssetsLocalize
 		private LocalizationView localizationView;
 		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
-		private int storageVersion;
 
 		/// <summary>
 		/// Storage link caching.
@@ -45,7 +44,14 @@ namespace EasyAssetsLocalize
 			noticeView.OnGUI();
 		}
 
+		/// <summary>
+		/// Method for displaying data changes.
+		/// </summary>
 		private void OnChangeStorage() => searchView.IsChanged = true;
+
+		/// <summary>
+		/// This function is called when the behaviour becomes disabled.
+		/// </summary>
 		private void OnDisable() => storage.OnChange -= OnChangeStorage;
 	}
 }

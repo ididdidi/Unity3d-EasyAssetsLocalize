@@ -52,7 +52,7 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Creates a list of <see cref="SearchTreeEntry"/> from list of <see cref="Localization"/>
         /// </summary>
-        /// <param name="tags"></param>
+        /// <param name="locals"></param>
         /// <returns>List of localizations as SearchTreeEntry</returns>
         private List<SearchTreeEntry> Adapt(List<Localization> locals)
         {

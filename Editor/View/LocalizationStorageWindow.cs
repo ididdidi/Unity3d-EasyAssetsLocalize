@@ -20,6 +20,9 @@ namespace EasyAssetsLocalize
 		private IStorage storage;
 		private IStorage Storage { get => storage ?? LocalizationManager.Storage; }
 
+		/// <summary>
+		/// Standard method for initialization
+		/// </summary>
 		private void OnEnable()
 		{
 			noticeView = new NoticeView(this);
@@ -57,8 +60,14 @@ namespace EasyAssetsLocalize
 			noticeView.OnGUI();
 		}
 
+		/// <summary>
+		/// Method for displaying data changes.
+		/// </summary>
 		private void OnChangeStorage() => searchView.IsChanged = true;
 
+		/// <summary>
+		/// This function is called when the behaviour becomes disabled.
+		/// </summary>
 		private void OnDisable() => Storage.OnChange -= OnChangeStorage;
 	}
 }

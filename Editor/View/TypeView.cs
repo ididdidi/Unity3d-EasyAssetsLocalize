@@ -2,10 +2,17 @@
 
 namespace EasyAssetsLocalize
 {
+	/// <summary>
+	/// Class for displaying the type in the inspector or editor window.
+	/// </summary>
 	public class TypeView : IEditorView
 	{
 		public GUIContent Content { get; set; }
 
+		/// <summary>
+		/// Method to display in an inspector or editor window.
+		/// </summary>
+		/// <param name="position"><see cref="Rect"/></param>
 		public void OnGUI(Rect position)
 		{
 			var rect = new Rect(0f, 0f, 128f, 128f);

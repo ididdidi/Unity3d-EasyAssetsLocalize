@@ -22,6 +22,10 @@ namespace EasyAssetsLocalize
             typesList = new TypesListView(storage);
         }
 
+        /// <summary>
+        /// Method to display in an inspector or editor window.
+        /// </summary>
+        /// <param name="position"><see cref="Rect"/></param>
         public void OnGUI(Rect position)
         {
             GUILayout.BeginArea(position);

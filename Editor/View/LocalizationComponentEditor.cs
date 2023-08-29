@@ -103,12 +103,18 @@ namespace EasyAssetsLocalize
             }
         }
 
+        /// <summary>
+        /// Method for displaying data changes.
+        /// </summary>
         private void OnChangeStorage()
         {
             Localization = Component.GetLocalization();
             Repaint();
         }
 
+        /// <summary>
+        /// This function is called when the behaviour becomes disabled.
+        /// </summary>
         private void OnDisable() => Storage.OnChange -= OnChangeStorage;
     }
 }

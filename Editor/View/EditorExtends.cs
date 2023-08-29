@@ -62,6 +62,11 @@ namespace EasyAssetsLocalize
             return result;
         }
 
+        /// <summary>
+        /// Content getter for type.
+        /// </summary>
+        /// <param name="type"><see cref="System.Type"/></param>
+        /// <returns><see cref="GUIContent"/> for this type</returns>
         public static GUIContent GetContent(this System.Type type)
         {
             GUIContent content;
