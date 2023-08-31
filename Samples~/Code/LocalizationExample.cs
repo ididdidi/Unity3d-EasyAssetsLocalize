@@ -5,6 +5,7 @@ using EasyAssetsLocalize;
 public class LocalizationExample : MonoBehaviour
 {
     [SerializeField] Text language;
+
     // Start is called before the first frame update
     void Start()
     {
