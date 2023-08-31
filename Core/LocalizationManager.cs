@@ -27,10 +27,13 @@ namespace EasyAssetsLocalize
         {
             get
             {
-                if (localizationStorage == null) { 
-                    localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage));
-                }
+                if (localizationStorage == null) { localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)); }
                 return localizationStorage;
+            }
+            set
+            {
+                if (value != null) { localizationStorage = value; }
+                else { throw new System.NullReferenceException(); }
             }
         }
 
@@ -50,17 +53,6 @@ namespace EasyAssetsLocalize
                 Debug.LogError(e.Message.Replace(component.ID, component.name));
                 return Storage.GetDefaultLocalization(component.Type);
             }
-        }
-
-        /// <summary>
-        /// Method for get localization resource data depending on the current language.
-        /// </summary>
-        /// <param name="component"><see cref="LocalizationComponent"/></param>
-        /// <returns>Resource data</returns>
-        public static object GetLocalizationData(LocalizationComponent component)
-        {
-            var localization = GetLocalization(component);
-            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
         }
 
         /// <summary>
@@ -136,6 +128,17 @@ namespace EasyAssetsLocalize
             {
                 components[i].SetData(GetLocalizationData(components[i]));
             }
+        }
+
+        /// <summary>
+        /// Method for get localization resource data depending on the current language.
+        /// </summary>
+        /// <param name="component"><see cref="LocalizationComponent"/></param>
+        /// <returns>Resource data</returns>
+        public static object GetLocalizationData(LocalizationComponent component)
+        {
+            var localization = GetLocalization(component);
+            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
         }
     }
 }

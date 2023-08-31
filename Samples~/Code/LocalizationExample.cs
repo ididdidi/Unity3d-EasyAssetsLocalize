@@ -4,12 +4,19 @@ using EasyAssetsLocalize;
 
 public class LocalizationExample : MonoBehaviour
 {
+    [SerializeField] LocalizationStorage storage;
     [SerializeField] Text language;
 
     // Start is called before the first frame update
-    void Start()
+    public void OnEnable()
     {
+        LocalizationManager.Storage = storage;
         SetLanguge(LocalizationManager.Language);
+    }
+
+    public void OnValidate()
+    {
+        Debug.Log("OnValidate");
     }
 
     public void PrevLanguage()
@@ -27,5 +34,10 @@ public class LocalizationExample : MonoBehaviour
     private void SetLanguge(Language language)
     {
         this.language.text = language.ToString();
+    }
+
+    public void OnDisable()
+    {
+        
     }
 }
