@@ -12,6 +12,8 @@ namespace EasyAssetsLocalize
         /// </summary>
         [field: SerializeField, HideInInspector] public string ID { get; set; }
 
+        public LocalizationController Controller { get; set; }
+
         /// <summary>
         /// Type of localization resources.
         /// </summary>
@@ -23,14 +25,16 @@ namespace EasyAssetsLocalize
         /// <param name="data">Resource data for localization</param>
         public abstract void SetData(object data);
 
+        private void OnValidate() => Controller = LocalizationController.GetInstance();
+
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
-        private void Awake() => this.Subscribe();
+        private void OnEnable() => Controller?.Subscribe(this);
 
         /// <summary>
         /// Unsubscribe to localization changes.
         /// </summary>
-        private void OnDestroy() => this.Unsubscribe();
+        private void OnDisable() => Controller?.Unsubscribe(this);
     }
 }

@@ -1,4 +1,3 @@
-// Class generated automatically
 using UnityEditor;
 
 namespace EasyAssetsLocalize

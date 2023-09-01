@@ -48,7 +48,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        Localization GetLocalization(string id);
+        Localization GetLocalization(LocalizationComponent component);
 
         /// <summary>
         /// Returns the default localization for the given resource type

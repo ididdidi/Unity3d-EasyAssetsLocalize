@@ -58,7 +58,7 @@ namespace EasyAssetsLocalize
 
 				rect = new Rect(0, 0, 320, position.height);
 				EditorGUI.DrawRect(rect, Background);
-				if (LocalizationManager.Languages.Length > 0) searchView?.OnGUI(rect);
+				searchView?.OnGUI(rect);
 
 				rect.x = 319;
 				rect.width = position.width - 320;

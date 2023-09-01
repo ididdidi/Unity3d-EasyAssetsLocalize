@@ -11,13 +11,15 @@ namespace EasyAssetsLocalize
     /// </summary>
     public class TypesListView : ReorderableList
     {
+        private IStorage Storage { get; }
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="storage"><see cref="Localization"/> repository</param>
         public TypesListView(IStorage storage) : base(null, typeof(System.Type), false, true, true, true)
         {
-            list = new List<object>(from l in storage.Localizations.Where(i => i.IsDefault) select l.Type);
+            Storage = storage;
+            list = new List<object>(from l in Storage.Localizations.Where(i => i.IsDefault) select l.Type);
             drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeItem;
             onAddCallback = AddTypeComponent;
@@ -64,7 +66,7 @@ namespace EasyAssetsLocalize
             if (EditorGUI.EndChangeCheck())
             {
                 if (list[index] != null && LocalizationBuilder.Conteins(list[index].GetType())) { 
-                    LocalizationBuilder.CreateComponent(LocalizationManager.Storage, list[index]);
+                    LocalizationBuilder.CreateComponent(Storage, list[index]);
                 }
             }
         }
@@ -89,7 +91,7 @@ namespace EasyAssetsLocalize
             {
                 if (EditorExtends.DeleteConfirmation(type.Name))
                 {
-                    LocalizationManager.Storage.RemoveAll(type);
+                    Storage.RemoveAll(type);
                     LocalizationBuilder.RemoveComponent(type);
                 }
             }

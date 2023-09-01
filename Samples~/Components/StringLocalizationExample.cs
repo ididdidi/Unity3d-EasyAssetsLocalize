@@ -1,3 +1,4 @@
+// Example Class
 using UnityEngine.Events;
 
 namespace EasyAssetsLocalize

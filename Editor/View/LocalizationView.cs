@@ -52,7 +52,7 @@ namespace EasyAssetsLocalize
 				
 				scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 				EditorGUI.BeginDisabledGroup(localization.IsDefault && !editable);
-				DrawResources(Storage, localization, LocalizationManager.Languages);
+				DrawResources(Storage, localization, Storage.Languages.ToArray());
 				EditorGUI.EndDisabledGroup();
 				GUILayout.EndScrollView();
 				

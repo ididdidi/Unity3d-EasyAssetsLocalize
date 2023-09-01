@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyAssetsLocalize
 {
     [System.Serializable]
     public class SerializableType : ISerializationCallbackReceiver

@@ -24,22 +24,6 @@ MonoBehaviour:
     - id: 0
     - id: 1
     isDefault: 1
-  - id: b06a50fc455a4f1a8e679d1c9d1e2bf6
-    name: String Localization
-    serializableType:
-      data: 005a53797374656d2e537472696e672c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839
-    resources:
-    - id: 2
-    - id: 3
-    isDefault: 0
-  - id: 34cd8e5d778f4777be2a7831726b77e3
-    name: String Localization
-    serializableType:
-      data: 005a53797374656d2e537472696e672c206d73636f726c69622c2056657273696f6e3d342e302e302e302c2043756c747572653d6e65757472616c2c205075626c69634b6579546f6b656e3d62373761356335363139333465303839
-    resources:
-    - id: 4
-    - id: 5
-    isDefault: 0
   references:
     version: 1
     00000000:
@@ -47,22 +31,6 @@ MonoBehaviour:
       data:
         data: "\u0422\u0435\u043A\u0441\u0442"
     00000001:
-      type: {class: TextResource, ns: EasyAssetsLocalize, asm: git_package}
-      data:
-        data: Text
-    00000002:
-      type: {class: TextResource, ns: EasyAssetsLocalize, asm: git_package}
-      data:
-        data: "\u0422\u0435\u043A\u0441\u0442"
-    00000003:
-      type: {class: TextResource, ns: EasyAssetsLocalize, asm: git_package}
-      data:
-        data: Text
-    00000004:
-      type: {class: TextResource, ns: EasyAssetsLocalize, asm: git_package}
-      data:
-        data: "\u0422\u0435\u043A\u0441\u0442"
-    00000005:
       type: {class: TextResource, ns: EasyAssetsLocalize, asm: git_package}
       data:
         data: Text

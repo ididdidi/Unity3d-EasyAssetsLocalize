@@ -73,16 +73,18 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        public Localization GetLocalization(string id)
+        public Localization GetLocalization(LocalizationComponent component)
         {
-            for(int i=0; i < localizations.Count; i++)
+            var id = component.ID;
+            for (int i=0; i < localizations.Count; i++)
             {
                 if (localizations[i].ID.Equals(id))
                 {
                     return localizations[i];
                 } 
             }
-            throw new System.ArgumentException($"{GetType()}: Not found resources for localization {id}");
+            Debug.LogError($"{name}: Not found resources for localization {component}");
+            return GetDefaultLocalization(component.Type);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace EasyAssetsLocalize
     {
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
-        private IStorage Storage { get => LocalizationManager.Storage; }
+        private IStorage Storage => Component.Controller.Storage;
         private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;
@@ -44,7 +44,7 @@ namespace EasyAssetsLocalize
                 Component.ID = defaultLocal.ID;
             }
 
-            Localization = Component.GetLocalization();
+            Localization = Storage.GetLocalization(Component);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace EasyAssetsLocalize
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.BeginDisabledGroup(Localization.IsDefault);
                 Localization.Name = EditorGUILayout.TextField("Localization name", Localization.Name);
-                LocalizationView.DrawResources(Storage, Localization, LocalizationManager.Languages, GUILayout.Height(50f));
+                LocalizationView.DrawResources(Storage, Localization, Storage.Languages.ToArray(), GUILayout.Height(50f));
                 EditorGUI.EndDisabledGroup();
-                if (EditorGUI.EndChangeCheck()) { LocalizationManager.Storage?.SaveChanges(); }
+                if (EditorGUI.EndChangeCheck()) { Storage?.SaveChanges(); }
             }
 
             if (EditorExtends.CenterButton("Change Localization")) { ShowSearchWindow(); }
@@ -97,7 +97,7 @@ namespace EasyAssetsLocalize
                     Storage.AddLocalization(localization);
                 }
                 Component.ID = localization.ID;
-                Localization = Component.GetLocalization();
+                Localization = Storage.GetLocalization(Component);
                 EditorUtility.SetDirty(Component);
                 DropDownWindow?.Close();
             }
@@ -108,7 +108,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         private void OnChangeStorage()
         {
-            Localization = Component.GetLocalization();
+            Localization = Storage.GetLocalization(Component);
             Repaint();
         }
 

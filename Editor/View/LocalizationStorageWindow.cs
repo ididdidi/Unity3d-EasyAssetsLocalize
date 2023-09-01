@@ -18,7 +18,7 @@ namespace EasyAssetsLocalize
 		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
 		private IStorage storage;
-		private IStorage Storage { get => storage ?? LocalizationManager.Storage; }
+		private IStorage Storage { get => storage ?? Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)); }
 
 		/// <summary>
 		/// Standard method for initialization
@@ -49,7 +49,7 @@ namespace EasyAssetsLocalize
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
 		[MenuItem("Window/Localization Storage")]
-		public new static LocalizationStorageWindow Show() => Show(LocalizationManager.Storage);
+		public new static LocalizationStorageWindow Show() => Show(Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)));
 
 		/// <summary>
 		/// Method for rendering window content.

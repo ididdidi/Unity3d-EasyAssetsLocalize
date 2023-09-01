@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
-    // Class for managing resource localization
-    public static class LocalizationManager
+    public class LocalizationController : MonoBehaviour
     {
-        private static IStorage localizationStorage;
-        private static List<LocalizationComponent> components = new List<LocalizationComponent>();
+        private static LocalizationController instance;
+        private List<LocalizationComponent> components = new List<LocalizationComponent>();
+
+        [SerializeField] private LocalizationStorage localizationStorage;
+        [System.Serializable] public class Handler : UnityEvent<string> { }
+        [SerializeField] private Handler OnChangingLanguage;
+
+        public IStorage Storage { get => localizationStorage ?? (localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage))); }
 
         /// <summary>
         /// The current language.
@@ -18,51 +24,39 @@ namespace EasyAssetsLocalize
             set => PlayerPrefs.SetInt("Language", (int)value.SystemLanguage);
         }
 
-        public static Language[] Languages => Storage.Languages.ToArray();
-
-        /// <summary>
-        /// Link to localization repository.
-        /// </summary>
-        public static IStorage Storage
+        public static LocalizationController GetInstance(bool dontDestroy = false)
         {
-            get
+            if (!instance) { instance = FindObjectOfType<LocalizationController>(); }
+            if (!instance)
             {
-                if (localizationStorage == null) { localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)); }
-                return localizationStorage;
+                var @object = new GameObject($"{nameof(LocalizationController)}");
+                instance = @object.AddComponent<LocalizationController>();
+
+                if (dontDestroy) { DontDestroyOnLoad(@object); }
             }
-            set
-            {
-                if (value != null) { localizationStorage = value; }
-                else { throw new System.NullReferenceException(); }
-            }
+            return instance;
         }
 
+        private void Start() => OnChangingLanguage?.Invoke(Language.ToString());
+
         /// <summary>
-        /// Method for getting component localization.
+        /// Method for get localization resource data depending on the current language.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        /// <returns><see cref="Localization"/> for a given component</returns>
-        public static Localization GetLocalization(this LocalizationComponent component)
+        /// <returns>Resource data</returns>
+        private object GetLocalizationData(LocalizationComponent component)
         {
-            try
-            {
-                return Storage.GetLocalization(component.ID);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError(e.Message.Replace(component.ID, component.name));
-                return Storage.GetDefaultLocalization(component.Type);
-            }
+            var localization = Storage.GetLocalization(component);
+            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
         }
 
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        public static void Subscribe(this LocalizationComponent component)
+        public void Subscribe(LocalizationComponent component)
         {
-            if(!string.IsNullOrEmpty(component.ID) && !components.Contains(component)) { components.Add(component); }
-
+            components.Add(component);
             component.SetData(GetLocalizationData(component));
         }
 
@@ -70,7 +64,7 @@ namespace EasyAssetsLocalize
         /// Unsubscribe to localization changes.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        public static void Unsubscribe(this LocalizationComponent component)
+        public void Unsubscribe(LocalizationComponent component)
         {
             if (!string.IsNullOrEmpty(component.ID) && components.Contains(component)) { components.Remove(component); }
         }
@@ -78,7 +72,7 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Changes the language to the next one in the localization list.
         /// </summary>
-        public static void SetNextLanguage()
+        public void SetNextLanguage()
         {
             ChangeLocalzation(Direction.Next);
         }
@@ -86,7 +80,7 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Changes the language to the previous one in the list of localizations.
         /// </summary>
-        public static void SetPrevLanguage()
+        public void SetPrevLanguage()
         {
             ChangeLocalzation(Direction.Back);
         }
@@ -96,7 +90,7 @@ namespace EasyAssetsLocalize
         /// Method for changing localization language. Switching is carried out in a circle.
         /// </summary>
         /// <param name="direction">Indicates which language to select: the previous one in the list or the next one</param>
-        private static void ChangeLocalzation(Direction direction)
+        private void ChangeLocalzation(Direction direction)
         {
             var languages = new List<Language>(Storage.Languages);
             if (languages.Count < 2) { return; }
@@ -108,8 +102,6 @@ namespace EasyAssetsLocalize
                 if (newIndex >= 0) { index = newIndex; }
                 else { index = languages.Count + newIndex; }
                 SetLanguage(languages[index]);
-
-                Debug.Log($"{languages[index]} has been selected");
             }
             else
             {
@@ -121,24 +113,14 @@ namespace EasyAssetsLocalize
         /// Sets the current language and loads localized resources.
         /// </summary>
         /// <param name="language">Language</param>
-        private static void SetLanguage(Language language)
+        private void SetLanguage(Language language)
         {
             Language = language;
+            OnChangingLanguage?.Invoke(language.ToString());
             for (int i = 0; i < components.Count; i++)
             {
                 components[i].SetData(GetLocalizationData(components[i]));
             }
-        }
-
-        /// <summary>
-        /// Method for get localization resource data depending on the current language.
-        /// </summary>
-        /// <param name="component"><see cref="LocalizationComponent"/></param>
-        /// <returns>Resource data</returns>
-        public static object GetLocalizationData(LocalizationComponent component)
-        {
-            var localization = GetLocalization(component);
-            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
         }
     }
 }

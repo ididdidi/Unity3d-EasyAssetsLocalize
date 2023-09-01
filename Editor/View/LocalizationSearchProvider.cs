@@ -19,8 +19,6 @@ namespace EasyAssetsLocalize
         /// Constructor.
         /// </summary>
         /// <param name="storage">Localization storage</param>
-        /// <param name="onSelect">On select Callback</param>
-        /// <param name="onFocus">On focus Callback</param>
         /// <param name="type">Target type</param>
         public LocalizationSearchProvider(IStorage storage, System.Type type = null)
         {
@@ -118,7 +116,7 @@ namespace EasyAssetsLocalize
                 else { icon = defaults[i].Type.GetContent().image; level = 2; } // Initialize the icon according to the resource type and specify the level as 2.
 
                 // Find the default value for this type, create a new element and add it to the list of localizations.
-                var defValue = LocalizationManager.Storage.GetDefaultLocalization(defaults[i].Type);
+                var defValue = Storage.GetDefaultLocalization(defaults[i].Type);
                 searchList.Add(new SearchTreeEntry(new GUIContent($"New {defValue.Type.Name} Localization", icon), level, defValue.Clone()));
             }
             return searchList;

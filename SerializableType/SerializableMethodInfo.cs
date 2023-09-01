@@ -2,7 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 
-namespace UnityExtended
+namespace EasyAssetsLocalize
 {
     [System.Serializable]
     public class SerializableMethodInfo : ISerializationCallbackReceiver
