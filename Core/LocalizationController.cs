@@ -28,6 +28,11 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
+        /// Returns the available language
+        /// </summary>
+        private Language AvailableLanguage => Storage.Languages.Contains(Language) ? Language : Storage.Languages[0];
+
+        /// <summary>
         /// Creates or returns a finished instance from the scene.
         /// </summary>
         /// <param name="dontDestroy">Whether to delete an object when moving to a new scene</param>
@@ -45,7 +50,7 @@ namespace EasyAssetsLocalize
             return instance;
         }
         // Set language value at start
-        private void Start() => OnChangingLanguage?.Invoke(Language.ToString());
+        private void Start() => OnChangingLanguage?.Invoke(AvailableLanguage.ToString());
 
         /// <summary>
         /// Method for get localization resource data depending on the current language.
@@ -55,7 +60,7 @@ namespace EasyAssetsLocalize
         private object GetLocalizationData(LocalizationComponent component)
         {
             var localization = Storage.GetLocalization(component);
-            return localization.Resources[Storage.Languages.IndexOf(Language)].Data;
+            return localization.Resources[Storage.Languages.IndexOf(AvailableLanguage)].Data;
         }
 
         /// <summary>
@@ -103,18 +108,11 @@ namespace EasyAssetsLocalize
             var languages = new List<Language>(Storage.Languages);
             if (languages.Count < 2) { return; }
 
-            int index = languages.IndexOf(Language);
-            if (index > -1)
-            {
-                int newIndex = (index + (int)direction) % languages.Count;
-                if (newIndex >= 0) { index = newIndex; }
-                else { index = languages.Count + newIndex; }
-                SetLanguage(languages[index]);
-            }
-            else
-            {
-                throw new System.ArgumentException($"{Language} not found in the {localizationStorage}");
-            }
+            int index = languages.IndexOf(AvailableLanguage);
+            int newIndex = (index + (int)direction) % languages.Count;
+            if (newIndex >= 0) { index = newIndex; }
+            else { index = languages.Count + newIndex; }
+            SetLanguage(languages[index]);
         }
 
         /// <summary>

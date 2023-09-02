@@ -154,6 +154,7 @@ namespace EasyAssetsLocalize
             OnChange?.Invoke();
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
 #endif
         }
     }
