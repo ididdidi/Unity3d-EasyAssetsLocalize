@@ -13,6 +13,9 @@ namespace EasyAssetsLocalize
         [System.Serializable] public class Handler : UnityEvent<string> { }
         [SerializeField] private Handler OnChangingLanguage;
 
+        /// <summary>
+        /// Link to Localization Storage
+        /// </summary>
         public IStorage Storage { get => localizationStorage ?? (localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage))); }
 
         /// <summary>
@@ -24,6 +27,11 @@ namespace EasyAssetsLocalize
             set => PlayerPrefs.SetInt("Language", (int)value.SystemLanguage);
         }
 
+        /// <summary>
+        /// Creates or returns a finished instance from the scene.
+        /// </summary>
+        /// <param name="dontDestroy">Whether to delete an object when moving to a new scene</param>
+        /// <returns>Instance <see cref="LocalizationController"/></returns>
         public static LocalizationController GetInstance(bool dontDestroy = false)
         {
             if (!instance) { instance = FindObjectOfType<LocalizationController>(); }
@@ -36,7 +44,7 @@ namespace EasyAssetsLocalize
             }
             return instance;
         }
-
+        // Set language value at start
         private void Start() => OnChangingLanguage?.Invoke(Language.ToString());
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace EasyAssetsLocalize
         Localization[] Localizations { get; }
 
         /// <summary>
-        /// 
+        /// Delegate called when data changes
         /// </summary>
         System.Action OnChange { get; set; }
 

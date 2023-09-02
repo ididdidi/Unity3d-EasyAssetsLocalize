@@ -12,6 +12,9 @@ namespace EasyAssetsLocalize
         /// </summary>
         [field: SerializeField, HideInInspector] public string ID { get; set; }
 
+        /// <summary>
+        /// Link to localization controller on stage
+        /// </summary>
         public LocalizationController Controller { get; set; }
 
         /// <summary>
