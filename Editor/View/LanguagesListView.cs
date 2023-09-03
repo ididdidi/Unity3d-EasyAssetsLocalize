@@ -62,7 +62,7 @@ namespace EasyAssetsLocalize
                 storage.SaveChanges();
             }
             
-            if (isFocused || lastIndex != index) { lastIndex = index; }
+            if (isFocused && lastIndex != index) { lastIndex = index; }
         }
 
         /// <summary>

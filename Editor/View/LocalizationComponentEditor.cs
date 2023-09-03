@@ -35,6 +35,7 @@ namespace EasyAssetsLocalize
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
+            Component.Controller = LocalizationController.GetInstance();
             Storage.OnChange += OnChangeStorage;
 
             /// When adding a component to the scene

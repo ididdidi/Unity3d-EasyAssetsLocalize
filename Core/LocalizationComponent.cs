@@ -28,8 +28,6 @@ namespace EasyAssetsLocalize
         /// <param name="data">Resource data for localization</param>
         public abstract void SetData(object data);
 
-        private void OnValidate() => Controller = LocalizationController.GetInstance();
-
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
