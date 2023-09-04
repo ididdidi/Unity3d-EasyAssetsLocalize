@@ -4,7 +4,7 @@ using UnityEngine;
 namespace EasyAssetsLocalize
 {
     [System.Serializable]
-    public class SerializableType : ISerializationCallbackReceiver
+    internal class SerializableType : ISerializationCallbackReceiver
     {
         public System.Type type;
         public byte[] data;

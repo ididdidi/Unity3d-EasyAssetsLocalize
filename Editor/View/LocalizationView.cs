@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
-	public class LocalizationView : IEditorView
+	internal class LocalizationView : IEditorView
 	{
 		private object data;
 		private Vector2 scrollPosition;

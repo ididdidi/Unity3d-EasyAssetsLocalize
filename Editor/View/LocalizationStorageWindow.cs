@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
 	/// <summary>
 	/// Display localization storage data in a separate inspector window.
 	/// </summary>
-	public class LocalizationStorageWindow : EditorWindow, IDisplay
+	internal class LocalizationStorageWindow : EditorWindow, IDisplay
 	{
 		public const float MIN_WIDTH = 240f;
 		public const float MIN_HIGHT = 320f;

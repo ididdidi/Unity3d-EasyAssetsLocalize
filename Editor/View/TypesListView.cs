@@ -9,7 +9,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Class for displaying a list of types for localization.
     /// </summary>
-    public class TypesListView : ReorderableList
+    internal class TypesListView : ReorderableList
     {
         private IStorage Storage { get; }
         /// <summary>

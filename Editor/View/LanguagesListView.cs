@@ -7,7 +7,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Class for visualizing the list of used languages.
     /// </summary>
-    public class LanguagesListView : ReorderableList
+    internal class LanguagesListView : ReorderableList
     {
         private IStorage storage;
         private int lastIndex =-1;

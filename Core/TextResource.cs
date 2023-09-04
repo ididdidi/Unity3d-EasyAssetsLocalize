@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// Encapsulates text resource data.
     /// </summary>
     [System.Serializable]
-    public class TextResource : IResource
+    internal class TextResource : IResource
     {
         [SerializeField] private string data;
 

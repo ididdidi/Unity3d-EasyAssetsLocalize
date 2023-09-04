@@ -8,7 +8,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Search Localization Data Provider.
     /// </summary>
-    public class LocalizationSearchProvider : ISearchTreeProvider
+    internal class LocalizationSearchProvider : ISearchTreeProvider
     {
         private SearchTree searchTree = new SearchTree();
         private IStorage Storage { get; }

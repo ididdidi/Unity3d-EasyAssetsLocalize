@@ -5,7 +5,7 @@ using UnityEngine;
 namespace EasyAssetsLocalize
 {
     [System.Serializable]
-    public class SerializableMethodInfo : ISerializationCallbackReceiver
+    internal class SerializableMethodInfo : ISerializationCallbackReceiver
     {
         public SerializableMethodInfo(MethodInfo aMethodInfo)
         {

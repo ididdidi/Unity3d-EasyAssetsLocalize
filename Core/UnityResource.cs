@@ -5,7 +5,7 @@ namespace EasyAssetsLocalize
      /// Encapsulates object resource data.
      /// </summary>
     [System.Serializable]
-    public class UnityResource : IResource
+    internal class UnityResource : IResource
     {
         [SerializeField] private Object data;
 

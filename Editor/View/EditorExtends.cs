@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Class that complements the capabilities of the editor GUI
     /// </summary>
-    public static class EditorExtends
+    internal static class EditorExtends
     {
         /// <summary>
         /// Field to store GUI.changed parameter

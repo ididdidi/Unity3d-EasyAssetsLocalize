@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
-    public class LocalizationSettingsView : IEditorView
+    internal class LocalizationSettingsView : IEditorView
     {
         private static readonly string helpURL = "https://ididdidi.ru/";
         private LanguagesListView languagesList;

@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Сlass that encapsulates data from languages and localized resources.
     /// </summary>
-    public class LocalizationStorage : ScriptableObject, IStorage
+    internal class LocalizationStorage : ScriptableObject, IStorage
     {
         [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();
         [SerializeField, HideInInspector] private List<Localization> localizations = new List<Localization>();

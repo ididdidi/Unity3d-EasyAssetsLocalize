@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Creates an instance of a script object of type LocalizationStorage.
     /// </summary>
-    public static class LocalizationBuilder
+    internal static class LocalizationBuilder
     {
         private static int count;
         public static readonly string localPath = "/Addons/EasyAssetsLocalize";

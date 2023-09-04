@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
-    public class LocalizationPresenter
+    internal class LocalizationPresenter
 	{
 		private const float MIN_WIDTH = 640f;
 		private bool isWideView;

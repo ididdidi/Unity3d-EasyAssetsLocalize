@@ -3,7 +3,7 @@
     /// <summary>
     /// A class that contains a code template for creating a component.
     /// </summary>
-    public class LocalizationComponentTemplate
+    internal class LocalizationComponentTemplate
     {
         private System.Type type;
 

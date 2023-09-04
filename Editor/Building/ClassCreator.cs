@@ -1,4 +1,4 @@
-﻿public static class ClassCreator
+﻿internal static class ClassCreator
 {
     /// <summary>
     /// Method for creating a class file.

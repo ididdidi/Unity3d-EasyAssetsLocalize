@@ -6,7 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Class to create ScriptableObjects.
     /// </summary>
-    public static class AssetCreator
+    internal static class AssetCreator
     {
         /// <summary>
         /// Method to create ScriptableObjects

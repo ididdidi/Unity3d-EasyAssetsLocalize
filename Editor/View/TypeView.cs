@@ -5,7 +5,7 @@ namespace EasyAssetsLocalize
 	/// <summary>
 	/// Class for displaying the type in the inspector or editor window.
 	/// </summary>
-	public class TypeView : IEditorView
+	internal class TypeView : IEditorView
 	{
 		public GUIContent Content { get; set; }
 

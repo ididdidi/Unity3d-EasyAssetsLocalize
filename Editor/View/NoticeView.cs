@@ -7,7 +7,7 @@ namespace EasyAssetsLocalize
 	/// <summary>
 	/// Class for displaying a notification in the editor window.
 	/// </summary>
-	public class NoticeView
+	internal class NoticeView
     {
         private IDisplay display;
         private GUIContent noticeContent;

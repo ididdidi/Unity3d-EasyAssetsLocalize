@@ -7,7 +7,7 @@ namespace EasyAssetsLocalize
 	/// Responsible for presenting the Localization Storage in the inspector.
 	/// </summary>
 	[CustomEditor(typeof(LocalizationStorage))]
-	public partial class LocalizationStorageEditor : Editor, IDisplay
+	internal partial class LocalizationStorageEditor : Editor, IDisplay
 	{
 		private NoticeView noticeView;
 		private LocalizationStorage storage;

@@ -3,7 +3,7 @@
     /// <summary>
     /// A class that contains a code template for creating an Editor for component.
     /// </summary>
-    public class LocalizationEditorTemplate
+    internal class LocalizationEditorTemplate
     {
         private System.Type type;
 
