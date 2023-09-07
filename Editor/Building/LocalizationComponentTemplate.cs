@@ -26,6 +26,7 @@ using UnityEngine.Events;
 
 namespace {GetType().Namespace}
 {{
+    [UnityEngine.AddComponentMenu(""Localize/{type.Name} Localization"")]
     public class {type.Name}Localization : LocalizationComponent
     {{
         [System.Serializable] public class Handler : UnityEvent<{type.FullName}> {{ }}

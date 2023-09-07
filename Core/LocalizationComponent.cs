@@ -31,7 +31,11 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
-        private void OnEnable() => Controller?.Subscribe(this);
+        private void OnEnable()
+        {
+            Controller = LocalizationController.GetInstance(false);
+            Controller.Subscribe(this);
+        }
 
         /// <summary>
         /// Unsubscribe to localization changes.

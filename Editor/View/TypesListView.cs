@@ -65,7 +65,8 @@ namespace EasyAssetsLocalize
             list[index] = EditorGUI.ObjectField(position, (Object)list[index], typeof(Object), false);
             if (EditorGUI.EndChangeCheck())
             {
-                if (list[index] != null && LocalizationBuilder.Conteins(list[index].GetType())) { 
+                if (list[index] != null && !LocalizationBuilder.Conteins(list[index].GetType()))
+                {
                     LocalizationBuilder.CreateComponent(Storage, list[index]);
                 }
             }

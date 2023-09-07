@@ -57,7 +57,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="type">resource type</param>
         /// <returns>Is there a component for this resource type</returns>
-        public static bool Conteins(System.Type type) => string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
+        public static bool Conteins(System.Type type) => !string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
 
         /// <summary>
         /// Delete localization component code for the specified resource type.
@@ -83,7 +83,7 @@ namespace EasyAssetsLocalize
         /// <returns>Path to the first file found, or <see cref="null"/></returns>
         public static string GetDirectory(string fileName)
         {
-            string[] res = System.IO.Directory.GetFiles(Application.dataPath, fileName, System.IO.SearchOption.AllDirectories);
+            string[] res = System.IO.Directory.GetFiles(Application.dataPath + localPath, fileName, System.IO.SearchOption.AllDirectories);
             if (res.Length == 0) { return null; }
             string path = res[0].Replace(fileName, "").Replace("\\", "/");
             return path;
