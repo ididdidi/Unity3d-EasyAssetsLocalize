@@ -15,3 +15,9 @@ The package for easy localization of assets in Unity.
 * In the tab that opens, you can add the languages and resource types needed for localization.
 * To add a language, click on the __`+`__ at the bottom of the list and select it from the list of Unity's base system languages.
 * To add a new type of assets for localization, click the __`+`__ at the end of the list with types and drag the default asset sample into the field that appears. Wait for the code generation to finish.
+
+## Usage
+* Select the object you are going to localize.
+* Add a resource localization component to it: `Add component -> Localize -> [Resource type]Localization`.
+* The component that appears will reference the default localization. To change localization, click the `Change Localization` button.
+* For localization to change the resources of an object, add the object to the list of handlers and select the property corresponding to the resource type (usually they are at the top of the drop-down list)
