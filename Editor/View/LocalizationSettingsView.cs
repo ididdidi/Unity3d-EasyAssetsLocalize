@@ -5,7 +5,7 @@ namespace EasyAssetsLocalize
 {
     internal class LocalizationSettingsView : IEditorView
     {
-        private static readonly string helpURL = "https://ididdidi.ru/";
+        private static readonly string helpURL = "https://ididdidi.ru/projects/unity3d-easy-assets-localize";
         private LanguagesListView languagesList;
         private TypesListView typesList;
         private Vector2 scrollPosition;
@@ -41,7 +41,7 @@ namespace EasyAssetsLocalize
             }
 
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Propertyes", EditorStyles.boldLabel);
+            GUILayout.Label("Settings", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
 
             // Draw header

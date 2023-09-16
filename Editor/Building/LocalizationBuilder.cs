@@ -23,7 +23,7 @@ namespace EasyAssetsLocalize
                 var storage = AssetCreator.Create<LocalizationStorage>($"Assets{localPath}/Resources/");
                 storage.AddLanguage(new Language(Application.systemLanguage));
                 CreateComponent(storage, "Text");
-                Debug.Log("To get started with asset localization go to Window -> Localization Storage -> Propertyes(Gear) " +
+                Debug.Log("To get started with asset localization go to Window -> Localization Storage -> Settings(Gear) " +
                     "and add the default assets to the list of types.");
             }
         }
