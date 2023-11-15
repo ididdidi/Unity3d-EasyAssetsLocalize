@@ -98,6 +98,20 @@ namespace EasyAssetsLocalize
             ChangeLocalzation(Direction.Back);
         }
 
+        /// <summary>
+        /// Sets the current language and loads localized resources.
+        /// </summary>
+        /// <param name="language">Language</param>
+        public void SetLanguage(Language language)
+        {
+            Language = language;
+            OnChangingLanguage?.Invoke(language.ToString());
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].SetData(GetLocalizationData(components[i]));
+            }
+        }
+
         private enum Direction { Next = 1, Back = -1 }
         /// <summary>
         /// Method for changing localization language. Switching is carried out in a circle.
@@ -113,20 +127,6 @@ namespace EasyAssetsLocalize
             if (newIndex >= 0) { index = newIndex; }
             else { index = languages.Count + newIndex; }
             SetLanguage(languages[index]);
-        }
-
-        /// <summary>
-        /// Sets the current language and loads localized resources.
-        /// </summary>
-        /// <param name="language">Language</param>
-        private void SetLanguage(Language language)
-        {
-            Language = language;
-            OnChangingLanguage?.Invoke(language.ToString());
-            for (int i = 0; i < components.Count; i++)
-            {
-                components[i].SetData(GetLocalizationData(components[i]));
-            }
         }
     }
 }
