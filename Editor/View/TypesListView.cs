@@ -90,7 +90,11 @@ namespace EasyAssetsLocalize
         {
             if(reorderable.list[reorderable.index] is System.Type type)
             {
-                if (EditorExtends.DeleteConfirmation(type.Name))
+                if(type.Equals(typeof(string)))
+                {
+                    Debug.LogError("Due to the complexity of adding a \"string\" type, removing it is prohibited.");
+                }
+                else if(EditorExtends.DeleteConfirmation(type.Name))
                 {
                     Storage.RemoveAll(type);
                     LocalizationBuilder.RemoveComponent(type);
