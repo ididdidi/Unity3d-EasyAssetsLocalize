@@ -98,32 +98,32 @@ namespace EasyAssetsLocalize
 			}
 		}
 
-		private void OnFocusEntry(object data)
+		private IEditorView UpdateView(object data)
 		{
-			if (!isWideView || currentView == settingsView) { return; }
 			if (data is GUIContent content)
 			{
 				typeView.Content = content;
-				currentView = typeView;
+				return typeView;
 			}
-			else { OnSelectEntry(data); }
+			else if (data is Localization localization)
+			{
+				localizationView.Data = localization;
+				return localizationView;
+			}
+			return currentView;
+		}
+
+		private void OnFocusEntry(object data)
+		{
+			var view = UpdateView(data);
+			if (isWideView) { currentView = view; }
 		}
 
 		private void OnSelectEntry(object data)
 		{
-			if (data is Localization localization)
-			{
-				if (isWideView)
-				{
-					localizationView.Data = localization;
-					currentView = localizationView;
-				}
-				else
-				{
-					localizationView.Data = localization;
-					StartChangeView(localizationView, 1f, 0f);
-				}
-			}
+			var view = UpdateView(data);
+			if (isWideView) { currentView = view; }
+			else { StartChangeView(localizationView, 1f, 0f); }
 		}
 
 		private void CloseLocalizationView()
