@@ -9,7 +9,7 @@ namespace EasyAssetsLocalize
     internal static class LocalizationBuilder
     {
         private static int count;
-        public static readonly string localPath = "/Addons/EasyAssetsLocalize";
+        public static readonly string localPath = "/Tools/EasyAssetsLocalize";
 
         /// <summary>
         /// Method for initializing storage and components required for localization.

@@ -98,6 +98,11 @@ namespace EasyAssetsLocalize
 			}
 		}
 
+		/// <summary>
+		/// Updating data to be displayed in views.
+		/// </summary>
+		/// <param name="data">Data to display</param>
+		/// <returns>Returns a view depending on the received data</returns>
 		private IEditorView UpdateView(object data)
 		{
 			if (data is GUIContent content)
@@ -113,12 +118,20 @@ namespace EasyAssetsLocalize
 			return currentView;
 		}
 
+		/// <summary>
+		/// Method called when focus appears on a entry.
+		/// </summary>
+		/// <param name="data">Data in focused entry</param>
 		private void OnFocusEntry(object data)
 		{
 			var view = UpdateView(data);
 			if (isWideView) { currentView = view; }
 		}
 
+		/// <summary>
+		/// Method called when select on a entry.
+		/// </summary>
+		/// <param name="data">Data in selected entry</param>
 		private void OnSelectEntry(object data)
 		{
 			var view = UpdateView(data);
@@ -126,18 +139,30 @@ namespace EasyAssetsLocalize
 			else { StartChangeView(localizationView, 1f, 0f); }
 		}
 
+		/// <summary>
+		/// Hides the localization view.
+		/// </summary>
 		private void CloseLocalizationView()
 		{
 			if (isWideView) { searchView?.GoToParent(); }
 			else { StartChangeView(localizationView, 0f, 1f); }
 		}
 
+		/// <summary>
+		/// Hides the settings view.
+		/// </summary>
 		private void CloseSettingsView()
 		{
 			if (isWideView) { currentView = (searchView.CurrentEntry is SearchTreeGroupEntry) ? typeView : localizationView as IEditorView; }
 			else { StartChangeView(settingsView, 0f, 1f); }
 		}
 
+		/// <summary>
+		/// Method that triggers the change of active view.
+		/// </summary>
+		/// <param name="view">Animated view</param>
+		/// <param name="currentAnimation">Current animation position value</param>
+		/// <param name="targetAnimation">Target animation position value</param>
 		private void StartChangeView(IEditorView view, float currentAnimation, float targetAnimation)
 		{
 			animatedView = view;
@@ -147,6 +172,10 @@ namespace EasyAssetsLocalize
 			lastTime = System.DateTime.Now.Ticks;
 		}
 
+		/// <summary>
+		/// View change animation
+		/// </summary>
+		/// <param name="position"></param>
 		private void AnimatedChangeView(Rect position)
 		{
 			long now = System.DateTime.Now.Ticks;
