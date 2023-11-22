@@ -125,7 +125,7 @@ namespace EasyAssetsLocalize
 		private void OnFocusEntry(object data)
 		{
 			var view = UpdateView(data);
-			if (isWideView) { currentView = view; }
+			if (isWideView && currentView != settingsView) { currentView = view; }
 		}
 
 		/// <summary>

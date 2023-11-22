@@ -1,14 +1,20 @@
-﻿internal static class ClassCreator
+﻿namespace EasyAssetsLocalize
 {
     /// <summary>
-    /// Method for creating a class file.
+    /// Helper class for code generation of other classes.
     /// </summary>
-    /// <param name="className">Class name</param>
-    /// <param name="path">Directory path</param>
-    /// <param name="code">Code</param>
-    /// <param name="comment">Comment</param>
-    public static void CreateClass(string className, string path, string code, string comment = "// Class generated automatically")
+    internal static class ClassCreator
     {
-        System.IO.File.WriteAllText($"{path}{className}.cs", comment + code);
+        /// <summary>
+        /// Method for creating a class file.
+        /// </summary>
+        /// <param name="className">Class name</param>
+        /// <param name="path">Directory path</param>
+        /// <param name="code">Code</param>
+        /// <param name="comment">Comment</param>
+        public static void CreateClass(string className, string path, string code, string comment = "// Class generated automatically")
+        {
+            System.IO.File.WriteAllText($"{path}{className}.cs", comment + code);
+        }
     }
 }
