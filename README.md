@@ -7,7 +7,7 @@ The package for easy localization of assets in Unity3d.
 * Open the __Package Manager__: `Window` -> `Package Manager`.
 * Click on the __`+`__ at the top.
 * Select `Add package from git URL...` in the drop-down list.
-* Paste the link to this repository into the field that appears and press `Enter`.
+* Paste the [link to this repository](https://github.com/ididdidi/Unity3d-EasyAssetsLocalize.git) into the field that appears and press `Enter`.
 * Wait for the code generation to finish.
 
 ## 2. Setup
