@@ -18,7 +18,8 @@ namespace EasyAssetsLocalize
         private static void Initialize()
         {
             // Create repository if it doesn't exist
-            if (!Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)))
+            var path = $"{Application.dataPath}{localPath}/Resources/LocalizationStorage.asset";
+            if (!System.IO.File.Exists(path))
             {
                 var storage = AssetCreator.Create<LocalizationStorage>($"Assets{localPath}/Resources/");
                 storage.AddLanguage(new Language(Application.systemLanguage));
