@@ -3,7 +3,8 @@ using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
-    public class SpriteLocalizationExample : LocalizationComponent
+    [UnityEngine.AddComponentMenu("Localize/Sprite Localization")]
+    public class SpriteLocalization : LocalizationComponent
     {
         [System.Serializable] public class Handler : UnityEvent<UnityEngine.Sprite> { }
         [UnityEngine.SerializeField, UnityEngine.HideInInspector] private Handler handler;

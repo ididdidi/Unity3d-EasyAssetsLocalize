@@ -695,7 +695,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Some Text
+  m_Text: Language
 --- !u!222 &1398800747
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -713,10 +713,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1398800744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ccdaf75c0ab2134eb33c38a8c81bc7f, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f59c8319482e1842869a3600c878c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 16ab157941504e7b91bd56483c1975cc
+  <ID>k__BackingField: 2a5691771aeb40e1b9686e4de637573c
   handler:
     m_PersistentCalls:
       m_Calls:
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551aa5a944f07cb4e9bd6000a1d8b127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationStorage: {fileID: 11400000, guid: 00416e7663e84474bae31cc9e69131eb,
+  localizationStorage: {fileID: 11400000, guid: e297a2043173cef46a20af6542e2e50a,
     type: 2}
   OnChangingLanguage:
     m_PersistentCalls:
@@ -1201,10 +1201,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1939429939}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d995fe12f661cc4f9c97afb5d78603b, type: 3}
+  m_Script: {fileID: 11500000, guid: 09fd6440717fc4f4e95d21efa32235b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 1b3856db2022485bb473a468809e6b69
+  <ID>k__BackingField: fac616f5666142ddb80c39c11610b5cf
   handler:
     m_PersistentCalls:
       m_Calls:

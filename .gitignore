@@ -1,7 +1,0 @@
-# Exclude mutable files
-
-/[Cc]omponents
-/[Rr]esources
-
-[Cc]omponents.meta
-[Rr]esources.meta

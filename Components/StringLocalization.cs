@@ -1,9 +1,10 @@
-// Example Class
+// Class generated automatically
 using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
-    public class StringLocalizationExample : LocalizationComponent
+    [UnityEngine.AddComponentMenu("Localize/String Localization")]
+    public class StringLocalization : LocalizationComponent
     {
         [System.Serializable] public class Handler : UnityEvent<System.String> { }
         [UnityEngine.SerializeField, UnityEngine.HideInInspector] private Handler handler;
