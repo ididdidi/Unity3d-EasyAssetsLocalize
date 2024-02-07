@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
+    [AddComponentMenu("Localize/Localization Controller")]
     public class LocalizationController : MonoBehaviour
     {
         private static LocalizationController instance;
