@@ -83,8 +83,7 @@ namespace EasyAssetsLocalize
                     return localizations[i];
                 } 
             }
-            Debug.LogError($"{name}: Not found resources for localization {component}");
-            return GetDefaultLocalization(component.Type);
+            throw new System.ArgumentException($"Resource localization not found for <color=aqua>{component.name}</color>");
         }
 
         /// <summary>

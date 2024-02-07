@@ -59,8 +59,17 @@ namespace EasyAssetsLocalize
         /// <returns>Resource data</returns>
         private object GetLocalizationData(LocalizationComponent component)
         {
-            var localization = Storage.GetLocalization(component);
-            return localization.Resources[Storage.Languages.IndexOf(AvailableLanguage)].Data;
+            Localization localization;
+            try
+            {
+                localization = Storage.GetLocalization(component);
+            }
+            catch (System.ArgumentException exception)
+            {
+                localization = Storage.GetDefaultLocalization(component.Type);
+                Debug.LogError(exception, component);
+            }
+            return localization?.Resources[Storage.Languages.IndexOf(AvailableLanguage)].Data;
         }
 
         /// <summary>
