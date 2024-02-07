@@ -65,9 +65,17 @@ namespace EasyAssetsLocalize
             list[index] = EditorGUI.ObjectField(position, (Object)list[index], typeof(Object), false);
             if (EditorGUI.EndChangeCheck())
             {
-                if (list[index] != null && !LocalizationBuilder.Conteins(list[index].GetType()))
+                if (list[index] != null)
                 {
-                    LocalizationBuilder.CreateComponent(Storage, list[index]);
+                    if(Storage.GetDefaultLocalization(list[index].GetType()) == null)
+                    {
+                        LocalizationBuilder.CreateComponent(Storage, list[index]);
+                    }
+                    else
+                    {
+                        throw new System.ArgumentException("The localization of objects " +
+                            $"<color=green>{list[index].GetType()}</color> is already in storage.");
+                    }
                 }
             }
         }
