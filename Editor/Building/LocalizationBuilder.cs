@@ -54,13 +54,6 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
-        /// Checks for the presence of a localization component for the specified resource type.
-        /// </summary>
-        /// <param name="type">resource type</param>
-        /// <returns>Is there a component for this resource type</returns>
-        public static bool Conteins(System.Type type) => !string.IsNullOrEmpty(GetDirectory($"{type.Name}LocalizationEditor.cs"));
-
-        /// <summary>
         /// Delete localization component code for the specified resource type.
         /// </summary>
         /// <param name="type">resource type</param>
