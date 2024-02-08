@@ -87,10 +87,7 @@ namespace EasyAssetsLocalize
         /// Unsubscribe to localization changes.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        public void Unsubscribe(LocalizationComponent component)
-        {
-            if (!string.IsNullOrEmpty(component.ID) && components.Contains(component)) { components.Remove(component); }
-        }
+        public void Unsubscribe(LocalizationComponent component) => components.Remove(component);
 
         /// <summary>
         /// Changes the language to the next one in the localization list.
