@@ -11,7 +11,7 @@ namespace EasyAssetsLocalize
     {
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
-        private IStorage Storage => Component.Controller.Storage;
+        private IStorage Storage => LocalizationController.Storage;
         private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;
@@ -32,7 +32,6 @@ namespace EasyAssetsLocalize
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
-            Component.Controller = LocalizationController.GetInstance();
             UpdateLocalization();
             Storage.OnChange += UpdateLocalization;
 

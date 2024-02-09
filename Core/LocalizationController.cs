@@ -4,20 +4,19 @@ using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
-    [AddComponentMenu("Localize/Localization Controller")]
+    [ExecuteAlways, AddComponentMenu("Localize/Localization Controller")]
     public class LocalizationController : MonoBehaviour
     {
-        private static LocalizationController instance;
-        private List<LocalizationComponent> components = new List<LocalizationComponent>();
-
-        [SerializeField] private LocalizationStorage localizationStorage;
-        [System.Serializable] public class Handler : UnityEvent<string> { }
-        [SerializeField] private Handler OnChangingLanguage;
+        #region STATIC
+        private static IStorage storage;
+        private static List<LocalizationComponent> components = new List<LocalizationComponent>();
 
         /// <summary>
         /// Link to Localization Storage
         /// </summary>
-        public IStorage Storage { get => localizationStorage ?? (localizationStorage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage))); }
+        public static IStorage Storage { 
+            get => storage ?? ResetStorage();
+        }
 
         /// <summary>
         /// The current language.
@@ -31,34 +30,16 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Returns the available language
         /// </summary>
-        private Language AvailableLanguage => Storage.Languages.Contains(Language) ? Language : Storage.Languages[0];
+        private static Language AvailableLanguage => Storage.Languages.Contains(Language) ? Language : Storage.Languages[0];
 
-        /// <summary>
-        /// Creates or returns a finished instance from the scene.
-        /// </summary>
-        /// <param name="dontDestroy">Whether to delete an object when moving to a new scene</param>
-        /// <returns>Instance <see cref="LocalizationController"/></returns>
-        public static LocalizationController GetInstance(bool dontDestroy = false)
-        {
-            if (!instance) { instance = FindObjectOfType<LocalizationController>(); }
-            if (!instance)
-            {
-                var @object = new GameObject($"{nameof(LocalizationController)}");
-                instance = @object.AddComponent<LocalizationController>();
-
-                if (dontDestroy) { DontDestroyOnLoad(@object); }
-            }
-            return instance;
-        }
-        // Set language value at start
-        private void Start() => OnChangingLanguage?.Invoke(AvailableLanguage.ToString());
+        private static IStorage ResetStorage() => storage = Resources.Load<LocalizationStorage>(nameof(LocalizationStorage));
 
         /// <summary>
         /// Method for get localization resource data depending on the current language.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
         /// <returns>Resource data</returns>
-        private object GetLocalizationData(LocalizationComponent component)
+        private static object GetLocalizationData(LocalizationComponent component)
         {
             Localization localization;
             try
@@ -77,7 +58,7 @@ namespace EasyAssetsLocalize
         /// Subscribe to localization changes.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        public void Subscribe(LocalizationComponent component)
+        public static void Subscribe(LocalizationComponent component)
         {
             components.Add(component);
             component.SetData(GetLocalizationData(component));
@@ -87,7 +68,23 @@ namespace EasyAssetsLocalize
         /// Unsubscribe to localization changes.
         /// </summary>
         /// <param name="component"><see cref="LocalizationComponent"/></param>
-        public void Unsubscribe(LocalizationComponent component) => components.Remove(component);
+        public static void Unsubscribe(LocalizationComponent component) => components.Remove(component);
+        #endregion
+
+        #region DYNAMIC
+        [SerializeField] private LocalizationStorage localStorage;
+
+        [System.Serializable] public class Handler : UnityEvent<string> { }
+        [SerializeField] private Handler OnChangingLanguage;
+
+        private void Reset() => localStorage = Storage as LocalizationStorage;
+
+        // Set language value at start
+        private void Awake()
+        {
+            if (localStorage) { storage = localStorage; }
+            OnChangingLanguage?.Invoke(AvailableLanguage.ToString());
+        }
 
         /// <summary>
         /// Changes the language to the next one in the localization list.
@@ -135,5 +132,8 @@ namespace EasyAssetsLocalize
             else { index = languages.Count + newIndex; }
             SetLanguage(languages[index]);
         }
+
+        private void OnDestroy() => ResetStorage();
+        #endregion
     }
 }

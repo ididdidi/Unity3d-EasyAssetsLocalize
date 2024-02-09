@@ -18,7 +18,7 @@ namespace EasyAssetsLocalize
 		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
 		private IStorage storage;
-		private IStorage Storage { get => storage ?? Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)); }
+		private IStorage Storage { get => storage ?? LocalizationController.Storage; }
 
 		/// <summary>
 		/// Standard method for initialization

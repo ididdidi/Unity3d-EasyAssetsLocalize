@@ -13,11 +13,6 @@ namespace EasyAssetsLocalize
         [field: SerializeField, HideInInspector] public string ID { get; set; }
 
         /// <summary>
-        /// Link to localization controller on stage
-        /// </summary>
-        public LocalizationController Controller { get; set; }
-
-        /// <summary>
         /// Type of localization resources.
         /// </summary>
         public abstract System.Type Type { get; }
@@ -31,15 +26,11 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Subscribe to localization changes.
         /// </summary>
-        private void OnEnable()
-        {
-            Controller = LocalizationController.GetInstance(false);
-            Controller.Subscribe(this);
-        }
+        private void OnEnable() => LocalizationController.Subscribe(this);
 
         /// <summary>
         /// Unsubscribe to localization changes.
         /// </summary>
-        private void OnDisable() => Controller?.Unsubscribe(this);
+        private void OnDisable() => LocalizationController.Unsubscribe(this);
     }
 }
