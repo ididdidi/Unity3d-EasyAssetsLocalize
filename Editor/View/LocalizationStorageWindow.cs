@@ -21,19 +21,6 @@ namespace EasyAssetsLocalize
 		private IStorage Storage { get => storage ?? LocalizationController.Storage; }
 
 		/// <summary>
-		/// Standard method for initialization
-		/// </summary>
-		private void OnEnable()
-		{
-			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(Storage, noticeView);
-			settingsView = new LocalizationSettingsView(Storage);
-			searchView = new SearchTreeView(this, new LocalizationSearchProvider(Storage));
-			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
-			Storage.OnChange += OnChangeStorage;
-		}
-
-		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
 		public static LocalizationStorageWindow Show(IStorage storage, float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
@@ -42,6 +29,7 @@ namespace EasyAssetsLocalize
 			instance.titleContent = new GUIContent("Easy Assets Localize", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			instance.minSize = new Vector2(minWidth, minHight);
 			instance.storage = storage;
+			instance.Initialize();
 			return instance;
 		}
 
@@ -50,6 +38,19 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		[MenuItem("Window/Localization Storage")]
 		public new static LocalizationStorageWindow Show() => Show(Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)));
+
+		/// <summary>
+		/// Method for initialization
+		/// </summary>
+		private void Initialize()
+		{
+			noticeView = new NoticeView(this);
+			localizationView = new LocalizationView(Storage, noticeView);
+			settingsView = new LocalizationSettingsView(Storage);
+			searchView = new SearchTreeView(this, new LocalizationSearchProvider(Storage));
+			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
+			Storage.OnChange += OnChangeStorage;
+		}
 
 		/// <summary>
 		/// Method for rendering window content.
