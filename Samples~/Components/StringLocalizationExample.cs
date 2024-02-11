@@ -10,6 +10,6 @@ namespace EasyAssetsLocalize
 
         public override System.Type Type => typeof(System.String);
 
-        public override void SetData(object data) => handler?.Invoke((System.String)data);
+        protected override void SetData(object data) => handler?.Invoke((System.String)data);
     }
 }

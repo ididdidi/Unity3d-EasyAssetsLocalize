@@ -10,6 +10,6 @@ namespace EasyAssetsLocalize
 
         public override System.Type Type => typeof(UnityEngine.Sprite);
 
-        public override void SetData(object data) => handler?.Invoke((UnityEngine.Sprite)data);
+        protected override void SetData(object data) => handler?.Invoke((UnityEngine.Sprite)data);
     }
 }

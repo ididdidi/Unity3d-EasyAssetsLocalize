@@ -27,7 +27,7 @@ namespace EasyAssetsLocalize
 			settingsView = new LocalizationSettingsView(storage);
 			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage), false);
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
-			storage.OnChange += OnChangeStorage;
+			LocalizationManager.OnStorageChange += OnChangeStorage;
 		}
 
 		/// <summary>
@@ -47,11 +47,11 @@ namespace EasyAssetsLocalize
 		/// <summary>
 		/// Method for displaying data changes.
 		/// </summary>
-		private void OnChangeStorage() => searchView.IsChanged = true;
+		private void OnChangeStorage(IStorage storage) => searchView.IsChanged = true;
 
 		/// <summary>
 		/// This function is called when the behaviour becomes disabled.
 		/// </summary>
-		private void OnDisable() => storage.OnChange -= OnChangeStorage;
+		private void OnDisable() => LocalizationManager.OnStorageChange -= OnChangeStorage;
 	}
 }

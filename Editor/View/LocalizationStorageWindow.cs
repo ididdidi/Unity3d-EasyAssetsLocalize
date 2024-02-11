@@ -18,7 +18,6 @@ namespace EasyAssetsLocalize
 		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
 		private IStorage storage;
-		private IStorage Storage { get => storage ?? LocalizationController.Storage; }
 
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
@@ -45,11 +44,11 @@ namespace EasyAssetsLocalize
 		private void Initialize()
 		{
 			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(Storage, noticeView);
-			settingsView = new LocalizationSettingsView(Storage);
-			searchView = new SearchTreeView(this, new LocalizationSearchProvider(Storage));
+			localizationView = new LocalizationView(storage, noticeView);
+			settingsView = new LocalizationSettingsView(storage);
+			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage));
 			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
-			Storage.OnChange += OnChangeStorage;
+			LocalizationManager.OnStorageChange += SetStorage;
 		}
 
 		/// <summary>
@@ -64,11 +63,15 @@ namespace EasyAssetsLocalize
 		/// <summary>
 		/// Method for displaying data changes.
 		/// </summary>
-		private void OnChangeStorage() => searchView.IsChanged = true;
+		private void SetStorage(IStorage storage)
+		{
+			this.storage = storage;
+			searchView.IsChanged = true;
+		}
 
 		/// <summary>
 		/// This function is called when the behaviour becomes disabled.
 		/// </summary>
-		private void OnDisable() => Storage.OnChange -= OnChangeStorage;
+		private void OnDisable() => LocalizationManager.OnStorageChange -= SetStorage;
 	}
 }

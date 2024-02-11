@@ -14,11 +14,6 @@ namespace EasyAssetsLocalize
         Localization[] Localizations { get; }
 
         /// <summary>
-        /// Delegate called when data changes
-        /// </summary>
-        System.Action OnChange { get; set; }
-
-        /// <summary>
         /// Adds a new localization language to the repository.
         /// </summary>
         /// <param name="language">New localization language</param>
@@ -48,7 +43,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        Localization GetLocalization(LocalizationComponent component);
+        Localization GetLocalization(string id);
 
         /// <summary>
         /// Returns the default localization for the given resource type

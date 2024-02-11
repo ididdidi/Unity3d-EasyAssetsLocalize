@@ -9,9 +9,9 @@ namespace EasyAssetsLocalize
     [CustomEditor(typeof(LocalizationComponent))]
     public class LocalizationComponentEditor : Editor
     {
+        private IStorage storage;
         private LocalizationComponent Component { get; set; }
         private Localization Localization { get; set; }
-        private IStorage Storage => LocalizationController.Storage;
         private SearchDropDownWindow DropDownWindow { get; set; }
 
         private SerializedProperty handler;
@@ -32,15 +32,21 @@ namespace EasyAssetsLocalize
         private void OnEnable()
         {
             Component = target as LocalizationComponent;
-            UpdateLocalization();
-            Storage.OnChange += UpdateLocalization;
+            SetStorage(LocalizationManager.Storage);
+            LocalizationManager.OnStorageChange += SetStorage;
 
             /// When adding a component to the scene
             if (string.IsNullOrEmpty(Component.ID)) { 
-                var defaultLocal = Storage.GetDefaultLocalization(Component.Type);
+                var defaultLocal = storage.GetDefaultLocalization(Component.Type);
                 Localization = defaultLocal;
                 Component.ID = defaultLocal.ID;
             }
+        }
+
+        private void SetStorage(IStorage storage)
+        {
+            this.storage = storage;
+            UpdateLocalization();
         }
 
         /// <summary>
@@ -63,9 +69,9 @@ namespace EasyAssetsLocalize
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.BeginDisabledGroup(Localization.IsDefault);
                 Localization.Name = EditorGUILayout.TextField("Localization name", Localization.Name);
-                LocalizationView.DrawResources(Storage, Localization, Storage.Languages.ToArray(), GUILayout.Height(50f));
+                LocalizationView.DrawResources(storage, Localization, storage.Languages.ToArray(), GUILayout.Height(50f));
                 EditorGUI.EndDisabledGroup();
-                if (EditorGUI.EndChangeCheck()) { Storage?.SaveChanges(); }
+                if (EditorGUI.EndChangeCheck()) { storage?.SaveChanges(); }
             }
             else
             {
@@ -81,7 +87,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         private void ShowSearchWindow()
         {
-            DropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(Storage, Component.Type), SetLocaloization);
+            DropDownWindow = SearchDropDownWindow.Show(new LocalizationSearchProvider(storage, Component.Type), SetLocaloization);
         }
 
         /// <summary>
@@ -93,9 +99,9 @@ namespace EasyAssetsLocalize
         {
             if (data is Localization localization)
             {
-                if (!Storage.ContainsLocalization(localization))
+                if (!storage.ContainsLocalization(localization))
                 {
-                    Storage.AddLocalization(localization);
+                    storage.AddLocalization(localization);
                 }
                 Component.ID = localization.ID;
                 UpdateLocalization();
@@ -109,7 +115,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         private void UpdateLocalization()
         {
-            try { Localization = Storage.GetLocalization(Component); }
+            try { Localization = storage.GetLocalization(Component.ID); }
             catch (System.ArgumentException) { Localization = null; }
             finally { Repaint(); }
         }
@@ -117,6 +123,6 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// This function is called when the behaviour becomes disabled.
         /// </summary>
-        private void OnDisable() => Storage.OnChange -= UpdateLocalization;
+        private void OnDisable() => LocalizationManager.OnStorageChange -= SetStorage;
     }
 }
