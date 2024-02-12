@@ -4,25 +4,43 @@ using UnityEngine.Events;
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// The class implements changing the localization storage in the scene and methods for changing the language.
+    /// </summary>
     [ExecuteAlways, AddComponentMenu("Localize/Localization Controller")]
     public class LocalizationController : MonoBehaviour
     {
         [SerializeField] private LocalizationStorage localStorage;
 
+        /// <summary>
+        /// Handler for displaying language changes.
+        /// </summary>
         [System.Serializable] public class Handler : UnityEvent<string> { }
         [SerializeField] private Handler OnChangingLanguage;
 
+        /// <summary>
+        /// Method to set the default localization storage.
+        /// </summary>
         private void Reset() => localStorage = LocalizationManager.Storage as LocalizationStorage;
 
+        /// <summary>
+        /// Method to set the default localization store in the editor.
+        /// </summary>
         private void OnValidate() => LocalizationManager.SetStorage(localStorage ?? LocalizationManager.Storage);
 
-        // Set language value at start
+        /// <summary>
+        /// Method subscribes to language changes in the Localization Manager and setting the language value at scene Start.
+        /// </summary>
         private void Start()
         {
             LocalizationManager.OnLanguageChange += OnLanguageChange;
             if (localStorage) { LocalizationManager.SetStorage(localStorage); }
         }
 
+        /// <summary>
+        /// The method adapts the delegates that handle language changes to the LocalizationManager delegates.
+        /// </summary>
+        /// <param name="language"></param>
         private void OnLanguageChange(Language language) => OnChangingLanguage?.Invoke(language.ToString());
 
         /// <summary>
@@ -52,8 +70,14 @@ namespace EasyAssetsLocalize
             LocalizationManager.Language = languages[index];
         }
 
-        private void OnDisable() => LocalizationManager.OnLanguageChange -= OnLanguageChange;
+        /// <summary>
+        /// The method unsubscribes from changing the language in the LocalizationManager and sets the default localization storage.
+        /// </summary>
+        private void OnDisable()
+        {
+            LocalizationManager.OnLanguageChange -= OnLanguageChange;
+            LocalizationManager.ResetStorage();
+        }
 
-        private void OnDestroy() => LocalizationManager.ResetStorage();
     }
 }

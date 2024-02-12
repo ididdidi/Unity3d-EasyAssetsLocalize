@@ -26,6 +26,13 @@ namespace EasyAssetsLocalize
 		private long lastTime;
 		private float currentAnimation, targetAnimation = 0f;
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="parent">An instance class that provides a Rect and implements the repaint method</param>
+		/// <param name="searchView">Displaying search in the editor</param>
+		/// <param name="localizationView">Displaying localization in the editor</param>
+		/// <param name="settingsView">Displaying settings in the editor</param>
 		public LocalizationPresenter(IDisplay parent, SearchTreeView searchView, LocalizationView localizationView, LocalizationSettingsView settingsView)
 		{
 			this.parent = parent ?? throw new System.ArgumentNullException(nameof(parent));

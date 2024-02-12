@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// Class for displaying the settings of this plugin in the Unity editor.
+    /// </summary>
     internal class LocalizationSettingsView : IEditorView
     {
         private const float MIN_WIDTH = 380f;

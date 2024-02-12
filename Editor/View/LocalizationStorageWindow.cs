@@ -12,12 +12,12 @@ namespace EasyAssetsLocalize
 		public const float MIN_HIGHT = 320f;
 
 		// Data renderer in a editor window
+		private IStorage storage;
 		private NoticeView noticeView;
 		private SearchTreeView searchView;
 		private LocalizationView localizationView;
 		private LocalizationSettingsView settingsView;
 		private LocalizationPresenter localizationPresentor;
-		private IStorage storage;
 
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.

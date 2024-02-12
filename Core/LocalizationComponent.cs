@@ -27,7 +27,7 @@ namespace EasyAssetsLocalize
         /// <summary>
         /// Method for get localization resource data depending on the current language.
         /// </summary>
-        /// <returns>Resource data</returns>
+        /// <param name="language">Current language</param>
         private void SetLanguage(Language language)
         {
             Localization localization;

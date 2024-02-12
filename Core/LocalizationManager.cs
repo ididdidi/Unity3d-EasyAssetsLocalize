@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// Static class for managing localization, providing localization storage and language to localization components in the scene.
+    /// </summary>
     public static class LocalizationManager
     {
         private static IStorage storage;
-        private static List<LocalizationComponent> components = new List<LocalizationComponent>();
 
         /// <summary>
         /// Link to Localization Storage
@@ -26,8 +27,15 @@ namespace EasyAssetsLocalize
         /// Delegates subscribed to changes in the localizationtion storage.
         /// </summary>
         public static System.Action<IStorage> OnStorageChange { get; set; }
+        /// <summary>
+        /// Delegates subscribed to changes in the language.
+        /// </summary>
         public static System.Action<Language> OnLanguageChange { get; set; }
 
+        /// <summary>
+        /// Method for changing the current localization storage to another.
+        /// </summary>
+        /// <param name="storage"></param>
         public static void SetStorage(IStorage storage)
         {
             Storage = storage;
@@ -35,6 +43,10 @@ namespace EasyAssetsLocalize
             OnLanguageChange?.Invoke(Language);
         }
 
+        /// <summary>
+        /// The method resets the current localization store and sets the default one from the resources.
+        /// </summary>
+        /// <returns>Default Localization Storage</returns>
         public static IStorage ResetStorage()
         {
             SetStorage(Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)));
@@ -54,6 +66,10 @@ namespace EasyAssetsLocalize
             }
         }
 
+        /// <summary>
+        /// Method for getting the current localization language.
+        /// </summary>
+        /// <returns>Current Language</returns>
         private static Language GetLanguage()
         {
             Language language = new Language(PlayerPrefs.HasKey("Language") ? 

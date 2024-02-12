@@ -43,6 +43,10 @@ namespace EasyAssetsLocalize
             }
         }
 
+        /// <summary>
+        /// Method to set the current localization store.
+        /// </summary>
+        /// <param name="storage">Localization storage</param>
         private void SetStorage(IStorage storage)
         {
             this.storage = storage;

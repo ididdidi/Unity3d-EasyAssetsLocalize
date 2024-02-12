@@ -7,6 +7,9 @@ namespace EasyAssetsLocalize
     /// </summary>
     public interface IStorage
     {
+        /// <summary>
+        /// List of localizations.
+        /// </summary>
         List<Language> Languages { get; }
         /// <summary>
         /// List of localizations in array format.
