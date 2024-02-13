@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// Class for displaying the settings of this plugin in the Unity editor.
+    /// </summary>
     internal class LocalizationSettingsView : IEditorView
     {
+        private const float MIN_WIDTH = 380f;
+        private const float BTN_SIZE = 20f;
+
         private static readonly string helpURL = "https://ididdidi.ru/projects/unity3d-easy-assets-localize";
         private LanguagesListView languagesList;
         private TypesListView typesList;
@@ -35,7 +41,7 @@ namespace EasyAssetsLocalize
             GUILayout.BeginHorizontal(EditorStyles.inspectorFullWidthMargins);
 
             var content = new GUIContent(EditorGUIUtility.IconContent("tab_prev").image, "Back");
-            if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
+            if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(BTN_SIZE), GUILayout.Height(BTN_SIZE)))
             {
                 GoBack();
             }
@@ -46,7 +52,7 @@ namespace EasyAssetsLocalize
 
             // Draw header
             content = new GUIContent(EditorGUIUtility.IconContent("_Help").image, "Help");
-            if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(20f), GUILayout.Height(20f)))
+            if (GUILayout.Button(content, EditorStyles.label, GUILayout.Width(BTN_SIZE), GUILayout.Height(BTN_SIZE)))
             {
                 Application.OpenURL(helpURL);
             }
@@ -56,7 +62,7 @@ namespace EasyAssetsLocalize
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorFullWidthMargins);
 
-            var horizontal = position.width > 370;
+            var horizontal = position.width > MIN_WIDTH;
             if (horizontal) { GUILayout.BeginHorizontal(); }
 
             // Show Languages ReorderableList

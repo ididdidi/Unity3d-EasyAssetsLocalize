@@ -8,7 +8,6 @@ namespace EasyAssetsLocalize
     /// </summary>
     internal static class LocalizationBuilder
     {
-        private static int count;
         public static readonly string localPath = "/Tools/EasyAssetsLocalize";
 
         /// <summary>

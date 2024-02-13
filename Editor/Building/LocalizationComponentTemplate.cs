@@ -15,7 +15,7 @@
         {
             this.type = type ?? throw new System.ArgumentNullException(nameof(type));
         }
-
+        
         /// <summary>
         /// Code to create class file.
         /// </summary>
@@ -34,7 +34,7 @@ namespace {GetType().Namespace}
 
         public override System.Type Type => typeof({type.FullName});
 
-        public override void SetData(object data) => handler?.Invoke(({type.FullName})data);
+        protected override void SetData(object data) => handler?.Invoke(({type.FullName})data);
     }}
 }}";
         }

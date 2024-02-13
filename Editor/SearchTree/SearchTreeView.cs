@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace EasyAssetsLocalize
 {
+    /// <summary>
+    /// Class for displaying search tree in the Unity editor.
+    /// </summary>
     public class SearchTreeView : IEditorView
     {
         // Styles

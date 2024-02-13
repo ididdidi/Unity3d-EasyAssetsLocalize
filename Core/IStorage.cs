@@ -7,16 +7,14 @@ namespace EasyAssetsLocalize
     /// </summary>
     public interface IStorage
     {
+        /// <summary>
+        /// List of localizations.
+        /// </summary>
         List<Language> Languages { get; }
         /// <summary>
         /// List of localizations in array format.
         /// </summary>
         Localization[] Localizations { get; }
-
-        /// <summary>
-        /// Delegate called when data changes
-        /// </summary>
-        System.Action OnChange { get; set; }
 
         /// <summary>
         /// Adds a new localization language to the repository.
@@ -48,7 +46,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        Localization GetLocalization(LocalizationComponent component);
+        Localization GetLocalization(string id);
 
         /// <summary>
         /// Returns the default localization for the given resource type

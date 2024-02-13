@@ -16,13 +16,16 @@ namespace EasyAssetsLocalize
         [SerializeField] private bool isDefault;
 
         /// <summary>
-        /// Tag ID.
+        /// Localization ID.
         /// </summary>
         public string ID { get => id; }
         /// <summary>
-        /// Tag name.
+        /// Localization name.
         /// </summary>
         public string Name { get => name; set => name = value; }
+        /// <summary>
+        /// Type of ocalization resource.
+        /// </summary>
         public System.Type Type => serializableType.type;
         /// <summary>
         /// List of localized resources.

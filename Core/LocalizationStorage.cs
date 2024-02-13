@@ -20,8 +20,6 @@ namespace EasyAssetsLocalize
         /// </summary>
         public Localization[] Localizations => localizations.ToArray();
 
-        public System.Action OnChange { get; set; }
-
         /// <summary>
         /// Adds a new localization language to the repository.
         /// </summary>
@@ -73,9 +71,8 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="id">Identifier of the localization tag in the repository</param>
         /// <returns>Localization</returns>
-        public Localization GetLocalization(LocalizationComponent component)
+        public Localization GetLocalization(string id)
         {
-            var id = component.ID;
             for (int i=0; i < localizations.Count; i++)
             {
                 if (localizations[i].ID.Equals(id))
@@ -83,7 +80,7 @@ namespace EasyAssetsLocalize
                     return localizations[i];
                 } 
             }
-            throw new System.ArgumentException($"Resource localization not found for <color=aqua>{component.name}</color>");
+            throw new System.ArgumentException("Resource localization not found");
         }
 
         /// <summary>
@@ -150,7 +147,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         public void SaveChanges()
         {
-            OnChange?.Invoke();
+            LocalizationManager.OnStorageChange?.Invoke(this);
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();
