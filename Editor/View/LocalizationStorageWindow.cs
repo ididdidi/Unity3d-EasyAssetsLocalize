@@ -22,13 +22,11 @@ namespace EasyAssetsLocalize
 		/// <summary>
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
-		public static LocalizationStorageWindow Show(IStorage storage, float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
+		public static LocalizationStorageWindow Show(float minWidth = MIN_WIDTH, float minHight = MIN_HIGHT)
 		{
 			var instance = GetWindow<LocalizationStorageWindow>();
 			instance.titleContent = new GUIContent("Easy Assets Localize", EditorGUIUtility.IconContent("FilterByType@2x").image);
 			instance.minSize = new Vector2(minWidth, minHight);
-			instance.storage = storage;
-			instance.Initialize();
 			return instance;
 		}
 
@@ -36,28 +34,12 @@ namespace EasyAssetsLocalize
 		/// Creation of initialization and display of a window on the monitor screen.
 		/// </summary>
 		[MenuItem("Window/Localization Storage")]
-		public new static LocalizationStorageWindow Show() => Show(Resources.Load<LocalizationStorage>(nameof(LocalizationStorage)));
+		public new static LocalizationStorageWindow Show() => Show(MIN_WIDTH, MIN_HIGHT);
 
-		/// <summary>
-		/// Method for initialization
-		/// </summary>
-		private void Initialize()
+		private void OnEnable()
 		{
-			noticeView = new NoticeView(this);
-			localizationView = new LocalizationView(storage, noticeView);
-			settingsView = new LocalizationSettingsView(storage);
-			searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage));
-			localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
+			SetStorage(LocalizationManager.Storage);
 			LocalizationManager.OnStorageChange += SetStorage;
-		}
-
-		/// <summary>
-		/// Method for rendering window content.
-		/// </summary>
-		internal void OnGUI()
-		{
-			localizationPresentor.OnGUI(new Rect(0, 0, position.width, position.height));
-			noticeView.OnGUI();
 		}
 
 		/// <summary>
@@ -65,8 +47,25 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		private void SetStorage(IStorage storage)
 		{
-			this.storage = storage;
+			if (this.storage != storage)
+			{
+				this.storage = storage;
+				noticeView = new NoticeView(this);
+				localizationView = new LocalizationView(storage, noticeView);
+				settingsView = new LocalizationSettingsView(storage);
+				searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage));
+				localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
+			}
 			searchView.IsChanged = true;
+		}
+
+		/// <summary>
+		/// Method for rendering window content.
+		/// </summary>
+		internal void OnGUI()
+		{
+			localizationPresentor?.OnGUI(new Rect(0, 0, position.width, position.height));
+			noticeView?.OnGUI();
 		}
 
 		/// <summary>

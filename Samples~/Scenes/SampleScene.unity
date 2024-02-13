@@ -538,7 +538,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Language '
+  m_Text: Language
 --- !u!222 &919531754
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccdaf75c0ab2134eb33c38a8c81bc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 16ab157941504e7b91bd56483c1975cc
+  <ID>k__BackingField: e6d52e09d56247dda9977fe7d0c23fff
   handler:
     m_PersistentCalls:
       m_Calls:
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551aa5a944f07cb4e9bd6000a1d8b127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localStorage: {fileID: 11400000, guid: fa82765d0a5c69c45a016db4c54cbb31, type: 2}
+  localStorage: {fileID: 11400000, guid: 5af12409175008846b0dac36ebdcd179, type: 2}
   OnChangingLanguage:
     m_PersistentCalls:
       m_Calls:
@@ -1203,7 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d995fe12f661cc4f9c97afb5d78603b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 1b3856db2022485bb473a468809e6b69
+  <ID>k__BackingField: 6c95442fd17240dbae34c66b87382e92
   handler:
     m_PersistentCalls:
       m_Calls:
