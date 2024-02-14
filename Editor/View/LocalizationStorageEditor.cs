@@ -22,6 +22,10 @@ namespace EasyAssetsLocalize
 		public void OnEnable()
 		{
 			storage = this.target as LocalizationStorage;
+
+			if (storage.Languages.Count == 0) { storage.AddLanguage(new Language(Application.systemLanguage)); }
+			if (storage.Localizations.Length == 0) { storage.CreateDefaultLocalization("Text"); }
+
 			noticeView = new NoticeView(this);
 			localizationView = new LocalizationView(storage, noticeView);
 			settingsView = new LocalizationSettingsView(storage);

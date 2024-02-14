@@ -29,6 +29,16 @@ namespace EasyAssetsLocalize
         }
 
         /// <summary>
+        /// Method for creating a default value for a specific resource type.
+        /// </summary>
+        /// <param name="defaultValue">Default value for a resource type</param>
+        public static void CreateDefaultLocalization(this IStorage storage, object defaultValue)
+        {
+            var local = new Localization($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count, true);
+            storage.AddLocalization(local);
+        }
+
+        /// <summary>
         /// Method for generating localization component code for a specific data type.
         /// </summary>
         /// <param name="storage"><see cref="Localization"/> data storage</param>
@@ -36,6 +46,8 @@ namespace EasyAssetsLocalize
         public static void CreateComponent(IStorage storage, object defaultValue)
         {
             if (defaultValue == null) { throw new System.ArgumentNullException(nameof(defaultValue)); }
+
+            CreateDefaultLocalization(storage, defaultValue);
 
             var path = $"{Application.dataPath}{localPath}/Components/";
             if (!System.IO.Directory.Exists($"{path}Editor/"))
@@ -47,8 +59,6 @@ namespace EasyAssetsLocalize
             ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentTemplate(type).Code);
             ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorTemplate(type).Code);
 
-            var local = new Localization($"Default {defaultValue.GetType().Name} Localization", defaultValue, storage.Languages.Count, true);
-            storage.AddLocalization(local);
             AssetDatabase.Refresh();
         }
 
@@ -66,7 +76,6 @@ namespace EasyAssetsLocalize
                 System.IO.File.Delete($"{path.Replace("/Editor", "")}{fileName.Replace("Editor", "")}");
                 AssetDatabase.Refresh();
             }
-            else throw new System.ArgumentNullException(fileName);
         }
 
         /// <summary>

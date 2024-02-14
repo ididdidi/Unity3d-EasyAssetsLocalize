@@ -19,11 +19,21 @@ namespace EasyAssetsLocalize
         public TypesListView(IStorage storage) : base(null, typeof(System.Type), false, true, true, true)
         {
             Storage = storage;
-            list = new List<object>(from l in Storage.Localizations.Where(i => i.IsDefault) select l.Type);
+            list = GetListFromArray(Storage.Localizations);
             drawHeaderCallback = DrawHeader;
             drawElementCallback = DrawTypeItem;
             onAddCallback = AddTypeComponent;
             onRemoveCallback = RemoveTypeComponent;
+        }
+
+        /// <summary>
+        /// Method to initialize a list.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns>List of resource types for localization</returns>
+        private List<object> GetListFromArray(Localization[] array)
+        {
+            return new List<object>(from l in array.Where(i => i.IsDefault) select l.Type);
         }
 
         /// <summary>
@@ -70,6 +80,7 @@ namespace EasyAssetsLocalize
                     if(Storage.GetDefaultLocalization(list[index].GetType()) == null)
                     {
                         LocalizationBuilder.CreateComponent(Storage, list[index]);
+                        list = GetListFromArray(Storage.Localizations);
                     }
                     else
                     {
@@ -101,6 +112,7 @@ namespace EasyAssetsLocalize
                 if(type.Equals(typeof(string)))
                 {
                     Debug.LogError("Due to the complexity of adding a \"string\" type, removing it is prohibited.");
+                    return;
                 }
                 else if(EditorExtends.DeleteConfirmation(type.Name))
                 {

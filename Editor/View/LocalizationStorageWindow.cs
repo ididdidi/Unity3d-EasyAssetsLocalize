@@ -47,7 +47,7 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		private void SetStorage(IStorage storage)
 		{
-			if (this.storage != storage)
+			if (this.storage != storage && storage != null)
 			{
 				this.storage = storage;
 				noticeView = new NoticeView(this);
@@ -64,8 +64,32 @@ namespace EasyAssetsLocalize
 		/// </summary>
 		internal void OnGUI()
 		{
-			localizationPresentor?.OnGUI(new Rect(0, 0, position.width, position.height));
-			noticeView?.OnGUI();
+			Rect rect = new Rect(0, 0, position.width, position.height);
+			if (localizationPresentor != null)
+			{
+				localizationPresentor.OnGUI(rect);
+				noticeView?.OnGUI();
+			}
+			else
+			{
+				ShowEroor(rect, "Localization storage not found!");
+			}
+		}
+
+		private void ShowEroor(Rect position, string text)
+		{
+			var rect = new Rect(0f, 0f, 128f, 128f);
+			rect.center = position.center;
+			rect.y -= 25f;
+
+			var content = new GUIContent(text, EditorGUIUtility.IconContent("console.erroricon@2x").image);
+			GUI.DrawTexture(rect, content.image, ScaleMode.ScaleToFit);
+
+			position.y += 55f;
+			var style = new GUIStyle("AM MixerHeader");
+			style.alignment = TextAnchor.MiddleCenter;
+			style.fontSize = 32;
+			GUI.Label(position, content.text, style);
 		}
 
 		/// <summary>
