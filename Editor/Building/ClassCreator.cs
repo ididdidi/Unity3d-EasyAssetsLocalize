@@ -12,7 +12,7 @@
         /// <param name="path">Directory path</param>
         /// <param name="code">Code</param>
         /// <param name="comment">Comment</param>
-        public static void CreateClass(string className, string path, string code, string comment = "// Class generated automatically")
+        public static void CreateClass(string className, string path, string code, string comment)
         {
             string fullName = $"{path}{className}.cs";
             if (!System.IO.File.Exists(fullName)) { System.IO.File.WriteAllText(fullName, comment + code); }

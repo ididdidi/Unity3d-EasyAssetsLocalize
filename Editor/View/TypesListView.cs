@@ -117,10 +117,10 @@ namespace EasyAssetsLocalize
                 else if(EditorExtends.DeleteConfirmation(type.Name))
                 {
                     Storage.RemoveAll(type);
-                    LocalizationBuilder.RemoveComponent(type);
+                    //LocalizationBuilder.RemoveComponent(type);
                 }
             }
-            else { reorderable.list.RemoveAt(reorderable.index--); }
+            reorderable.list.RemoveAt(reorderable.index--);
         }
     }
 }
