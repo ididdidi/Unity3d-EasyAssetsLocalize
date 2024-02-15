@@ -38,7 +38,7 @@ namespace EasyAssetsLocalize
             catch (System.ArgumentException exception)
             {
                 localization = Storage.GetDefaultLocalization(Type);
-                Debug.LogError($"{exception} for <color=aqua>{name}</color>", this);
+                Debug.LogError($"{exception.Message} for <color=aqua>{name}</color>", this);
             }
             SetData(localization?.Resources[Storage.Languages.IndexOf(language)].Data);
         }
