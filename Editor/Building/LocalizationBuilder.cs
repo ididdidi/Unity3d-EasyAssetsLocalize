@@ -56,8 +56,11 @@ namespace EasyAssetsLocalize
             }
 
             var type = defaultValue.GetType();
-            ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentTemplate(type).Code);
-            ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorTemplate(type).Code);
+            var comment = $"// This class for {type.Name} localization is created automatically.\n" +
+                "// Please do not delete or move it if you plan to localize this resource type in the future.";
+
+            ClassCreator.CreateClass(type.Name + "Localization", path, new LocalizationComponentTemplate(type).Code, comment);
+            ClassCreator.CreateClass(type.Name + "LocalizationEditor", path + "Editor/", new LocalizationEditorTemplate(type).Code, comment);
 
             AssetDatabase.Refresh();
         }
