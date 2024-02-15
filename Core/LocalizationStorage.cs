@@ -6,6 +6,7 @@ namespace EasyAssetsLocalize
     /// <summary>
     /// Сlass that encapsulates data from languages and localized resources.
     /// </summary>
+    [CreateAssetMenu(fileName = "New LocalizationStorage", menuName = "Localization Storage", order = 700)]
     internal class LocalizationStorage : ScriptableObject, IStorage
     {
         [SerializeField, HideInInspector] private List<Language> languages = new List<Language>();
@@ -19,7 +20,7 @@ namespace EasyAssetsLocalize
         /// List of localizations in array format.
         /// </summary>
         public Localization[] Localizations => localizations.ToArray();
-
+        
         /// <summary>
         /// Adds a new localization language to the repository.
         /// </summary>
@@ -147,7 +148,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         public void SaveChanges()
         {
-            LocalizationManager.OnStorageChange?.Invoke(this);
+            LocalizationManager.SetStorage(this);
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();

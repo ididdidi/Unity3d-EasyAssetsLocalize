@@ -45,12 +45,10 @@ namespace EasyAssetsLocalize
             this.display = display;
             this.provider = provider;
             this.grabFocus = grabFocus;
-            IsChanged = true;
         }
 
         #region Settings
-        public bool IsChanged { get; set; }
-        public string SearchKeyword => searchTree.keyword;
+        public string SearchKeyword { get => searchTree?.keyword; private set => searchTree.keyword = value; }
         public SearchTreeEntry CurrentEntry { get; private set; }
         public System.Action<object> OnFocusEntry { get; set; }
         public System.Action<object> OnSelectEntry { get; set; }
@@ -84,7 +82,13 @@ namespace EasyAssetsLocalize
         }
         private bool isAnimating { get => currentAnimation != targetAnimation; }
         private bool isOnFocus { get => GUIUtility.keyboardControl == controlId || GUIUtility.keyboardControl == 0; }
+        private bool IsChanged { get; set; }
         #endregion
+
+        /// <summary>
+        /// Prompts the view to update search tree data.
+        /// </summary>
+        public void Refresh() => IsChanged = true;
 
         /// <summary>
         /// Method for go to previous level
@@ -131,7 +135,7 @@ namespace EasyAssetsLocalize
             rect.x += rect.width;
             rect.width = buttonSize;
             // Clear search keyword
-            if (keyword != string.Empty && CancelButton(rect) || (@event.type == EventType.KeyDown && @event.keyCode == KeyCode.Escape))
+            if (!string.IsNullOrEmpty(keyword) && CancelButton(rect) || (@event.type == EventType.KeyDown && @event.keyCode == KeyCode.Escape))
             {
                 keyword = string.Empty;
                 GUIUtility.keyboardControl = 0;
@@ -180,7 +184,7 @@ namespace EasyAssetsLocalize
         /// <param name="position">Coordinates and dimensions of the rect to display in the GUI</param>
         public void OnGUI(Rect position)
         {
-            if (IsChanged)
+            if (IsChanged || searchTree == null)
             {
                 searchTree = provider.GetSearchTree();
                 if (searchTree.SearchKeyIsEmpty)
@@ -211,16 +215,19 @@ namespace EasyAssetsLocalize
 
             GUI.SetNextControlName("SearchField");
             EditorGUI.BeginChangeCheck();
-            var newSearch = SearchField(searchRect, delayedSearch ?? searchTree.keyword, out controlId);
-            if (EditorGUI.EndChangeCheck() && (newSearch != searchTree.keyword || delayedSearch != null))
+            var newSearch = SearchField(searchRect, delayedSearch ?? SearchKeyword, out controlId);
+            if (EditorGUI.EndChangeCheck() && (newSearch != SearchKeyword || delayedSearch != null))
             {
                 if (!isAnimating)
                 {
-                    searchTree.keyword = delayedSearch ?? newSearch;
+                    SearchKeyword = delayedSearch ?? newSearch;
                     searchTree.Update();
                     // Always select the first search result when search is changed (e.g. a character was typed in or deleted),
                     // because it's usually the best match.
-                    if (ActiveChildren.Length >= 1) { ActiveParent.SelectedIndex = 0; }
+                    if (ActiveChildren.Length >= 1) {
+                        ActiveParent.SelectedIndex = 0;
+                        ActiveParent.ScrollPosition = default;
+                    }
                     else { ActiveParent.SelectedIndex = -1; }
                     delayedSearch = null;
                 }
@@ -229,7 +236,7 @@ namespace EasyAssetsLocalize
 
             if (grabFocus) { grabFocus = false; EditorGUI.FocusTextInControl("SearchField"); }
 
-            if (OptionButton != null && string.IsNullOrEmpty(searchTree.keyword))
+            if (OptionButton != null && string.IsNullOrEmpty(SearchKeyword))
             {
                 OptionButton.Invoke(new Rect(position.width - 18, 8, 20, 20));
             }

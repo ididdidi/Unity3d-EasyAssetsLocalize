@@ -140,10 +140,15 @@ namespace EasyAssetsLocalize
             tree.AddRange(matchesStart);
             tree.AddRange(matchesWithin);
 
+            // Seve selected index and s scroll position
+            SearchTreeGroupEntry oldSearchTreeEntry = selectionStack[0];
+
             // Create search result tree
             searchResultTree = tree.ToArray();
             selectionStack.Clear();
             selectionStack.Add(searchResultTree[0] as SearchTreeGroupEntry);
+            selectionStack[0].SelectedIndex = oldSearchTreeEntry.SelectedIndex;
+            selectionStack[0].ScrollPosition = oldSearchTreeEntry.ScrollPosition;
         }
 
         /// <summary>

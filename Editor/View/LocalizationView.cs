@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace EasyAssetsLocalize
 {
+	/// <summary>
+	/// Class for displaying localization resources.
+	/// </summary>
 	internal class LocalizationView : IEditorView
 	{
 		private object data;
