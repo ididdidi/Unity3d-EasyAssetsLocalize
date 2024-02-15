@@ -148,7 +148,7 @@ namespace EasyAssetsLocalize
         /// </summary>
         public void SaveChanges()
         {
-            LocalizationManager.OnStorageChange?.Invoke(this);
+            LocalizationManager.SetStorage(this);
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();

@@ -51,7 +51,7 @@ namespace EasyAssetsLocalize
 		/// <summary>
 		/// Method for displaying data changes.
 		/// </summary>
-		private void OnChangeStorage(IStorage storage) => searchView.IsChanged = true;
+		private void OnChangeStorage(IStorage storage) => searchView.Refresh();
 
 		/// <summary>
 		/// This function is called when the behaviour becomes disabled.

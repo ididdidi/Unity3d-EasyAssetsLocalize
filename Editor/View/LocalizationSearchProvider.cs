@@ -36,14 +36,11 @@ namespace EasyAssetsLocalize
 
             List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
             searchList.Add(new SearchTreeGroupEntry(new GUIContent("Localizations")));
-            var tags = new List<Localization>(Storage.Localizations);
-            tags.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
-            searchList.AddRange(Adapt(tags));
-
+            searchList.AddRange(GetItems());
             searchList.AddRange(GetNewItems());
-            searchTree.BuildStack(searchList.ToArray());
 
+            searchTree.BuildStack(searchList.ToArray());
             return searchTree;
         }
 
@@ -52,10 +49,13 @@ namespace EasyAssetsLocalize
         /// </summary>
         /// <param name="locals"></param>
         /// <returns>List of localizations as SearchTreeEntry</returns>
-        private List<SearchTreeEntry> Adapt(List<Localization> locals)
+        private List<SearchTreeEntry> GetItems()
         {
             // Group by Type
             Dictionary<System.Type, List<SearchTreeEntry>> entries = new Dictionary<System.Type, List<SearchTreeEntry>>();
+
+            var locals = new List<Localization>(Storage.Localizations);
+            locals.Sort((tag0, tag1) => tag0.Name.CompareTo(tag1.Name));
 
             for (int i = 0; i < locals.Count; i++)
             {
@@ -93,7 +93,6 @@ namespace EasyAssetsLocalize
         /// <returns>List of new localizations as SearchTreeEntry</returns>
         private List<SearchTreeEntry> GetNewItems()
         {
-           // TypeMetadata[] metaDatas = TypeMetadata.GetAllMetadata();
             List<SearchTreeEntry> searchList = new List<SearchTreeEntry>();
 
             // If the target type is not initialized, then create a group for new localizations.
@@ -107,7 +106,7 @@ namespace EasyAssetsLocalize
             var level = 1;
 
             // Loop through all types of resources for localization.
-            //var types = (from l in Storage.Localizations.Where(i => i.IsDefault) select l.Type).ToArray();
+            var newEntries = new List<SearchTreeEntry>();
             var defaults = (from l in Storage.Localizations.Where(i => i.IsDefault) select l).ToArray();
             for (int i = 0; i < defaults.Length; i++)
             {
@@ -117,8 +116,11 @@ namespace EasyAssetsLocalize
 
                 // Find the default value for this type, create a new element and add it to the list of localizations.
                 var defValue = Storage.GetDefaultLocalization(defaults[i].Type);
-                searchList.Add(new SearchTreeEntry(new GUIContent($"New {defValue.Type.Name} Localization", icon), level, defValue.Clone()));
+                newEntries.Add(new SearchTreeEntry(new GUIContent($"New {defValue.Type.Name} Localization", icon), level, defValue.Clone()));
             }
+
+            newEntries.Sort((item0, item1) => item0.Name.CompareTo(item1.Name));
+            searchList.AddRange(newEntries);
             return searchList;
         }
     }

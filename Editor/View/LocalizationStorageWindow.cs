@@ -56,7 +56,7 @@ namespace EasyAssetsLocalize
 				searchView = new SearchTreeView(this, new LocalizationSearchProvider(storage));
 				localizationPresentor = new LocalizationPresenter(this, searchView, localizationView, settingsView);
 			}
-			searchView.IsChanged = true;
+			searchView.Refresh();
 		}
 
 		/// <summary>
